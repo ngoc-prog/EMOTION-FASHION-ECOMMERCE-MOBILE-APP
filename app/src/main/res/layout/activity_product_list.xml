@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/lume_background">
+
+    <!-- Header -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/white"
+        android:elevation="3dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="8dp">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/ic_back"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:tint="@color/lume_primary_dark"
+            android:padding="12dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="ÉLAN"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.12"
+            android:textColor="@color/lume_primary_dark" />
+
+        <ImageButton
+            android:id="@+id/btn_cart"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_cart"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:tint="@color/lume_primary_dark"
+            android:padding="10dp" />
+    </RelativeLayout>
+
+    <!-- Category filter chips -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:background="@color/white"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
+
+        <LinearLayout
+            android:id="@+id/filter_chips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp" />
+    </HorizontalScrollView>
+
+    <!-- Section title -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="6dp">
+
+        <TextView
+            android:id="@+id/tv_section_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FASHION COLLECTION"
+            android:textSize="11sp"
+            android:letterSpacing="0.12"
+            android:textColor="@color/lume_text_secondary"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_product_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sản phẩm nổi bật"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/lume_text_primary"
+            android:layout_marginTop="4dp" />
+    </LinearLayout>
+
+    <!-- Loading + Grid -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_products"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="16dp"
+            android:clipToPadding="false" />
+
+        <ProgressBar
+            android:id="@+id/progress_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/lume_primary"
+            android:visibility="visible" />
+    </FrameLayout>
+
+</LinearLayout>

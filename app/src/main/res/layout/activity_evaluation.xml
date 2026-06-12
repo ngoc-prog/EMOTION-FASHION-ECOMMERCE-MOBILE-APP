@@ -1,0 +1,626 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lume_background">
+
+    <!-- ── Main content ──────────────────────────────────────────────────── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Header bar -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@color/white"
+            android:elevation="3dp">
+
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="4dp"
+                android:src="@drawable/ic_back"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@color/lume_text_primary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Mode Nghiên Cứu"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="@color/lume_text_primary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:text="RESEARCH"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:textColor="#4CAF50"
+                android:background="@drawable/bg_recommendation_card"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp" />
+        </RelativeLayout>
+
+        <!-- Scrollable content -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <!-- ── Card 1: Current Prediction ──────────────────────── -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@color/white"
+                    android:padding="16dp"
+                    android:layout_marginBottom="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="DỰ ĐOÁN HIỆN TẠI"
+                        android:textSize="10sp"
+                        android:letterSpacing="0.1"
+                        android:textStyle="bold"
+                        android:textColor="@color/lume_text_secondary"
+                        android:layout_marginBottom="10dp" />
+
+                    <TextView
+                        android:id="@+id/tv_predicted_emotion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="— Đang hiệu chỉnh —"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lume_text_secondary"
+                        android:gravity="center"
+                        android:padding="14dp"
+                        android:background="@drawable/bg_recommendation_card"
+                        android:layout_marginBottom="10dp" />
+
+                    <TextView
+                        android:id="@+id/tv_features_display"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="BRR: —  |  MC: —  |  MAR: —  |  BFD: —"
+                        android:textSize="11sp"
+                        android:fontFamily="monospace"
+                        android:textColor="@color/lume_text_secondary"
+                        android:gravity="center"
+                        android:layout_marginBottom="4dp" />
+
+                    <TextView
+                        android:id="@+id/tv_latency_display"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Frame: —ms  |  Avg: —ms  |  ~—fps"
+                        android:textSize="11sp"
+                        android:fontFamily="monospace"
+                        android:textColor="@color/lume_text_secondary"
+                        android:gravity="center" />
+                </LinearLayout>
+
+                <!-- ── Card 2: Ground Truth Buttons ────────────────────── -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@color/white"
+                    android:padding="16dp"
+                    android:layout_marginBottom="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="GHI NHÃN THỰC TẾ"
+                        android:textSize="10sp"
+                        android:letterSpacing="0.1"
+                        android:textStyle="bold"
+                        android:textColor="@color/lume_text_secondary"
+                        android:layout_marginBottom="12dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Thể hiện cảm xúc → nhấn nút tương ứng để ghi nhận mẫu"
+                        android:textSize="12sp"
+                        android:textColor="@color/lume_text_secondary"
+                        android:gravity="center"
+                        android:layout_marginBottom="12dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btn_gt_interested"
+                            android:layout_width="0dp"
+                            android:layout_height="52dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="4dp"
+                            android:text="Hứng thú"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="#FFFFFF"
+                            android:backgroundTint="#4CAF50"
+                            android:enabled="false" />
+
+                        <Button
+                            android:id="@+id/btn_gt_hesitant"
+                            android:layout_width="0dp"
+                            android:layout_height="52dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginEnd="4dp"
+                            android:text="Phân vân"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="#FFFFFF"
+                            android:backgroundTint="#FF9800"
+                            android:enabled="false" />
+
+                        <Button
+                            android:id="@+id/btn_gt_indifferent"
+                            android:layout_width="0dp"
+                            android:layout_height="52dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="4dp"
+                            android:text="Thờ ơ"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="#FFFFFF"
+                            android:backgroundTint="#9E9E9E"
+                            android:enabled="false" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_last_record"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Chưa có mẫu nào. Nhấn khi đang thể hiện rõ cảm xúc."
+                        android:textSize="12sp"
+                        android:textColor="@color/lume_text_secondary"
+                        android:gravity="center" />
+                </LinearLayout>
+
+                <!-- ── Card 3: Confusion Matrix ─────────────────────────── -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@color/white"
+                    android:padding="16dp"
+                    android:layout_marginBottom="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CONFUSION MATRIX"
+                        android:textSize="10sp"
+                        android:letterSpacing="0.1"
+                        android:textStyle="bold"
+                        android:textColor="@color/lume_text_secondary"
+                        android:layout_marginBottom="10dp" />
+
+                    <TextView
+                        android:id="@+id/tv_accuracy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Accuracy: —  |  N = 0 mẫu"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lume_primary_dark"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:background="@drawable/bg_recommendation_card"
+                        android:layout_marginBottom="14dp" />
+
+                    <!-- Matrix table: header + 3 data rows -->
+                    <TableLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:stretchColumns="0,1,2,3">
+
+                        <!-- Header row -->
+                        <TableRow>
+                            <TextView
+                                android:text=""
+                                android:padding="4dp" />
+                            <TextView
+                                android:text="Pred&#10;Hứng thú"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:textColor="#388E3C"
+                                android:gravity="center"
+                                android:padding="4dp" />
+                            <TextView
+                                android:text="Pred&#10;Phân vân"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:textColor="#E65100"
+                                android:gravity="center"
+                                android:padding="4dp" />
+                            <TextView
+                                android:text="Pred&#10;Thờ ơ"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:textColor="#6D4C41"
+                                android:gravity="center"
+                                android:padding="4dp" />
+                        </TableRow>
+
+                        <!-- Row 0: GT = Hứng thú -->
+                        <TableRow>
+                            <TextView
+                                android:text="GT&#10;Hứng thú"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:textColor="#388E3C"
+                                android:gravity="center"
+                                android:padding="4dp" />
+                            <TextView
+                                android:id="@+id/tv_cm_00"
+                                android:text="0"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:gravity="center"
+                                android:padding="8dp"
+                                android:background="#E8F5E9" />
+                            <TextView
+                                android:id="@+id/tv_cm_01"
+                                android:text="0"
+                                android:textSize="18sp"
+                                android:gravity="center"
+                                android:padding="8dp"
+                                android:background="#FAFAFA" />
+                            <TextView
+                                android:id="@+id/tv_cm_02"
+                                android:text="0"
+                                android:textSize="18sp"
+                                android:gravity="center"
+                                android:padding="8dp"
+                                android:background="#FAFAFA" />
+                        </TableRow>
+
+                        <!-- Row 1: GT = Phân vân -->
+                        <TableRow>
+                            <TextView
+                                android:text="GT&#10;Phân vân"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:textColor="#E65100"
+                                android:gravity="center"
+                                android:padding="4dp" />
+                            <TextView
+                                android:id="@+id/tv_cm_10"
+                                android:text="0"
+                                android:textSize="18sp"
+                                android:gravity="center"
+                                android:padding="8dp"
+                                android:background="#FAFAFA" />
+                            <TextView
+                                android:id="@+id/tv_cm_11"
+                                android:text="0"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:gravity="center"
+                                android:padding="8dp"
+                                android:background="#FFF3E0" />
+                            <TextView
+                                android:id="@+id/tv_cm_12"
+                                android:text="0"
+                                android:textSize="18sp"
+                                android:gravity="center"
+                                android:padding="8dp"
+                                android:background="#FAFAFA" />
+                        </TableRow>
+
+                        <!-- Row 2: GT = Thờ ơ -->
+                        <TableRow>
+                            <TextView
+                                android:text="GT&#10;Thờ ơ"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:textColor="#6D4C41"
+                                android:gravity="center"
+                                android:padding="4dp" />
+                            <TextView
+                                android:id="@+id/tv_cm_20"
+                                android:text="0"
+                                android:textSize="18sp"
+                                android:gravity="center"
+                                android:padding="8dp"
+                                android:background="#FAFAFA" />
+                            <TextView
+                                android:id="@+id/tv_cm_21"
+                                android:text="0"
+                                android:textSize="18sp"
+                                android:gravity="center"
+                                android:padding="8dp"
+                                android:background="#FAFAFA" />
+                            <TextView
+                                android:id="@+id/tv_cm_22"
+                                android:text="0"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:gravity="center"
+                                android:padding="8dp"
+                                android:background="#EFEBE9" />
+                        </TableRow>
+                    </TableLayout>
+                </LinearLayout>
+
+                <!-- ── Card 4: Per-Class Metrics ────────────────────────── -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@color/white"
+                    android:padding="16dp"
+                    android:layout_marginBottom="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CHỈ SỐ ĐÁNH GIÁ"
+                        android:textSize="10sp"
+                        android:letterSpacing="0.1"
+                        android:textStyle="bold"
+                        android:textColor="@color/lume_text_secondary"
+                        android:layout_marginBottom="10dp" />
+
+                    <TableLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:stretchColumns="0,1,2,3">
+
+                        <!-- Header -->
+                        <TableRow>
+                            <TextView
+                                android:text="Nhãn"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/lume_text_secondary"
+                                android:padding="6dp" />
+                            <TextView
+                                android:text="Precision"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/lume_text_secondary"
+                                android:gravity="center"
+                                android:padding="6dp" />
+                            <TextView
+                                android:text="Recall"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/lume_text_secondary"
+                                android:gravity="center"
+                                android:padding="6dp" />
+                            <TextView
+                                android:text="F1-Score"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/lume_text_secondary"
+                                android:gravity="center"
+                                android:padding="6dp" />
+                        </TableRow>
+
+                        <!-- Hứng thú -->
+                        <TableRow>
+                            <TextView
+                                android:text="Hứng thú"
+                                android:textSize="12sp"
+                                android:textColor="#388E3C"
+                                android:textStyle="bold"
+                                android:padding="6dp" />
+                            <TextView
+                                android:id="@+id/tv_prec_int"
+                                android:text="—"
+                                android:textSize="13sp"
+                                android:gravity="center"
+                                android:padding="6dp" />
+                            <TextView
+                                android:id="@+id/tv_rec_int"
+                                android:text="—"
+                                android:textSize="13sp"
+                                android:gravity="center"
+                                android:padding="6dp" />
+                            <TextView
+                                android:id="@+id/tv_f1_int"
+                                android:text="—"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:gravity="center"
+                                android:padding="6dp" />
+                        </TableRow>
+
+                        <!-- Phân vân -->
+                        <TableRow>
+                            <TextView
+                                android:text="Phân vân"
+                                android:textSize="12sp"
+                                android:textColor="#E65100"
+                                android:textStyle="bold"
+                                android:padding="6dp" />
+                            <TextView
+                                android:id="@+id/tv_prec_hes"
+                                android:text="—"
+                                android:textSize="13sp"
+                                android:gravity="center"
+                                android:padding="6dp" />
+                            <TextView
+                                android:id="@+id/tv_rec_hes"
+                                android:text="—"
+                                android:textSize="13sp"
+                                android:gravity="center"
+                                android:padding="6dp" />
+                            <TextView
+                                android:id="@+id/tv_f1_hes"
+                                android:text="—"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:gravity="center"
+                                android:padding="6dp" />
+                        </TableRow>
+
+                        <!-- Thờ ơ -->
+                        <TableRow>
+                            <TextView
+                                android:text="Thờ ơ"
+                                android:textSize="12sp"
+                                android:textColor="#6D4C41"
+                                android:textStyle="bold"
+                                android:padding="6dp" />
+                            <TextView
+                                android:id="@+id/tv_prec_ind"
+                                android:text="—"
+                                android:textSize="13sp"
+                                android:gravity="center"
+                                android:padding="6dp" />
+                            <TextView
+                                android:id="@+id/tv_rec_ind"
+                                android:text="—"
+                                android:textSize="13sp"
+                                android:gravity="center"
+                                android:padding="6dp" />
+                            <TextView
+                                android:id="@+id/tv_f1_ind"
+                                android:text="—"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:gravity="center"
+                                android:padding="6dp" />
+                        </TableRow>
+                    </TableLayout>
+                </LinearLayout>
+
+                <!-- ── Action buttons ─────────────────────────────────── -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp">
+
+                    <Button
+                        android:id="@+id/btn_export_csv"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="6dp"
+                        android:text="Xuất CSV"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/white"
+                        android:backgroundTint="@color/lume_primary_dark" />
+
+                    <Button
+                        android:id="@+id/btn_clear_data"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        android:text="Xóa dữ liệu"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lume_primary"
+                        android:backgroundTint="#FFF8F0"
+                        style="?attr/materialButtonOutlinedStyle" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_toggle_camera"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Hiện camera"
+                    android:textSize="12sp"
+                    android:textColor="@color/lume_text_secondary"
+                    android:backgroundTint="@color/lume_divider"
+                    android:layout_marginBottom="32dp" />
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <!-- ── Floating camera preview (top-right corner) ──────────────────── -->
+    <androidx.camera.view.PreviewView
+        android:id="@+id/camera_preview"
+        android:layout_width="110dp"
+        android:layout_height="82dp"
+        android:layout_gravity="top|end"
+        android:layout_margin="10dp"
+        android:elevation="4dp"
+        android:visibility="invisible" />
+
+    <!-- ── Calibration overlay (full-screen, shown on first open) ──────── -->
+    <LinearLayout
+        android:id="@+id/calibration_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="#DD000000"
+        android:padding="32dp"
+        android:visibility="visible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hiệu chỉnh baseline"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tv_calib_countdown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3"
+            android:textColor="#C09A6A"
+            android:textSize="64sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nhìn thẳng vào camera\ngiữ khuôn mặt trung lập"
+            android:textColor="#CCCCCC"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:lineSpacingMultiplier="1.4"
+            android:layout_marginBottom="24dp" />
+
+        <Button
+            android:id="@+id/btn_skip_calibration"
+            android:layout_width="160dp"
+            android:layout_height="40dp"
+            android:text="Bỏ qua hiệu chỉnh"
+            android:textSize="12sp"
+            android:textColor="#AAAAAA"
+            android:backgroundTint="#44FFFFFF" />
+    </LinearLayout>
+
+</FrameLayout>

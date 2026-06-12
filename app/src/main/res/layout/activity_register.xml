@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <!-- Header -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/lume_primary_dark"
+        android:elevation="4dp">
+
+        <ImageButton
+            android:id="@+id/btn_register_back"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/ic_back"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:tint="@android:color/white"
+            android:padding="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Tạo tài khoản"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="28dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Xin chào!"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/lume_text_primary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Tạo tài khoản để theo dõi đơn hàng và nhận ưu đãi"
+                android:textSize="13sp"
+                android:textColor="@color/lume_text_secondary"
+                android:lineSpacingMultiplier="1.4" />
+
+            <!-- Full name -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:text="Họ và tên"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="@color/lume_text_primary" />
+
+            <EditText
+                android:id="@+id/et_register_name"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_input_field"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:hint="Nguyễn Văn A"
+                android:textSize="14sp"
+                android:textColorHint="@color/lume_text_secondary"
+                android:textColor="@color/lume_text_primary"
+                android:inputType="textPersonName|textCapWords"
+                android:imeOptions="actionNext"
+                android:singleLine="true" />
+
+            <!-- Email -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Email"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="@color/lume_text_primary" />
+
+            <EditText
+                android:id="@+id/et_register_email"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_input_field"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:hint="email@example.com"
+                android:textSize="14sp"
+                android:textColorHint="@color/lume_text_secondary"
+                android:textColor="@color/lume_text_primary"
+                android:inputType="textEmailAddress"
+                android:imeOptions="actionNext"
+                android:singleLine="true" />
+
+            <!-- Password -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Mật khẩu"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="@color/lume_text_primary" />
+
+            <EditText
+                android:id="@+id/et_register_password"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_input_field"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:hint="Tối thiểu 6 ký tự"
+                android:textSize="14sp"
+                android:textColorHint="@color/lume_text_secondary"
+                android:textColor="@color/lume_text_primary"
+                android:inputType="textPassword"
+                android:imeOptions="actionNext"
+                android:singleLine="true" />
+
+            <!-- Confirm password -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Xác nhận mật khẩu"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="@color/lume_text_primary" />
+
+            <EditText
+                android:id="@+id/et_register_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_input_field"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:hint="Nhập lại mật khẩu"
+                android:textSize="14sp"
+                android:textColorHint="@color/lume_text_secondary"
+                android:textColor="@color/lume_text_primary"
+                android:inputType="textPassword"
+                android:imeOptions="actionDone"
+                android:singleLine="true" />
+
+            <!-- Error -->
+            <TextView
+                android:id="@+id/tv_register_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textSize="12sp"
+                android:textColor="#D32F2F"
+                android:visibility="gone" />
+
+            <!-- Register button -->
+            <Button
+                android:id="@+id/btn_register"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="24dp"
+                android:text="Tạo tài khoản"
+                android:backgroundTint="@color/lume_primary_dark"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:cornerRadius="26dp" />
+
+            <!-- Login link -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Đã có tài khoản?  "
+                    android:textSize="13sp"
+                    android:textColor="@color/lume_text_secondary" />
+
+                <TextView
+                    android:id="@+id/tv_go_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Đăng nhập"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/lume_primary_dark" />
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="20dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

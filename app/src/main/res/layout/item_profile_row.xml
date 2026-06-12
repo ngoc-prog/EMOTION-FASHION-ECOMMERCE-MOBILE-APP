@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:background="?attr/selectableItemBackground">
+
+    <FrameLayout
+        android:id="@+id/icon_bg"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="@drawable/bg_recommendation_card">
+        <ImageView
+            android:id="@+id/row_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_person"
+            android:tint="@color/lume_primary" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/row_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginLeft="14dp"
+        android:text="Menu item"
+        android:textSize="15sp"
+        android:textColor="@color/lume_text_primary" />
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_chevron_right"
+        android:tint="@color/lume_text_secondary" />
+</LinearLayout>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <!-- Background circle — deep navy -->
+    <path
+        android:fillColor="#1A1A2E"
+        android:pathData="M100,2 C154.124,2 198,45.876 198,100 C198,154.124 154.124,198 100,198 C45.876,198 2,154.124 2,100 C2,45.876 45.876,2 100,2Z"/>
+
+    <!-- Gold outer ring -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#C4A055"
+        android:strokeWidth="3"
+        android:pathData="M100,12 C148.601,12 188,51.399 188,100 C188,148.601 148.601,188 100,188 C51.399,188 12,148.601 12,100 C12,51.399 51.399,12 100,12Z"/>
+
+    <!-- Letter É — vertical bar -->
+    <path android:fillColor="#C4A055"
+          android:pathData="M62,58 L80,58 L80,148 L62,148 Z"/>
+
+    <!-- Letter É — top horizontal bar -->
+    <path android:fillColor="#C4A055"
+          android:pathData="M62,58 L148,58 L148,74 L62,74 Z"/>
+
+    <!-- Letter É — middle horizontal bar (shorter) -->
+    <path android:fillColor="#C4A055"
+          android:pathData="M62,95 L134,95 L134,111 L62,111 Z"/>
+
+    <!-- Letter É — bottom horizontal bar -->
+    <path android:fillColor="#C4A055"
+          android:pathData="M62,132 L148,132 L148,148 L62,148 Z"/>
+
+    <!-- Acute accent ´ above É -->
+    <path android:fillColor="#C4A055"
+          android:pathData="M100,30 L115,50 L108,50 L100,40 L92,50 L85,50 Z"/>
+
+    <!-- Thin decorative line below letter -->
+    <path android:fillColor="#C4A055"
+          android:pathData="M72,158 L128,158 L128,161 L72,161 Z"/>
+
+</vector>

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <!-- Header band -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@color/lume_primary_dark">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ÉLAN"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.2"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Fashion · Style · Élégance"
+            android:textSize="12sp"
+            android:letterSpacing="0.05"
+            android:textColor="#CCFFFFFF" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="28dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đăng nhập"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/lume_text_primary" />
+
+            <TextView
+                android:id="@+id/tv_login_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Chào mừng bạn trở lại"
+                android:textSize="13sp"
+                android:textColor="@color/lume_text_secondary" />
+
+            <!-- Email -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:text="Email"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="@color/lume_text_primary" />
+
+            <EditText
+                android:id="@+id/et_login_email"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_input_field"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:hint="admin@elan.vn"
+                android:textSize="14sp"
+                android:textColorHint="@color/lume_text_secondary"
+                android:textColor="@color/lume_text_primary"
+                android:inputType="textEmailAddress"
+                android:imeOptions="actionNext"
+                android:singleLine="true" />
+
+            <!-- Password -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Mật khẩu"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="@color/lume_text_primary" />
+
+            <EditText
+                android:id="@+id/et_login_password"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_input_field"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:hint="••••••••"
+                android:textSize="14sp"
+                android:textColorHint="@color/lume_text_secondary"
+                android:textColor="@color/lume_text_primary"
+                android:inputType="textPassword"
+                android:imeOptions="actionDone"
+                android:singleLine="true" />
+
+            <!-- Remember me -->
+            <CheckBox
+                android:id="@+id/cb_remember_me"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Ghi nhớ tài khoản"
+                android:textSize="13sp"
+                android:textColor="@color/lume_text_secondary"
+                android:buttonTint="@color/lume_primary_dark" />
+
+            <!-- Error message -->
+            <TextView
+                android:id="@+id/tv_login_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textSize="12sp"
+                android:textColor="#D32F2F"
+                android:visibility="gone" />
+
+            <!-- Login button -->
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="24dp"
+                android:text="Đăng nhập"
+                android:backgroundTint="@color/lume_primary_dark"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:cornerRadius="26dp" />
+
+            <!-- Register link -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chưa có tài khoản?  "
+                    android:textSize="13sp"
+                    android:textColor="@color/lume_text_secondary" />
+
+                <TextView
+                    android:id="@+id/tv_go_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Đăng ký"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/lume_primary_dark" />
+            </LinearLayout>
+
+            <!-- Guest / skip button (hidden when from checkout) -->
+            <Button
+                android:id="@+id/btn_login_skip"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:text="Tiếp tục không đăng nhập"
+                android:textColor="@color/lume_text_secondary"
+                android:backgroundTint="@color/lume_divider"
+                android:textSize="13sp"
+                app:cornerRadius="24dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

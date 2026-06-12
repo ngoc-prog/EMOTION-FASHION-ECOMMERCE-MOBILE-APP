@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- ÉLAN brand palette — luxury fashion, warm gold/champagne -->
+    <color name="lume_primary">#C09A6A</color>
+    <color name="lume_primary_dark">#8B6840</color>
+    <color name="lume_background">#FDFAF6</color>
+    <color name="lume_surface">#FFFFFF</color>
+    <color name="lume_text_primary">#1C1C2E</color>
+    <color name="lume_text_secondary">#9A8870</color>
+    <color name="lume_divider">#F0EAE0</color>
+
+    <!-- Emotion badge colors -->
+    <color name="emotion_interested">#4CAF50</color>
+    <color name="emotion_hesitant">#FF9800</color>
+    <color name="emotion_indifferent">#9E9E9E</color>
+    <color name="emotion_unknown">#607D8B</color>
+</resources>

@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/lume_background"
+        android:paddingBottom="72dp"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Product image gallery with button overlays -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="360dp">
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/vp_product_images"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/lume_divider" />
+
+                <!-- Dot indicators -->
+                <LinearLayout
+                    android:id="@+id/ll_dots"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="12dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical" />
+
+                <!-- Back button (top-left) -->
+                <ImageButton
+                    android:id="@+id/btn_back"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="14dp"
+                    android:src="@drawable/ic_back"
+                    android:background="@drawable/bg_circle_white"
+                    android:tint="@color/lume_text_primary"
+                    android:padding="8dp"
+                    android:elevation="4dp" />
+
+                <!-- Wishlist button (top-right) -->
+                <ImageButton
+                    android:id="@+id/btn_detail_wishlist"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="top|end"
+                    android:layout_margin="14dp"
+                    android:src="@drawable/ic_heart"
+                    android:background="@drawable/bg_circle_white"
+                    android:tint="@color/lume_text_secondary"
+                    android:padding="8dp"
+                    android:elevation="4dp"
+                    android:contentDescription="Yêu thích" />
+            </FrameLayout>
+
+            <!-- Content card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:background="@color/white">
+
+                <!-- Brand -->
+                <TextView
+                    android:id="@+id/tv_detail_brand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ÉLAN"
+                    android:textSize="11sp"
+                    android:letterSpacing="0.1"
+                    android:textColor="@color/lume_primary"
+                    android:textStyle="bold" />
+
+                <!-- Name + emotion badge -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="6dp">
+
+                    <TextView
+                        android:id="@+id/tv_detail_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lume_text_primary"
+                        android:lineSpacingMultiplier="1.2" />
+
+                    <com.example.emotioncommerce.ui.EmotionIndicatorView
+                        android:id="@+id/emotion_indicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp" />
+                </LinearLayout>
+
+                <!-- Rating row -->
+                <LinearLayout
+                    android:id="@+id/layout_detail_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="8dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:src="@drawable/ic_star" />
+
+                    <TextView
+                        android:id="@+id/tv_detail_rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="13sp"
+                        android:textColor="@color/lume_text_secondary"
+                        android:layout_marginStart="4dp" />
+                </LinearLayout>
+
+                <!-- Price -->
+                <TextView
+                    android:id="@+id/tv_detail_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:textColor="@color/lume_primary"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp" />
+
+                <!-- Hesitant promotion banner (animated in when HESITANT detected) -->
+                <LinearLayout
+                    android:id="@+id/layout_hesitant_promo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_promo_banner"
+                    android:padding="14dp"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center_vertical"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ưu đãi dành riêng cho bạn"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/lume_primary_dark" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Giảm 10% · Áp dụng khi mua hôm nay"
+                            android:textSize="12sp"
+                            android:textColor="@color/lume_text_secondary"
+                            android:layout_marginTop="2dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="end">
+
+                        <TextView
+                            android:id="@+id/tv_promo_original_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:textColor="@color/lume_text_secondary" />
+
+                        <TextView
+                            android:id="@+id/tv_promo_discounted_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="17sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/lume_primary_dark"
+                            android:layout_marginTop="2dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Divider -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/lume_divider"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginBottom="18dp" />
+
+                <!-- Description label -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MÔ TẢ SẢN PHẨM"
+                    android:textSize="11sp"
+                    android:letterSpacing="0.1"
+                    android:textColor="@color/lume_text_secondary"
+                    android:textStyle="bold" />
+
+                <!-- Description -->
+                <TextView
+                    android:id="@+id/tv_detail_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/lume_text_primary"
+                    android:layout_marginTop="8dp"
+                    android:lineSpacingMultiplier="1.6" />
+
+                <!-- Gemini recommendation card -->
+                <com.example.emotioncommerce.ui.RecommendationCardView
+                    android:id="@+id/recommendation_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp" />
+
+                <!-- Debug toggle -->
+                <Button
+                    android:id="@+id/btn_debug_toggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Debug"
+                    android:textSize="11sp"
+                    style="?attr/materialButtonOutlinedStyle" />
+
+                <!-- Debug text -->
+                <TextView
+                    android:id="@+id/tv_debug_overlay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:padding="10dp"
+                    android:background="#1A000000"
+                    android:textSize="11sp"
+                    android:fontFamily="monospace"
+                    android:textColor="@color/lume_text_primary"
+                    android:lineSpacingMultiplier="1.4" />
+
+                <!-- Camera preview (debug) -->
+                <androidx.camera.view.PreviewView
+                    android:id="@+id/camera_preview"
+                    android:layout_width="100dp"
+                    android:layout_height="130dp"
+                    android:layout_marginTop="8dp"
+                    android:visibility="invisible" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Sticky bottom action bar -->
+    <LinearLayout
+        android:id="@+id/bottom_action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:elevation="12dp"
+        android:paddingHorizontal="16dp"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Giá"
+                android:textSize="11sp"
+                android:textColor="@color/lume_text_secondary" />
+
+            <TextView
+                android:id="@+id/tv_sticky_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/lume_primary_dark" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_add_to_cart"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1.6"
+            android:text="Thêm vào giỏ"
+            android:backgroundTint="@color/lume_primary_dark"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:cornerRadius="24dp" />
+    </LinearLayout>
+
+    <!-- Calibration overlay (covers everything including sticky bar) -->
+    <LinearLayout
+        android:id="@+id/calibration_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="40dp"
+        android:background="#CC000000">
+
+        <TextView
+            android:id="@+id/tv_calibration_countdown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3"
+            android:textColor="#FFFFFF"
+            android:textSize="64sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Đang hiệu chỉnh..."
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Nhìn thẳng vào camera\nGiữ biểu cảm bình thường"
+            android:textColor="#CCCCCC"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:lineSpacingMultiplier="1.5" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:indeterminate="true"
+            android:indeterminateTint="#FFFFFF" />
+    </LinearLayout>
+
+</FrameLayout>
