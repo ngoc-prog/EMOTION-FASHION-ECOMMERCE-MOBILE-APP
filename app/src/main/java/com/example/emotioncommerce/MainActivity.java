@@ -1,5 +1,6 @@
 package com.example.emotioncommerce;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements CartRepository.Ca
         if (savedInstanceState == null) {
             loadFragment(new HomeFragment());
         }
+
+        handleOpenTabIntent(getIntent());
 
         bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
@@ -98,6 +101,20 @@ public class MainActivity extends AppCompatActivity implements CartRepository.Ca
                 .replace(R.id.fragment_container, fragment)
                 .commit();
         bottomNav.setSelectedItemId(R.id.nav_products);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleOpenTabIntent(intent);
+    }
+
+    private void handleOpenTabIntent(Intent intent) {
+        if (intent == null) return;
+        String tab = intent.getStringExtra("open_tab");
+        if ("cart".equals(tab)) {
+            bottomNav.setSelectedItemId(R.id.nav_cart);
+        }
     }
 
     public void switchToHomeTab() {

@@ -1,4 +1,212 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ÉLAN</string>
+    <string name="brand_tagline">Fashion · Style · Élégance</string>
+
+    <!-- Common -->
+    <string name="see_all">See all ›</string>
+    <string name="explore_now">Explore now</string>
+    <string name="explore_now_arrow">Explore now  →</string>
+    <string name="cancel">Cancel</string>
+    <string name="wishlist">Wishlist</string>
+    <string name="products_count">%1$d products</string>
+    <string name="price_currency">%1$,dđ</string>
+
+    <!-- Home -->
+    <string name="home_badge_ai">✦  EMOTION AI</string>
+    <string name="home_headline">Style that matches\nyour mood</string>
+    <string name="home_subtitle">Emotion-aware AI · Personalized picks</string>
+    <string name="categories">Categories</string>
+    <string name="featured_products">Featured products</string>
+    <string name="new_arrivals">New arrivals</string>
+
+    <!-- Login -->
+    <string name="login_title">Sign in</string>
+    <string name="login_welcome">Welcome back</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="remember_me">Remember me</string>
+    <string name="no_account">No account yet?  </string>
+    <string name="register_now">Register now</string>
+    <string name="continue_guest">Continue without signing in</string>
+    <string name="login_to_checkout">Sign in to complete your order</string>
+    <string name="err_login_empty">Please enter both email and password</string>
+    <string name="err_wrong_password">Incorrect password</string>
+    <string name="err_email_not_registered">This email is not registered</string>
+
+    <!-- Register -->
+    <string name="register_title">Create account</string>
+    <string name="register_subtitle">Join ÉLAN for personalized offers</string>
+    <string name="full_name">Full name</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="hint_min6">At least 6 characters</string>
+    <string name="hint_reenter_password">Re-enter password</string>
+    <string name="have_account">Already have an account?  </string>
+    <string name="err_fill_all">Please fill in all fields</string>
+    <string name="err_confirm_mismatch">Passwords do not match</string>
+    <string name="err_email_exists">This email is already registered</string>
+    <string name="err_password_short">Password must be at least 6 characters</string>
+
+    <!-- Product list -->
+    <string name="search_hint">Search products…</string>
+    <string name="clear_search">Clear search</string>
+    <string name="no_products_found">No products found</string>
+    <string name="try_other_search">Try a different search or category</string>
+    <string name="boost_hint">Emotion-based picks: %1$s</string>
+
+    <!-- Product detail -->
+    <string name="promo_title">An offer just for you</string>
+    <string name="promo_subtitle">10% off · Valid when you buy today</string>
+    <string name="select_size">SELECT SIZE</string>
+    <string name="product_description">DESCRIPTION</string>
+    <string name="price_label">Price  </string>
+    <string name="add_to_cart">Add to cart</string>
+    <string name="buy_now">Buy now</string>
+    <string name="added_to_cart_toast">%1$s added to cart</string>
+    <string name="reviews_suffix"> (%1$d reviews)</string>
+    <string name="calibrating">Calibrating…</string>
+    <string name="look_at_camera">Look straight at the camera\nKeep a neutral expression</string>
+    <string name="debug">Debug</string>
+
+    <!-- Cart -->
+    <string name="cart_title">Cart</string>
+    <string name="cart_empty">Your cart is empty</string>
+    <string name="cart_empty_sub">Explore the fashion collection &amp;\nadd your favorite pieces!</string>
+    <string name="proceed_checkout">Proceed to checkout  →</string>
+    <string name="qty_decrease">Decrease</string>
+    <string name="qty_increase">Increase</string>
+    <string name="remove">Remove</string>
+
+    <!-- Checkout -->
+    <string name="checkout_title">Checkout</string>
+    <string name="order_section">Order</string>
+    <string name="order_with_count">Order (%1$d items)</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="shipping_fee">Shipping</string>
+    <string name="free_ship_note">Free shipping on orders from 500,000đ</string>
+    <string name="shipping_info">Delivery information</string>
+    <string name="label_name_required">Full name *</string>
+    <string name="label_phone_required">Phone number *</string>
+    <string name="label_address_required">Address *</string>
+    <string name="label_city_required">City / Province *</string>
+    <string name="choose_city">Select city / province</string>
+    <string name="hint_address">House no., street, ward, district</string>
+    <string name="payment_method">Payment method</string>
+    <string name="pay_cod">Cash on delivery (COD)</string>
+    <string name="pay_bank">Bank transfer</string>
+    <string name="pay_card">Credit / Debit card</string>
+    <string name="total_payment">Total</string>
+    <string name="place_order">Place order</string>
+    <string name="total_fmt">Total: %1$,dđ</string>
+    <string name="free">Free</string>
+    <string name="err_name">Please enter your full name</string>
+    <string name="err_phone">Phone number must be exactly 10 digits</string>
+    <string name="err_address">Please enter your address</string>
+    <string name="err_city">Please select a city/province</string>
+    <string name="err_payment">Please select a payment method</string>
+
+    <!-- Order success -->
+    <string name="order_success_title">Order placed successfully!</string>
+    <string name="order_success_msg">Thank you for trusting ÉLAN.\nWe will contact you to confirm your order within 30 minutes.</string>
+    <string name="continue_shopping">Continue shopping</string>
+    <string name="total_payment_fmt">Total payment: %1$,dđ</string>
+
+    <!-- Profile -->
+    <string name="profile_title">Account</string>
+    <string name="guest">Guest</string>
+    <string name="login_for_full">Sign in for the full experience</string>
+    <string name="stat_cart">Cart</string>
+    <string name="stat_wishlist">Wishlist</string>
+    <string name="stat_viewed">Viewed</string>
+    <string name="analytics_dashboard">Analytics Dashboard</string>
+    <string name="badge_admin">ADMIN</string>
+    <string name="badge_research">RESEARCH</string>
+    <string name="research_mode">Research Mode</string>
+    <string name="section_shopping">SHOPPING</string>
+    <string name="section_account">ACCOUNT</string>
+    <string name="logout">Log out</string>
+    <string name="logout_confirm">Are you sure you want to log out?</string>
+    <string name="logged_out">Logged out</string>
+    <string name="row_orders">My orders</string>
+    <string name="row_wishlist">My wishlist</string>
+    <string name="row_address">Delivery addresses</string>
+    <string name="row_notifications">Notifications</string>
+    <string name="row_about">About ÉLAN</string>
+    <string name="admin_subtitle">ÉLAN Administrator</string>
+    <string name="member_subtitle">ÉLAN Member · Silver tier</string>
+
+    <!-- Admin analytics -->
+    <string name="analytics_title">Analytics</string>
+    <string name="analytics_subtitle">Emotion data · Current session</string>
+    <string name="no_data">No data yet</string>
+    <string name="no_data_sub">Browse a few products so the system\ncan collect emotion data</string>
+    <string name="session_stats">SESSION STATS</string>
+    <string name="stat_products_viewed">Products viewed</string>
+    <string name="stat_view_time">View time</string>
+    <string name="stat_add_cart">Added to cart</string>
+    <string name="emotion_distribution">EMOTION BREAKDOWN</string>
+    <string name="emotion_interested">Interested</string>
+    <string name="emotion_hesitant">Hesitant</string>
+    <string name="emotion_indifferent">Indifferent</string>
+    <string name="ranking_by_interest">RANKED BY INTEREST</string>
+    <string name="timeline_section">TIMELINE</string>
+    <string name="ai_suggestions">AI INSIGHTS</string>
+    <string name="gemini_desc">Gemini analyzes emotion data and suggests improvements for the store</string>
+    <string name="analyze_with_gemini">✦ Analyze with Gemini</string>
+    <string name="gemini_error">Gemini error: %1$s</string>
+    <string name="tab_overview">Overview</string>
+    <string name="tab_products">Products</string>
+    <string name="tab_timeline">Timeline</string>
+    <string name="tab_ai">AI</string>
+    <string name="timeline_showing">Showing %1$d / %2$d recent events</string>
+    <string name="event_add_cart">Added to cart</string>
+    <string name="event_add_wishlist">Added to wishlist</string>
+    <string name="detail_view_time">%1$s viewed</string>
+    <string name="detail_times_cart"> · %1$d× cart</string>
+    <string name="detail_times_wishlist"> · %1$d× wishlist</string>
+
+    <!-- Evaluation / research -->
+    <string name="research_mode_title">Research Mode</string>
+    <string name="current_prediction">CURRENT PREDICTION</string>
+    <string name="calibrating_dash">— Calibrating —</string>
+    <string name="ground_truth">GROUND TRUTH LABELING</string>
+    <string name="gt_instructions">Express an emotion → press the matching button to record a sample</string>
+    <string name="no_samples_yet">No samples yet. Press while clearly expressing an emotion.</string>
+    <string name="confusion_matrix">CONFUSION MATRIX</string>
+    <string name="accuracy_empty">Accuracy: —  |  N = 0 samples</string>
+    <string name="accuracy_fmt">Accuracy: %1$.1f%%  |  N = %2$d samples</string>
+    <string name="eval_metrics">EVALUATION METRICS</string>
+    <string name="label_col">Label</string>
+    <string name="export_csv">Export CSV</string>
+    <string name="clear_data">Clear data</string>
+    <string name="show_camera">Show camera</string>
+    <string name="hide_camera">Hide camera</string>
+    <string name="calibration_baseline">Baseline calibration</string>
+    <string name="look_neutral">Look straight at the camera\nkeep a neutral face</string>
+    <string name="skip_calibration">Skip calibration</string>
+    <string name="pred_interested">Pred\nInterested</string>
+    <string name="pred_hesitant">Pred\nHesitant</string>
+    <string name="pred_indifferent">Pred\nIndifferent</string>
+    <string name="gt_interested">GT\nInterested</string>
+    <string name="gt_hesitant">GT\nHesitant</string>
+    <string name="gt_indifferent">GT\nIndifferent</string>
+    <string name="no_face_data">No face data — point your face at the camera</string>
+    <string name="no_samples_export">No samples to export yet</string>
+    <string name="export_error">Export error: %1$s</string>
+    <string name="clear_confirm_msg">Delete all %1$d recorded samples?</string>
+    <string name="delete">Delete</string>
+    <string name="cleared_msg">Cleared. No samples yet.</string>
+    <string name="sample_correct">✓ Correct</string>
+    <string name="sample_wrong">✗ Wrong (predicted: %1$s)</string>
+    <string name="sample_recorded">Sample #%1$d — %2$s</string>
+    <string name="emotion_interested_code">Interested  (INTERESTED)</string>
+    <string name="emotion_hesitant_code">Hesitant  (HESITANT)</string>
+    <string name="emotion_indifferent_code">Indifferent  (INDIFFERENT)</string>
+    <string name="no_face_detected">No face detected</string>
+    <string name="calib_skipped">Calibration skipped — accuracy may be lower</string>
+    <string name="unknown">Unknown</string>
+
+    <!-- Recommendation / emotion indicator -->
+    <string name="picked_for_you">PICKED FOR YOU</string>
+    <string name="detecting">Detecting…</string>
 </resources>

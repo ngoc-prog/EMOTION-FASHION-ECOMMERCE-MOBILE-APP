@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lume_background">
@@ -31,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="Mode Nghiên Cứu"
+                android:text="@string/research_mode_title"
                 android:textSize="17sp"
                 android:textStyle="bold"
                 android:textColor="@color/lume_text_primary" />
@@ -42,15 +43,15 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="16dp"
-                android:text="RESEARCH"
+                android:text="@string/badge_research"
                 android:textSize="9sp"
                 android:textStyle="bold"
                 android:textColor="#4CAF50"
-                android:background="@drawable/bg_recommendation_card"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp" />
+                android:background="@drawable/bg_tag_green"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp" />
         </RelativeLayout>
 
         <!-- Scrollable content -->
@@ -70,26 +71,42 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@color/white"
-                    android:padding="16dp"
-                    android:layout_marginBottom="10dp">
-
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
+                    <View
+                        android:layout_width="3dp"
+                        android:layout_height="16dp"
+                        android:background="@color/lume_primary"
+                        android:layout_marginEnd="8dp" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="DỰ ĐOÁN HIỆN TẠI"
-                        android:textSize="10sp"
-                        android:letterSpacing="0.1"
+                        android:text="@string/current_prediction"
+                        android:textSize="12sp"
+                        android:letterSpacing="0.08"
                         android:textStyle="bold"
-                        android:textColor="@color/lume_text_secondary"
-                        android:layout_marginBottom="10dp" />
+                        android:textColor="@color/lume_text_primary" />
+                </LinearLayout>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/white">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <TextView
                         android:id="@+id/tv_predicted_emotion"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="— Đang hiệu chỉnh —"
+                        android:text="@string/calibrating_dash"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:textColor="@color/lume_text_secondary"
@@ -119,30 +136,47 @@
                         android:textColor="@color/lume_text_secondary"
                         android:gravity="center" />
                 </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
                 <!-- ── Card 2: Ground Truth Buttons ────────────────────── -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@color/white"
-                    android:padding="16dp"
-                    android:layout_marginBottom="10dp">
-
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
+                    <View
+                        android:layout_width="3dp"
+                        android:layout_height="16dp"
+                        android:background="@color/lume_primary"
+                        android:layout_marginEnd="8dp" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="GHI NHÃN THỰC TẾ"
-                        android:textSize="10sp"
-                        android:letterSpacing="0.1"
+                        android:text="@string/ground_truth"
+                        android:textSize="12sp"
+                        android:letterSpacing="0.08"
                         android:textStyle="bold"
-                        android:textColor="@color/lume_text_secondary"
-                        android:layout_marginBottom="12dp" />
+                        android:textColor="@color/lume_text_primary" />
+                </LinearLayout>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/white">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Thể hiện cảm xúc → nhấn nút tương ứng để ghi nhận mẫu"
+                        android:text="@string/gt_instructions"
                         android:textSize="12sp"
                         android:textColor="@color/lume_text_secondary"
                         android:gravity="center"
@@ -159,12 +193,13 @@
                             android:layout_height="52dp"
                             android:layout_weight="1"
                             android:layout_marginEnd="4dp"
-                            android:text="Hứng thú"
+                            android:text="@string/emotion_interested"
                             android:textSize="12sp"
                             android:textStyle="bold"
                             android:textColor="#FFFFFF"
                             android:backgroundTint="#4CAF50"
-                            android:enabled="false" />
+                            android:enabled="false"
+                            app:cornerRadius="10dp" />
 
                         <Button
                             android:id="@+id/btn_gt_hesitant"
@@ -173,12 +208,13 @@
                             android:layout_weight="1"
                             android:layout_marginStart="4dp"
                             android:layout_marginEnd="4dp"
-                            android:text="Phân vân"
+                            android:text="@string/emotion_hesitant"
                             android:textSize="12sp"
                             android:textStyle="bold"
                             android:textColor="#FFFFFF"
                             android:backgroundTint="#FF9800"
-                            android:enabled="false" />
+                            android:enabled="false"
+                            app:cornerRadius="10dp" />
 
                         <Button
                             android:id="@+id/btn_gt_indifferent"
@@ -186,12 +222,13 @@
                             android:layout_height="52dp"
                             android:layout_weight="1"
                             android:layout_marginStart="4dp"
-                            android:text="Thờ ơ"
+                            android:text="@string/emotion_indifferent"
                             android:textSize="12sp"
                             android:textStyle="bold"
                             android:textColor="#FFFFFF"
                             android:backgroundTint="#9E9E9E"
-                            android:enabled="false" />
+                            android:enabled="false"
+                            app:cornerRadius="10dp" />
                     </LinearLayout>
 
                     <TextView
@@ -199,36 +236,53 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Chưa có mẫu nào. Nhấn khi đang thể hiện rõ cảm xúc."
+                        android:text="@string/no_samples_yet"
                         android:textSize="12sp"
                         android:textColor="@color/lume_text_secondary"
                         android:gravity="center" />
                 </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
                 <!-- ── Card 3: Confusion Matrix ─────────────────────────── -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@color/white"
-                    android:padding="16dp"
-                    android:layout_marginBottom="10dp">
-
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
+                    <View
+                        android:layout_width="3dp"
+                        android:layout_height="16dp"
+                        android:background="@color/lume_primary"
+                        android:layout_marginEnd="8dp" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="CONFUSION MATRIX"
-                        android:textSize="10sp"
-                        android:letterSpacing="0.1"
+                        android:text="@string/confusion_matrix"
+                        android:textSize="12sp"
+                        android:letterSpacing="0.08"
                         android:textStyle="bold"
-                        android:textColor="@color/lume_text_secondary"
-                        android:layout_marginBottom="10dp" />
+                        android:textColor="@color/lume_text_primary" />
+                </LinearLayout>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/white">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <TextView
                         android:id="@+id/tv_accuracy"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Accuracy: —  |  N = 0 mẫu"
+                        android:text="@string/accuracy_empty"
                         android:textSize="15sp"
                         android:textStyle="bold"
                         android:textColor="@color/lume_primary_dark"
@@ -249,21 +303,21 @@
                                 android:text=""
                                 android:padding="4dp" />
                             <TextView
-                                android:text="Pred&#10;Hứng thú"
+                                android:text="@string/pred_interested"
                                 android:textSize="10sp"
                                 android:textStyle="bold"
                                 android:textColor="#388E3C"
                                 android:gravity="center"
                                 android:padding="4dp" />
                             <TextView
-                                android:text="Pred&#10;Phân vân"
+                                android:text="@string/pred_hesitant"
                                 android:textSize="10sp"
                                 android:textStyle="bold"
                                 android:textColor="#E65100"
                                 android:gravity="center"
                                 android:padding="4dp" />
                             <TextView
-                                android:text="Pred&#10;Thờ ơ"
+                                android:text="@string/pred_indifferent"
                                 android:textSize="10sp"
                                 android:textStyle="bold"
                                 android:textColor="#6D4C41"
@@ -274,7 +328,7 @@
                         <!-- Row 0: GT = Hứng thú -->
                         <TableRow>
                             <TextView
-                                android:text="GT&#10;Hứng thú"
+                                android:text="@string/gt_interested"
                                 android:textSize="10sp"
                                 android:textStyle="bold"
                                 android:textColor="#388E3C"
@@ -307,7 +361,7 @@
                         <!-- Row 1: GT = Phân vân -->
                         <TableRow>
                             <TextView
-                                android:text="GT&#10;Phân vân"
+                                android:text="@string/gt_hesitant"
                                 android:textSize="10sp"
                                 android:textStyle="bold"
                                 android:textColor="#E65100"
@@ -340,7 +394,7 @@
                         <!-- Row 2: GT = Thờ ơ -->
                         <TableRow>
                             <TextView
-                                android:text="GT&#10;Thờ ơ"
+                                android:text="@string/gt_indifferent"
                                 android:textSize="10sp"
                                 android:textStyle="bold"
                                 android:textColor="#6D4C41"
@@ -371,25 +425,42 @@
                         </TableRow>
                     </TableLayout>
                 </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
                 <!-- ── Card 4: Per-Class Metrics ────────────────────────── -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@color/white"
-                    android:padding="16dp"
-                    android:layout_marginBottom="10dp">
-
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
+                    <View
+                        android:layout_width="3dp"
+                        android:layout_height="16dp"
+                        android:background="@color/lume_primary"
+                        android:layout_marginEnd="8dp" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="CHỈ SỐ ĐÁNH GIÁ"
-                        android:textSize="10sp"
-                        android:letterSpacing="0.1"
+                        android:text="@string/eval_metrics"
+                        android:textSize="12sp"
+                        android:letterSpacing="0.08"
                         android:textStyle="bold"
-                        android:textColor="@color/lume_text_secondary"
-                        android:layout_marginBottom="10dp" />
+                        android:textColor="@color/lume_text_primary" />
+                </LinearLayout>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/white">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
 
                     <TableLayout
                         android:layout_width="match_parent"
@@ -399,7 +470,7 @@
                         <!-- Header -->
                         <TableRow>
                             <TextView
-                                android:text="Nhãn"
+                                android:text="@string/label_col"
                                 android:textSize="11sp"
                                 android:textStyle="bold"
                                 android:textColor="@color/lume_text_secondary"
@@ -430,7 +501,7 @@
                         <!-- Hứng thú -->
                         <TableRow>
                             <TextView
-                                android:text="Hứng thú"
+                                android:text="@string/emotion_interested"
                                 android:textSize="12sp"
                                 android:textColor="#388E3C"
                                 android:textStyle="bold"
@@ -459,7 +530,7 @@
                         <!-- Phân vân -->
                         <TableRow>
                             <TextView
-                                android:text="Phân vân"
+                                android:text="@string/emotion_hesitant"
                                 android:textSize="12sp"
                                 android:textColor="#E65100"
                                 android:textStyle="bold"
@@ -488,7 +559,7 @@
                         <!-- Thờ ơ -->
                         <TableRow>
                             <TextView
-                                android:text="Thờ ơ"
+                                android:text="@string/emotion_indifferent"
                                 android:textSize="12sp"
                                 android:textColor="#6D4C41"
                                 android:textStyle="bold"
@@ -515,6 +586,7 @@
                         </TableRow>
                     </TableLayout>
                 </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
                 <!-- ── Action buttons ─────────────────────────────────── -->
                 <LinearLayout
@@ -526,38 +598,41 @@
                     <Button
                         android:id="@+id/btn_export_csv"
                         android:layout_width="0dp"
-                        android:layout_height="44dp"
+                        android:layout_height="48dp"
                         android:layout_weight="1"
                         android:layout_marginEnd="6dp"
-                        android:text="Xuất CSV"
+                        android:text="@string/export_csv"
                         android:textSize="13sp"
                         android:textStyle="bold"
                         android:textColor="@android:color/white"
-                        android:backgroundTint="@color/lume_primary_dark" />
+                        android:backgroundTint="@color/lume_primary_dark"
+                        app:cornerRadius="24dp" />
 
                     <Button
                         android:id="@+id/btn_clear_data"
                         android:layout_width="0dp"
-                        android:layout_height="44dp"
+                        android:layout_height="48dp"
                         android:layout_weight="1"
                         android:layout_marginStart="6dp"
-                        android:text="Xóa dữ liệu"
+                        android:text="@string/clear_data"
                         android:textSize="13sp"
                         android:textStyle="bold"
                         android:textColor="@color/lume_primary"
                         android:backgroundTint="#FFF8F0"
-                        style="?attr/materialButtonOutlinedStyle" />
+                        style="?attr/materialButtonOutlinedStyle"
+                        app:cornerRadius="24dp" />
                 </LinearLayout>
 
                 <Button
                     android:id="@+id/btn_toggle_camera"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:text="Hiện camera"
+                    android:text="@string/show_camera"
                     android:textSize="12sp"
                     android:textColor="@color/lume_text_secondary"
                     android:backgroundTint="@color/lume_divider"
-                    android:layout_marginBottom="32dp" />
+                    android:layout_marginBottom="32dp"
+                    app:cornerRadius="20dp" />
 
             </LinearLayout>
         </ScrollView>
@@ -587,7 +662,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hiệu chỉnh baseline"
+            android:text="@string/calibration_baseline"
             android:textColor="#FFFFFF"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -606,7 +681,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nhìn thẳng vào camera\ngiữ khuôn mặt trung lập"
+            android:text="@string/look_neutral"
             android:textColor="#CCCCCC"
             android:textSize="14sp"
             android:gravity="center"
@@ -617,7 +692,7 @@
             android:id="@+id/btn_skip_calibration"
             android:layout_width="160dp"
             android:layout_height="40dp"
-            android:text="Bỏ qua hiệu chỉnh"
+            android:text="@string/skip_calibration"
             android:textSize="12sp"
             android:textColor="#AAAAAA"
             android:backgroundTint="#44FFFFFF" />

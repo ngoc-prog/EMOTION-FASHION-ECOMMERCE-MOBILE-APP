@@ -49,6 +49,17 @@
             android:orientation="vertical"
             android:padding="12dp">
 
+            <!-- tv_product_category id kept for Java compatibility — displays brand -->
+            <TextView
+                android:id="@+id/tv_product_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="9sp"
+                android:letterSpacing="0.08"
+                android:textAllCaps="true"
+                android:textColor="@color/lume_primary"
+                android:layout_marginBottom="3dp" />
+
             <TextView
                 android:id="@+id/tv_product_name"
                 android:layout_width="match_parent"
@@ -59,14 +70,6 @@
                 android:maxLines="2"
                 android:ellipsize="end"
                 android:lineSpacingMultiplier="1.2" />
-
-            <TextView
-                android:id="@+id/tv_product_category"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="11sp"
-                android:textColor="@color/lume_text_secondary"
-                android:layout_marginTop="3dp" />
 
             <!-- Rating row -->
             <LinearLayout

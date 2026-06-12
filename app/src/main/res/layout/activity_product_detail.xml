@@ -84,30 +84,16 @@
                     android:textColor="@color/lume_primary"
                     android:textStyle="bold" />
 
-                <!-- Name + emotion badge -->
-                <LinearLayout
+                <!-- Name -->
+                <TextView
+                    android:id="@+id/tv_detail_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginTop="6dp">
-
-                    <TextView
-                        android:id="@+id/tv_detail_name"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/lume_text_primary"
-                        android:lineSpacingMultiplier="1.2" />
-
-                    <com.example.emotioncommerce.ui.EmotionIndicatorView
-                        android:id="@+id/emotion_indicator"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp" />
-                </LinearLayout>
+                    android:layout_marginTop="6dp"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/lume_text_primary"
+                    android:lineSpacingMultiplier="1.2" />
 
                 <!-- Rating row -->
                 <LinearLayout
@@ -202,6 +188,24 @@
                     </LinearLayout>
                 </LinearLayout>
 
+                <!-- Size selector -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CHỌN SIZE"
+                    android:textSize="11sp"
+                    android:letterSpacing="0.1"
+                    android:textColor="@color/lume_text_secondary"
+                    android:textStyle="bold"
+                    android:layout_marginTop="16dp" />
+
+                <LinearLayout
+                    android:id="@+id/ll_size_chips"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp" />
+
                 <!-- Divider -->
                 <View
                     android:layout_width="match_parent"
@@ -237,7 +241,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp" />
 
-                <!-- Debug toggle -->
+                <!-- Debug toggle (admin only — hidden by default, shown in Java for admin) -->
                 <Button
                     android:id="@+id/btn_debug_toggle"
                     android:layout_width="wrap_content"
@@ -245,6 +249,7 @@
                     android:layout_marginTop="10dp"
                     android:text="Debug"
                     android:textSize="11sp"
+                    android:visibility="gone"
                     style="?attr/materialButtonOutlinedStyle" />
 
                 <!-- Debug text -->
@@ -279,47 +284,78 @@
     <LinearLayout
         android:id="@+id/bottom_action_bar"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:background="@color/white"
         android:elevation="12dp"
-        android:paddingHorizontal="16dp"
-        android:gravity="center_vertical">
+        android:paddingTop="10dp"
+        android:paddingBottom="12dp"
+        android:paddingHorizontal="16dp">
 
+        <!-- Price row -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Giá"
-                android:textSize="11sp"
+                android:text="Giá  "
+                android:textSize="12sp"
                 android:textColor="@color/lume_text_secondary" />
 
             <TextView
                 android:id="@+id/tv_sticky_price"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
+                android:layout_weight="1"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="@color/lume_primary_dark" />
+
+            <!-- Emotion indicator lives here in the bar -->
+            <com.example.emotioncommerce.ui.EmotionIndicatorView
+                android:id="@+id/emotion_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btn_add_to_cart"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1.6"
-            android:text="Thêm vào giỏ"
-            android:backgroundTint="@color/lume_primary_dark"
-            android:textColor="@android:color/white"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:cornerRadius="24dp" />
+        <!-- Buttons row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <Button
+                android:id="@+id/btn_add_to_cart"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="Thêm vào giỏ"
+                android:backgroundTint="#F5F0EB"
+                android:textColor="@color/lume_primary_dark"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:cornerRadius="24dp" />
+
+            <Button
+                android:id="@+id/btn_buy_now"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="Mua ngay"
+                android:backgroundTint="@color/lume_primary_dark"
+                android:textColor="@android:color/white"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:cornerRadius="24dp" />
+        </LinearLayout>
     </LinearLayout>
 
     <!-- Calibration overlay (covers everything including sticky bar) -->

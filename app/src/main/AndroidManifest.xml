@@ -22,9 +22,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ProductListActivity" android:exported="false" />
         <activity android:name=".ProductDetailActivity" android:exported="false" />
-        <activity android:name=".CartActivity" android:exported="false" />
         <activity android:name=".AdminAnalyticsActivity" android:exported="false" />
         <activity android:name=".LoginActivity"          android:exported="false" />
         <activity android:name=".RegisterActivity"       android:exported="false" />

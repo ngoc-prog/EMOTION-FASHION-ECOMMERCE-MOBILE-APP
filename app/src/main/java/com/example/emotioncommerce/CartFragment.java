@@ -27,6 +27,8 @@ public class CartFragment extends Fragment implements CartRepository.CartListene
     private View layoutEmptyCart;
     private View layoutCheckout;
     private TextView tvTotalPrice;
+    private TextView tvCartItemCount;
+    private TextView tvCartCountHeader;
     private CartAdapter adapter;
 
     private final ActivityResultLauncher<Intent> loginLauncher =
@@ -48,10 +50,12 @@ public class CartFragment extends Fragment implements CartRepository.CartListene
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        recyclerCart   = view.findViewById(R.id.recycler_cart);
-        layoutEmptyCart = view.findViewById(R.id.layout_empty_cart);
-        layoutCheckout  = view.findViewById(R.id.layout_checkout);
-        tvTotalPrice    = view.findViewById(R.id.tv_total_price);
+        recyclerCart      = view.findViewById(R.id.recycler_cart);
+        layoutEmptyCart   = view.findViewById(R.id.layout_empty_cart);
+        layoutCheckout    = view.findViewById(R.id.layout_checkout);
+        tvTotalPrice      = view.findViewById(R.id.tv_total_price);
+        tvCartItemCount   = view.findViewById(R.id.tv_cart_item_count);
+        tvCartCountHeader = view.findViewById(R.id.tv_cart_count_header);
 
         recyclerCart.setLayoutManager(new LinearLayoutManager(requireContext()));
         adapter = new CartAdapter();
@@ -106,6 +110,13 @@ public class CartFragment extends Fragment implements CartRepository.CartListene
         if (!empty) {
             adapter.setItems(cart.getItems());
             tvTotalPrice.setText(String.format("%,dđ", cart.getTotalPrice()));
+            int count = cart.getTotalCount();
+            String countLabel = count + " sản phẩm";
+            tvCartItemCount.setText(countLabel);
+            tvCartCountHeader.setText(countLabel);
+            tvCartCountHeader.setVisibility(View.VISIBLE);
+        } else {
+            tvCartCountHeader.setVisibility(View.GONE);
         }
     }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -7,12 +8,13 @@
     android:paddingTop="8dp"
     android:paddingBottom="8dp">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_checkout_img"
         android:layout_width="52dp"
         android:layout_height="52dp"
         android:scaleType="centerCrop"
-        android:background="@drawable/product_placeholder" />
+        android:background="@drawable/product_placeholder"
+        app:shapeAppearanceOverlay="@style/RoundedImage" />
 
     <LinearLayout
         android:layout_width="0dp"

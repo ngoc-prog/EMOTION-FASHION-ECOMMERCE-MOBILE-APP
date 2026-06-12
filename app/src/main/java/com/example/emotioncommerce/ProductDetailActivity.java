@@ -1,7 +1,9 @@
 package com.example.emotioncommerce;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,6 +11,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.graphics.drawable.GradientDrawable;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,6 +31,7 @@ import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import com.example.emotioncommerce.BuildConfig;
+import com.example.emotioncommerce.data.AuthRepository;
 import com.example.emotioncommerce.data.CartRepository;
 import com.example.emotioncommerce.data.SessionAnalyticsRepository;
 import com.example.emotioncommerce.data.WishlistRepository;
@@ -191,6 +195,10 @@ public class ProductDetailActivity extends AppCompatActivity {
         tvPromoOriginalPrice   = findViewById(R.id.tv_promo_original_price);
         tvPromoDiscountedPrice = findViewById(R.id.tv_promo_discounted_price);
 
+        // Size chips
+        setupSizeChips(findViewById(R.id.ll_size_chips));
+
+        // Add to cart
         findViewById(R.id.btn_add_to_cart).setOnClickListener(v -> {
             CartRepository.getInstance().addProduct(currentProduct);
             SessionAnalyticsRepository.getInstance().recordAction(
@@ -200,11 +208,70 @@ public class ProductDetailActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         });
 
-        findViewById(R.id.btn_debug_toggle).setOnClickListener(v -> {
+        // Buy now → add to cart then go to cart
+        findViewById(R.id.btn_buy_now).setOnClickListener(v -> {
+            CartRepository.getInstance().addProduct(currentProduct);
+            SessionAnalyticsRepository.getInstance().recordAction(
+                    currentProduct.getId(), currentProduct.getName(),
+                    lastTrackedEmotion, SessionAnalyticsRepository.ActionRecord.ActionType.ADD_CART);
+            finish();
+            // Navigate to cart tab via MainActivity
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("open_tab", "cart");
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+        });
+
+        // Debug toggle — only shown for admin users
+        Button btnDebug = findViewById(R.id.btn_debug_toggle);
+        if (AuthRepository.getInstance().isAdmin()) {
+            btnDebug.setVisibility(View.VISIBLE);
+        }
+        btnDebug.setOnClickListener(v -> {
             debugVisible = !debugVisible;
             tvDebugOverlay.setVisibility(debugVisible ? View.VISIBLE : View.GONE);
             cameraPreview.setVisibility(debugVisible ? View.VISIBLE : View.INVISIBLE);
         });
+    }
+
+    private int selectedSizeIndex = 1; // default S
+
+    private void setupSizeChips(LinearLayout container) {
+        String[] sizes = {"XS", "S", "M", "L", "XL"};
+        int colorSelected = Color.parseColor("#3D2B1F");
+        int colorUnselected = Color.parseColor("#F5F0EB");
+        int textSelected = Color.WHITE;
+        int textUnselected = Color.parseColor("#3D2B1F");
+
+        for (int i = 0; i < sizes.length; i++) {
+            TextView chip = new TextView(this);
+            int sizePx = dpToPx(36);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(sizePx, sizePx);
+            lp.setMargins(0, 0, dpToPx(8), 0);
+            chip.setLayoutParams(lp);
+            chip.setText(sizes[i]);
+            chip.setTextSize(12f);
+            chip.setGravity(android.view.Gravity.CENTER);
+            chip.setTextColor(i == selectedSizeIndex ? textSelected : textUnselected);
+
+            GradientDrawable bg = new GradientDrawable();
+            bg.setShape(GradientDrawable.OVAL);
+            bg.setColor(i == selectedSizeIndex ? colorSelected : colorUnselected);
+            chip.setBackground(bg);
+
+            final int idx = i;
+            chip.setOnClickListener(v -> {
+                selectedSizeIndex = idx;
+                // Refresh all chips
+                for (int j = 0; j < container.getChildCount(); j++) {
+                    TextView c = (TextView) container.getChildAt(j);
+                    boolean active = (j == selectedSizeIndex);
+                    ((GradientDrawable) c.getBackground()).setColor(active ? colorSelected : colorUnselected);
+                    c.setTextColor(active ? textSelected : textUnselected);
+                }
+            });
+            container.addView(chip);
+        }
     }
 
     private void updateWishlistIcon(ImageButton btn) {
@@ -271,6 +338,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         }, ContextCompat.getMainExecutor(this));
     }
 
+    @androidx.camera.core.ExperimentalGetImage
     private void bindCameraUseCases(ProcessCameraProvider cameraProvider) {
         Preview preview = new Preview.Builder().build();
         preview.setSurfaceProvider(cameraPreview.getSurfaceProvider());

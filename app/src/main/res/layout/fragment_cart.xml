@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -19,26 +20,38 @@
             android:text="Giỏ hàng"
             android:textSize="18sp"
             android:textStyle="bold"
+            android:letterSpacing="0.02"
             android:textColor="@color/lume_text_primary" />
+
+        <TextView
+            android:id="@+id/tv_cart_count_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="16dp"
+            android:textSize="12sp"
+            android:textColor="@color/lume_text_secondary"
+            android:visibility="gone" />
     </RelativeLayout>
 
-    <!-- Content area: takes all remaining space -->
+    <!-- Content area -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <!-- Cart items list — shown when cart is non-empty -->
+        <!-- Cart items list -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_cart"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="12dp"
+            android:paddingTop="14dp"
             android:paddingBottom="8dp"
             android:clipToPadding="false"
             android:visibility="gone" />
 
-        <!-- Empty state — shown when cart is empty -->
+        <!-- Empty state -->
         <LinearLayout
             android:id="@+id/layout_empty_cart"
             android:layout_width="match_parent"
@@ -49,12 +62,12 @@
             android:visibility="visible">
 
             <FrameLayout
-                android:layout_width="88dp"
-                android:layout_height="88dp">
+                android:layout_width="96dp"
+                android:layout_height="96dp">
 
                 <View
-                    android:layout_width="88dp"
-                    android:layout_height="88dp"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
                     android:background="@drawable/bg_recommendation_card" />
 
                 <ImageView
@@ -68,8 +81,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Giỏ hàng của bạn trống"
+                android:layout_marginTop="22dp"
+                android:text="Giỏ hàng của bạn đang trống"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/lume_text_primary" />
@@ -78,7 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Khám phá bộ sưu tập thời trang &amp; phụ kiện\nvà thêm sản phẩm yêu thích nhé!"
+                android:text="Khám phá bộ sưu tập thời trang &amp;\nthêm sản phẩm yêu thích nhé!"
                 android:textSize="14sp"
                 android:textColor="@color/lume_text_secondary"
                 android:gravity="center"
@@ -89,15 +102,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_marginTop="28dp"
-                android:text="Tiếp tục mua sắm"
+                android:text="Khám phá ngay"
                 android:backgroundTint="@color/lume_primary_dark"
                 android:textColor="@android:color/white"
-                android:paddingLeft="28dp"
-                android:paddingRight="28dp" />
+                android:paddingLeft="32dp"
+                android:paddingRight="32dp"
+                app:cornerRadius="24dp" />
         </LinearLayout>
     </FrameLayout>
 
-    <!-- Checkout section — shown when cart is non-empty -->
+    <!-- Checkout section -->
     <LinearLayout
         android:id="@+id/layout_checkout"
         android:layout_width="match_parent"
@@ -112,28 +126,29 @@
             android:layout_height="1dp"
             android:background="@color/lume_divider" />
 
+        <!-- Price breakdown -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingHorizontal="20dp"
             android:paddingTop="14dp"
-            android:paddingBottom="4dp"
+            android:paddingBottom="2dp"
             android:gravity="center_vertical">
 
             <TextView
+                android:id="@+id/tv_cart_item_count"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Tổng cộng"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 android:textColor="@color/lume_text_secondary" />
 
             <TextView
                 android:id="@+id/tv_total_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="@color/lume_primary_dark" />
         </LinearLayout>
@@ -142,14 +157,15 @@
             android:id="@+id/btn_checkout"
             android:layout_width="match_parent"
             android:layout_height="52dp"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="16dp"
-            android:text="Đặt hàng"
+            android:text="Tiến hành đặt hàng  →"
             android:backgroundTint="@color/lume_primary_dark"
             android:textColor="@android:color/white"
             android:textSize="15sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:cornerRadius="26dp" />
     </LinearLayout>
 
 </LinearLayout>

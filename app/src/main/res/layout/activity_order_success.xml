@@ -1,32 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@color/white"
+    android:background="@color/lume_background"
     android:padding="32dp">
 
-    <!-- Check circle icon -->
-    <View
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:background="@drawable/bg_success_circle" />
-
-    <!-- Checkmark drawn via TextView overlay -->
+    <!-- Brand -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-72dp"
-        android:text="✓"
-        android:textSize="44sp"
+        android:text="ÉLAN"
+        android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="@android:color/white" />
+        android:letterSpacing="0.15"
+        android:textColor="@color/lume_primary"
+        android:layout_marginBottom="32dp" />
+
+    <!-- Success icon -->
+    <FrameLayout
+        android:layout_width="100dp"
+        android:layout_height="100dp">
+
+        <View
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/bg_success_circle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="✓"
+            android:textSize="46sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white" />
+    </FrameLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="28dp"
         android:text="Đặt hàng thành công!"
         android:textSize="22sp"
         android:textStyle="bold"
@@ -49,15 +65,22 @@
         android:textSize="15sp"
         android:textColor="@color/lume_text_primary" />
 
+    <!-- Divider line -->
+    <View
+        android:layout_width="48dp"
+        android:layout_height="2dp"
+        android:background="@color/lume_primary"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="16dp" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="Cảm ơn bạn đã tin tưởng ÉLAN.\nChúng tôi sẽ liên hệ xác nhận đơn hàng trong vòng 30 phút."
-        android:textSize="13sp"
+        android:textSize="14sp"
         android:textColor="@color/lume_text_secondary"
         android:gravity="center"
-        android:lineSpacingExtra="4dp" />
+        android:lineSpacingMultiplier="1.6" />
 
     <Button
         android:id="@+id/btn_continue_shopping"
@@ -68,6 +91,7 @@
         android:textSize="15sp"
         android:textStyle="bold"
         android:textColor="@android:color/white"
-        android:backgroundTint="@color/lume_primary_dark" />
+        android:backgroundTint="@color/lume_primary_dark"
+        app:cornerRadius="26dp" />
 
 </LinearLayout>

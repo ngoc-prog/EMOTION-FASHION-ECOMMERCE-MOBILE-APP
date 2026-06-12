@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -29,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="ÉLAN"
+            android:text="@string/app_name"
             android:textSize="22sp"
             android:textStyle="bold"
             android:letterSpacing="0.15"
@@ -100,7 +101,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="✦  EMOTION AI"
+                        android:text="@string/home_badge_ai"
                         android:textSize="10sp"
                         android:textStyle="bold"
                         android:letterSpacing="0.12"
@@ -116,7 +117,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Style theo\ncảm xúc của bạn"
+                        android:text="@string/home_headline"
                         android:textSize="26sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -127,7 +128,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="AI nhận diện cảm xúc · Gợi ý cá nhân hóa"
+                        android:text="@string/home_subtitle"
                         android:textSize="12sp"
                         android:textColor="#CCFFFFFF"
                         android:layout_marginBottom="18dp" />
@@ -137,13 +138,14 @@
                         android:id="@+id/btn_hero_explore"
                         android:layout_width="wrap_content"
                         android:layout_height="38dp"
-                        android:text="Khám phá ngay  →"
+                        android:text="@string/explore_now_arrow"
                         android:textSize="12sp"
                         android:textStyle="bold"
                         android:textColor="@color/lume_primary_dark"
                         android:backgroundTint="#FFFFFF"
                         android:paddingLeft="20dp"
-                        android:paddingRight="20dp" />
+                        android:paddingRight="20dp"
+                        app:cornerRadius="19dp" />
                 </LinearLayout>
             </FrameLayout>
 
@@ -167,7 +169,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Danh mục"
+                    android:text="@string/categories"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.02"
@@ -210,7 +212,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Sản phẩm nổi bật"
+                    android:text="@string/featured_products"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.02"
@@ -220,7 +222,7 @@
                     android:id="@+id/btn_see_all"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Xem tất cả ›"
+                    android:text="@string/see_all"
                     android:textSize="12sp"
                     android:textColor="@color/lume_primary"
                     android:padding="4dp" />
@@ -258,7 +260,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Hàng mới về"
+                    android:text="@string/new_arrivals"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.02"
@@ -268,7 +270,7 @@
                     android:id="@+id/btn_see_all_new"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Xem tất cả ›"
+                    android:text="@string/see_all"
                     android:textSize="12sp"
                     android:textColor="@color/lume_primary"
                     android:padding="4dp" />

@@ -6,34 +6,49 @@
     android:orientation="vertical"
     android:background="@color/white">
 
-    <!-- Header -->
-    <RelativeLayout
+    <!-- Header band — matches Login style -->
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@color/lume_primary_dark"
-        android:elevation="4dp">
+        android:layout_height="150dp"
+        android:background="@drawable/hero_banner">
 
         <ImageButton
             android:id="@+id/btn_register_back"
             android:layout_width="44dp"
             android:layout_height="44dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="4dp"
+            android:layout_gravity="top|start"
+            android:layout_margin="8dp"
             android:src="@drawable/ic_back"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:tint="@android:color/white"
+            android:tint="#CCFFFFFF"
             android:padding="10dp" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="Tạo tài khoản"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/white" />
-    </RelativeLayout>
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.2"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/brand_tagline"
+                android:textSize="12sp"
+                android:letterSpacing="0.05"
+                android:textColor="#CCFFFFFF" />
+        </LinearLayout>
+    </FrameLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -50,7 +65,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Xin chào!"
+                android:text="@string/register_title"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="@color/lume_text_primary" />
@@ -59,20 +74,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Tạo tài khoản để theo dõi đơn hàng và nhận ưu đãi"
+                android:text="@string/register_subtitle"
                 android:textSize="13sp"
-                android:textColor="@color/lume_text_secondary"
-                android:lineSpacingMultiplier="1.4" />
+                android:textColor="@color/lume_text_secondary" />
 
             <!-- Full name -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
-                android:text="Họ và tên"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:textColor="@color/lume_text_primary" />
+                android:text="@string/full_name"
+                android:textSize="12sp"
+                android:letterSpacing="0.03"
+                android:textColor="@color/lume_text_secondary" />
 
             <EditText
                 android:id="@+id/et_register_name"
@@ -95,10 +109,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Email"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:textColor="@color/lume_text_primary" />
+                android:text="@string/email"
+                android:textSize="12sp"
+                android:letterSpacing="0.03"
+                android:textColor="@color/lume_text_secondary" />
 
             <EditText
                 android:id="@+id/et_register_email"
@@ -121,10 +135,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Mật khẩu"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:textColor="@color/lume_text_primary" />
+                android:text="@string/password"
+                android:textSize="12sp"
+                android:letterSpacing="0.03"
+                android:textColor="@color/lume_text_secondary" />
 
             <EditText
                 android:id="@+id/et_register_password"
@@ -134,7 +148,7 @@
                 android:background="@drawable/bg_input_field"
                 android:paddingLeft="14dp"
                 android:paddingRight="14dp"
-                android:hint="Tối thiểu 6 ký tự"
+                android:hint="@string/hint_min6"
                 android:textSize="14sp"
                 android:textColorHint="@color/lume_text_secondary"
                 android:textColor="@color/lume_text_primary"
@@ -147,10 +161,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Xác nhận mật khẩu"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:textColor="@color/lume_text_primary" />
+                android:text="@string/confirm_password"
+                android:textSize="12sp"
+                android:letterSpacing="0.03"
+                android:textColor="@color/lume_text_secondary" />
 
             <EditText
                 android:id="@+id/et_register_confirm"
@@ -160,7 +174,7 @@
                 android:background="@drawable/bg_input_field"
                 android:paddingLeft="14dp"
                 android:paddingRight="14dp"
-                android:hint="Nhập lại mật khẩu"
+                android:hint="@string/hint_reenter_password"
                 android:textSize="14sp"
                 android:textColorHint="@color/lume_text_secondary"
                 android:textColor="@color/lume_text_primary"
@@ -168,7 +182,6 @@
                 android:imeOptions="actionDone"
                 android:singleLine="true" />
 
-            <!-- Error -->
             <TextView
                 android:id="@+id/tv_register_error"
                 android:layout_width="wrap_content"
@@ -178,20 +191,18 @@
                 android:textColor="#D32F2F"
                 android:visibility="gone" />
 
-            <!-- Register button -->
             <Button
                 android:id="@+id/btn_register"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:layout_marginTop="24dp"
-                android:text="Tạo tài khoản"
+                android:text="@string/register_title"
                 android:backgroundTint="@color/lume_primary_dark"
                 android:textColor="@android:color/white"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:cornerRadius="26dp" />
 
-            <!-- Login link -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -202,7 +213,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Đã có tài khoản?  "
+                    android:text="@string/have_account"
                     android:textSize="13sp"
                     android:textColor="@color/lume_text_secondary" />
 
@@ -210,7 +221,7 @@
                     android:id="@+id/tv_go_login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Đăng nhập"
+                    android:text="@string/login_title"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     android:textColor="@color/lume_primary_dark" />

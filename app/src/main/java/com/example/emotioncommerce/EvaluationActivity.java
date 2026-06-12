@@ -290,6 +290,7 @@ public class EvaluationActivity extends AppCompatActivity {
         }, ContextCompat.getMainExecutor(this));
     }
 
+    @androidx.camera.core.ExperimentalGetImage
     private void bindCameraUseCases(ProcessCameraProvider provider) {
         Preview preview = new Preview.Builder().build();
         preview.setSurfaceProvider(cameraPreview.getSurfaceProvider());
