@@ -66,22 +66,22 @@ public class ProfileFragment extends Fragment
 
         btnLogout.setOnClickListener(v ->
             new AlertDialog.Builder(requireContext())
-                .setTitle("Đăng xuất")
-                .setMessage("Bạn có chắc muốn đăng xuất không?")
-                .setPositiveButton("Đăng xuất", (d, w) -> {
+                .setTitle(getString(R.string.logout))
+                .setMessage(getString(R.string.logout_confirm))
+                .setPositiveButton(getString(R.string.logout), (d, w) -> {
                     AuthRepository.getInstance().logout();
-                    Toast.makeText(requireContext(), "Đã đăng xuất", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), getString(R.string.logged_out), Toast.LENGTH_SHORT).show();
                     ((MainActivity) requireActivity()).switchToHomeTab();
                 })
-                .setNegativeButton("Hủy", null)
+                .setNegativeButton(getString(R.string.cancel), null)
                 .show()
         );
 
-        setupRow(view, R.id.row_orders,        R.drawable.ic_cart,     "Đơn hàng của tôi");
-        setupRow(view, R.id.row_wishlist,      R.drawable.ic_heart,    "Sản phẩm yêu thích");
-        setupRow(view, R.id.row_address,       R.drawable.ic_location, "Địa chỉ giao hàng");
-        setupRow(view, R.id.row_notifications, R.drawable.ic_bell,     "Thông báo");
-        setupRow(view, R.id.row_about,         R.drawable.ic_info,     "Về ứng dụng ÉLAN");
+        setupRow(view, R.id.row_orders,        R.drawable.ic_cart,     getString(R.string.row_orders));
+        setupRow(view, R.id.row_wishlist,      R.drawable.ic_heart,    getString(R.string.row_wishlist));
+        setupRow(view, R.id.row_address,       R.drawable.ic_location, getString(R.string.row_address));
+        setupRow(view, R.id.row_notifications, R.drawable.ic_bell,     getString(R.string.row_notifications));
+        setupRow(view, R.id.row_about,         R.drawable.ic_info,     getString(R.string.row_about));
 
         refreshProfileUI();
     }
@@ -117,8 +117,8 @@ public class ProfileFragment extends Fragment
         if (!auth.isLoggedIn()) {
             // Guest state
             tvAvatarLetter.setText("K");
-            tvProfileName.setText("Khách hàng");
-            tvProfileSubtitle.setText("Đăng nhập để trải nghiệm đầy đủ");
+            tvProfileName.setText(getString(R.string.guest));
+            tvProfileSubtitle.setText(getString(R.string.login_for_full));
             btnProfileLogin.setVisibility(View.VISIBLE);
             btnAdminAnalytics.setVisibility(View.GONE);
             btnResearchMode.setVisibility(View.GONE);
@@ -127,7 +127,7 @@ public class ProfileFragment extends Fragment
             // Admin state
             tvAvatarLetter.setText("A");
             tvProfileName.setText(auth.getDisplayName());
-            tvProfileSubtitle.setText("Quản trị viên ÉLAN");
+            tvProfileSubtitle.setText(getString(R.string.admin_subtitle));
             btnProfileLogin.setVisibility(View.GONE);
             btnAdminAnalytics.setVisibility(View.VISIBLE);
             btnResearchMode.setVisibility(View.VISIBLE);
@@ -136,7 +136,7 @@ public class ProfileFragment extends Fragment
             // Customer state
             tvAvatarLetter.setText(auth.getAvatarLetter());
             tvProfileName.setText(auth.getDisplayName());
-            tvProfileSubtitle.setText("Thành viên ÉLAN · Hạng Bạc");
+            tvProfileSubtitle.setText(getString(R.string.member_subtitle));
             btnProfileLogin.setVisibility(View.GONE);
             btnAdminAnalytics.setVisibility(View.GONE);
             btnResearchMode.setVisibility(View.GONE);

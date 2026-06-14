@@ -35,9 +35,8 @@ import java.util.Locale;
 
 public class ProductListFragment extends Fragment {
 
-    private static final String[] CATEGORIES = {
-        "Tất cả", "Thời trang", "Phụ kiện", "Đồng hồ"
-    };
+    // Internal category keys ("" = all). Matched against product.getCategory().
+    private static final String[] CAT_KEYS = {"", "Thời trang", "Phụ kiện", "Đồng hồ"};
 
     private ProductAdapter adapter;
     private RecyclerView recyclerProducts;
@@ -46,7 +45,7 @@ public class ProductListFragment extends Fragment {
     private TextView tvBoostHint;
     private View layoutNoResults;
     private List<Product> allProducts = new ArrayList<>();
-    private String activeCategory = "Tất cả";
+    private String activeCategory = "";
     private String searchQuery = "";
     private final List<TextView> chipViews = new ArrayList<>();
     private float dp;
@@ -66,7 +65,7 @@ public class ProductListFragment extends Fragment {
 
         Bundle args = getArguments();
         if (args != null && args.containsKey("filter_category")) {
-            activeCategory = args.getString("filter_category", "Tất cả");
+            activeCategory = args.getString("filter_category", "");
         }
 
         progressLoading  = view.findViewById(R.id.progress_loading);
@@ -110,12 +109,14 @@ public class ProductListFragment extends Fragment {
 
     private void setupFilterChips(View view) {
         LinearLayout container = view.findViewById(R.id.filter_chips);
+        int[] catLabelRes = {R.string.cat_all, R.string.cat_fashion, R.string.cat_accessories, R.string.cat_watches};
 
-        for (String cat : CATEGORIES) {
+        for (int i = 0; i < CAT_KEYS.length; i++) {
+            String catKey = CAT_KEYS[i];
             TextView chip = new TextView(requireContext());
-            chip.setText(cat);
+            chip.setText(getString(catLabelRes[i]));
             chip.setTextSize(13f);
-            updateChipStyle(chip, cat.equals(activeCategory));
+            updateChipStyle(chip, catKey.equals(activeCategory));
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -125,9 +126,9 @@ public class ProductListFragment extends Fragment {
             chip.setLayoutParams(params);
 
             chip.setOnClickListener(v -> {
-                activeCategory = cat;
-                for (TextView c : chipViews) {
-                    updateChipStyle(c, c.getText().toString().equals(activeCategory));
+                activeCategory = catKey;
+                for (int j = 0; j < chipViews.size(); j++) {
+                    updateChipStyle(chipViews.get(j), CAT_KEYS[j].equals(activeCategory));
                 }
                 filterAndShow();
             });
@@ -184,7 +185,7 @@ public class ProductListFragment extends Fragment {
         String query = searchQuery.toLowerCase(Locale.getDefault());
 
         for (Product p : allProducts) {
-            boolean matchCat = activeCategory.equals("Tất cả")
+            boolean matchCat = activeCategory.isEmpty()
                     || p.getCategory().equals(activeCategory);
             boolean matchSearch = query.isEmpty()
                     || p.getName().toLowerCase(Locale.getDefault()).contains(query)
@@ -195,7 +196,7 @@ public class ProductListFragment extends Fragment {
         // Emotion-driven reorder: bump boosted categories to top (Tất cả view only)
         java.util.Set<String> boosted =
                 SessionAnalyticsRepository.getInstance().getBoostedCategories();
-        boolean reordered = !boosted.isEmpty() && activeCategory.equals("Tất cả");
+        boolean reordered = !boosted.isEmpty() && activeCategory.isEmpty();
         if (reordered) {
             filtered.sort((a, b) -> {
                 boolean aB = boosted.contains(a.getCategory());
@@ -212,7 +213,7 @@ public class ProductListFragment extends Fragment {
         layoutNoResults.setVisibility(empty ? View.VISIBLE : View.GONE);
 
         adapter.setProducts(filtered);
-        tvProductCount.setText(filtered.size() + " sản phẩm");
+        tvProductCount.setText(getString(R.string.products_count, filtered.size()));
     }
 
     private void updateBoostHint(boolean active, java.util.Set<String> boosted) {
@@ -225,7 +226,7 @@ public class ProductListFragment extends Fragment {
             if (cats.length() > 0) cats.append(" · ");
             cats.append(c);
         }
-        tvBoostHint.setText("Gợi ý theo cảm xúc: " + cats);
+        tvBoostHint.setText(getString(R.string.boost_hint, cats.toString()));
 
         GradientDrawable bg = new GradientDrawable();
         bg.setShape(GradientDrawable.RECTANGLE);

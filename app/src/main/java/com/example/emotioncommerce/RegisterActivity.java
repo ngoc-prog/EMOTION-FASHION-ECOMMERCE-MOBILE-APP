@@ -44,11 +44,11 @@ public class RegisterActivity extends AppCompatActivity {
         tvError.setVisibility(View.GONE);
 
         if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            showError("Vui lòng điền đầy đủ thông tin");
+            showError(getString(R.string.err_fill_all));
             return;
         }
         if (!password.equals(confirm)) {
-            showError("Mật khẩu xác nhận không khớp");
+            showError(getString(R.string.err_confirm_mismatch));
             return;
         }
 
@@ -61,10 +61,10 @@ public class RegisterActivity extends AppCompatActivity {
                 finish();
                 break;
             case EMAIL_EXISTS:
-                showError("Email này đã được đăng ký");
+                showError(getString(R.string.err_email_exists));
                 break;
             case WEAK_PASSWORD:
-                showError("Mật khẩu phải có ít nhất 6 ký tự");
+                showError(getString(R.string.err_password_short));
                 break;
         }
     }

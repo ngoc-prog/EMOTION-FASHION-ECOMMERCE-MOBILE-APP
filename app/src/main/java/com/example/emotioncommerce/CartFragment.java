@@ -109,9 +109,9 @@ public class CartFragment extends Fragment implements CartRepository.CartListene
 
         if (!empty) {
             adapter.setItems(cart.getItems());
-            tvTotalPrice.setText(String.format("%,dđ", cart.getTotalPrice()));
+            tvTotalPrice.setText(getString(R.string.price_currency, cart.getTotalPrice()));
             int count = cart.getTotalCount();
-            String countLabel = count + " sản phẩm";
+            String countLabel = getString(R.string.products_count, count);
             tvCartItemCount.setText(countLabel);
             tvCartCountHeader.setText(countLabel);
             tvCartCountHeader.setVisibility(View.VISIBLE);
@@ -139,19 +139,19 @@ public class CartFragment extends Fragment implements CartRepository.CartListene
         @Override
         public void onBindViewHolder(@NonNull VH holder, int position) {
             CartRepository.CartItem item = items.get(position);
-            holder.tvName.setText(item.product.getName());
-            holder.tvBrand.setText(item.product.getBrand());
-            holder.tvPrice.setText(String.format("%,dđ", item.product.getPrice() * item.quantity));
-            holder.tvQuantity.setText(String.valueOf(item.quantity));
+            holder.tvName.setText(item.getProduct().getName());
+            holder.tvBrand.setText(item.getProduct().getBrand());
+            holder.tvPrice.setText(String.format("%,dđ", item.getProduct().getPrice() * item.getQuantity()));
+            holder.tvQuantity.setText(String.valueOf(item.getQuantity()));
 
             Glide.with(holder.itemView.getContext())
-                    .load(item.product.getImageUrl().isEmpty() ? null : item.product.getImageUrl())
+                    .load(item.getProduct().getImageUrl().isEmpty() ? null : item.getProduct().getImageUrl())
                     .placeholder(R.drawable.product_placeholder)
                     .error(R.drawable.product_placeholder)
                     .centerCrop()
                     .into(holder.ivImage);
 
-            int productId = item.product.getId();
+            int productId = item.getProduct().getId();
             holder.btnDecrement.setOnClickListener(v ->
                     CartRepository.getInstance().decrementQuantity(productId));
             holder.btnIncrement.setOnClickListener(v ->

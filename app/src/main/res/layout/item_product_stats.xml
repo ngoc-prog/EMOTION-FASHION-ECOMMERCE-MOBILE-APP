@@ -59,7 +59,7 @@
             <TextView
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
-                android:text="Hứng thú"
+                android:text="@string/emotion_interested"
                 android:textSize="11sp"
                 android:textColor="@color/lume_text_secondary" />
 

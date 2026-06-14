@@ -55,10 +55,10 @@ public class AdminAnalyticsActivity extends AppCompatActivity {
 
     private void setupTabs() {
         TabLayout tabs = findViewById(R.id.tab_layout);
-        tabs.addTab(tabs.newTab().setText("Tổng quan"));
-        tabs.addTab(tabs.newTab().setText("Sản phẩm"));
-        tabs.addTab(tabs.newTab().setText("Timeline"));
-        tabs.addTab(tabs.newTab().setText("AI"));
+        tabs.addTab(tabs.newTab().setText(getString(R.string.tab_overview)));
+        tabs.addTab(tabs.newTab().setText(getString(R.string.tab_products)));
+        tabs.addTab(tabs.newTab().setText(getString(R.string.tab_timeline)));
+        tabs.addTab(tabs.newTab().setText(getString(R.string.tab_ai)));
 
         final View[] panels = {
             findViewById(R.id.panel_overview),
@@ -163,7 +163,7 @@ public class AdminAnalyticsActivity extends AppCompatActivity {
                                 msg = e.getClass().getSimpleName();
                             }
                             if (msg.length() > 300) msg = msg.substring(0, 300) + "...";
-                            tvResult.setText("Lỗi Gemini: " + msg);
+                            tvResult.setText(getString(R.string.gemini_error, msg));
                             tvResult.setVisibility(View.VISIBLE);
                             v.setEnabled(true);
                         });
@@ -247,33 +247,35 @@ public class AdminAnalyticsActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             if (getItemViewType(position) == TYPE_FOOTER) {
                 ((TextView) holder.itemView).setText(
-                        "Hiển thị " + items.size() + " / " + totalCount + " sự kiện gần nhất");
+                        holder.itemView.getContext().getString(R.string.timeline_showing,
+                                items.size(), totalCount));
                 return;
             }
 
             VH h = (VH) holder;
             TimelineEvent event = items.get(position);
 
-            long relSec = Math.max(0, (event.timestampMs - sessionStartMs) / 1000);
+            long relSec = Math.max(0, (event.getTimestampMs() - sessionStartMs) / 1000);
             h.tvTime.setText(String.format("%d:%02d", relSec / 60, relSec % 60));
-            h.tvProduct.setText(event.productName);
+            h.tvProduct.setText(event.getProductName());
 
             int dotColor;
             String detail;
-            if (event.kind == TimelineEvent.Kind.EMOTION) {
-                switch (event.emotion) {
-                    case INTERESTED:  dotColor = 0xFF4CAF50; detail = "Hứng thú"; break;
-                    case INDIFFERENT: dotColor = 0xFF9E8589; detail = "Thờ ơ";    break;
-                    default:          dotColor = 0xFFFF9800; detail = "Phân vân"; break;
+            android.content.Context ctx = h.itemView.getContext();
+            if (event.getKind() == TimelineEvent.Kind.EMOTION) {
+                switch (event.getEmotion()) {
+                    case INTERESTED:  dotColor = 0xFF4CAF50; detail = ctx.getString(R.string.emotion_interested); break;
+                    case INDIFFERENT: dotColor = 0xFF9E8589; detail = ctx.getString(R.string.emotion_indifferent); break;
+                    default:          dotColor = 0xFFFF9800; detail = ctx.getString(R.string.emotion_hesitant); break;
                 }
-                detail += " · " + (event.durationMs / 1000) + "s";
+                detail += " · " + (event.getDurationMs() / 1000) + "s";
             } else {
-                if (event.actionType == SessionAnalyticsRepository.ActionRecord.ActionType.ADD_CART) {
+                if (event.getActionType() == SessionAnalyticsRepository.ActionRecord.ActionType.ADD_CART) {
                     dotColor = 0xFF4CAF50;
-                    detail   = "Thêm vào giỏ hàng";
+                    detail   = ctx.getString(R.string.event_add_cart);
                 } else {
                     dotColor = 0xFFC09A6A;
-                    detail   = "Thêm vào yêu thích";
+                    detail   = ctx.getString(R.string.event_add_wishlist);
                 }
             }
 
@@ -322,20 +324,21 @@ public class AdminAnalyticsActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull VH h, int position) {
             ProductStats ps = items.get(position);
 
-            h.tvName.setText((position + 1) + ". " + ps.productName);
+            h.tvName.setText((position + 1) + ". " + ps.getProductName());
 
             int interestPct = (int)(ps.getInterestRate() * 100);
             h.pbInterest.setProgress(interestPct);
             h.tvInterestPct.setText(interestPct + "%");
 
             // Dominant emotion badge
+            android.content.Context ctx = h.itemView.getContext();
             EmotionLabel dom = ps.getDominantEmotion();
             String domLabel;
             int domColor;
             switch (dom) {
-                case INTERESTED:  domLabel = "Hứng thú"; domColor = 0xFF4CAF50; break;
-                case INDIFFERENT: domLabel = "Thờ ơ";    domColor = 0xFF9E8589; break;
-                default:          domLabel = "Phân vân"; domColor = 0xFFFF9800; break;
+                case INTERESTED:  domLabel = ctx.getString(R.string.emotion_interested); domColor = 0xFF4CAF50; break;
+                case INDIFFERENT: domLabel = ctx.getString(R.string.emotion_indifferent); domColor = 0xFF9E8589; break;
+                default:          domLabel = ctx.getString(R.string.emotion_hesitant); domColor = 0xFFFF9800; break;
             }
             h.tvDominant.setText(domLabel);
             GradientDrawable bg = new GradientDrawable();
@@ -345,11 +348,11 @@ public class AdminAnalyticsActivity extends AppCompatActivity {
             h.tvDominant.setBackground(bg);
 
             // Detail: time + cart
-            long secs = ps.totalViewTimeMs / 1000;
+            long secs = ps.getTotalViewTimeMs() / 1000;
             String timeStr = secs >= 60 ? (secs/60) + "m " + (secs%60) + "s" : secs + "s";
-            String detail = timeStr + " xem";
-            if (ps.cartCount > 0) detail += " · " + ps.cartCount + "× giỏ hàng";
-            if (ps.wishlistCount > 0) detail += " · " + ps.wishlistCount + "× yêu thích";
+            String detail = ctx.getString(R.string.detail_view_time, timeStr);
+            if (ps.getCartCount() > 0) detail += ctx.getString(R.string.detail_times_cart, ps.getCartCount());
+            if (ps.getWishlistCount() > 0) detail += ctx.getString(R.string.detail_times_wishlist, ps.getWishlistCount());
             h.tvDetail.setText(detail);
         }
 

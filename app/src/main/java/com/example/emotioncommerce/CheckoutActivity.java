@@ -48,7 +48,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
         // Pre-fill name from profile
         String displayName = AuthRepository.getInstance().getDisplayName();
-        if (!TextUtils.isEmpty(displayName) && !displayName.equals("Khách hàng")) {
+        if (!TextUtils.isEmpty(displayName) && !displayName.equals(getString(R.string.guest))) {
             etName.setText(displayName);
         }
 
@@ -65,17 +65,17 @@ public class CheckoutActivity extends AppCompatActivity {
 
         // Order summary
         ((TextView) findViewById(R.id.tv_order_count))
-                .setText(String.format("Đơn hàng (%d sản phẩm)", cart.getTotalCount()));
+                .setText(getString(R.string.order_with_count, cart.getTotalCount()));
 
         long subtotal = cart.getTotalPrice();
         long shipping = subtotal > 500_000 ? 0 : 30_000;
         long total    = subtotal + shipping;
 
         ((TextView) findViewById(R.id.tv_subtotal))
-                .setText(String.format("%,dđ", subtotal));
+                .setText(getString(R.string.price_currency, subtotal));
         ((TextView) findViewById(R.id.tv_shipping_fee))
-                .setText(shipping == 0 ? "Miễn phí" : String.format("+%,dđ", shipping));
-        tvBottomTotal.setText(String.format("Tổng: %,dđ", total));
+                .setText(shipping == 0 ? getString(R.string.free) : getString(R.string.price_currency, shipping));
+        tvBottomTotal.setText(getString(R.string.total_fmt, total));
 
         findViewById(R.id.btn_back_checkout).setOnClickListener(v -> finish());
 
@@ -88,7 +88,7 @@ public class CheckoutActivity extends AppCompatActivity {
     private void showProvincePicker() {
         String[] provinces = getResources().getStringArray(R.array.vn_provinces);
         new AlertDialog.Builder(this)
-                .setTitle("Chọn tỉnh / thành phố")
+                .setTitle(getString(R.string.choose_city))
                 .setItems(provinces, (dialog, which) -> {
                     selectedProvince = provinces[which];
                     tvCityLabel.setText(selectedProvince);
@@ -103,27 +103,27 @@ public class CheckoutActivity extends AppCompatActivity {
         String address = getText(etAddress);
 
         if (TextUtils.isEmpty(name)) {
-            etName.setError("Vui lòng nhập họ và tên");
+            etName.setError(getString(R.string.err_name));
             etName.requestFocus();
             return false;
         }
         if (phone.length() != 10 || !phone.matches("[0-9]{10}")) {
-            etPhone.setError("Số điện thoại phải đúng 10 chữ số");
+            etPhone.setError(getString(R.string.err_phone));
             etPhone.requestFocus();
             return false;
         }
         if (TextUtils.isEmpty(address)) {
-            etAddress.setError("Vui lòng nhập địa chỉ");
+            etAddress.setError(getString(R.string.err_address));
             etAddress.requestFocus();
             return false;
         }
         if (TextUtils.isEmpty(selectedProvince)) {
-            Toast.makeText(this, "Vui lòng chọn tỉnh/thành phố", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.err_city), Toast.LENGTH_SHORT).show();
             cityPicker.requestFocus();
             return false;
         }
         if (rgPayment.getCheckedRadioButtonId() == -1) {
-            Toast.makeText(this, "Vui lòng chọn phương thức thanh toán", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.err_payment), Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -170,12 +170,12 @@ public class CheckoutActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull VH h, int pos) {
             CartRepository.CartItem item = items.get(pos);
-            h.tvName.setText(item.product.getName());
-            h.tvBrand.setText(item.product.getBrand());
+            h.tvName.setText(item.getProduct().getName());
+            h.tvBrand.setText(item.getProduct().getBrand());
             h.tvQtyPrice.setText(String.format("x%d  %,dđ",
-                    item.quantity, (long) item.product.getPrice() * item.quantity));
+                    item.getQuantity(), (long) item.getProduct().getPrice() * item.getQuantity()));
             Glide.with(h.itemView.getContext())
-                    .load(item.product.getImageUrl().isEmpty() ? null : item.product.getImageUrl())
+                    .load(item.getProduct().getImageUrl().isEmpty() ? null : item.getProduct().getImageUrl())
                     .placeholder(R.drawable.product_placeholder)
                     .error(R.drawable.product_placeholder)
                     .centerCrop()

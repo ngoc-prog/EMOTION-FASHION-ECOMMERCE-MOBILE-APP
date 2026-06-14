@@ -34,19 +34,19 @@ public class EmotionIndicatorView extends AppCompatTextView {
         String text;
         switch (label) {
             case INTERESTED:
-                text  = "Hứng thú";
+                text  = getContext().getString(com.example.emotioncommerce.R.string.emotion_interested);
                 color = Color.parseColor("#4CAF50");
                 break;
             case HESITANT:
-                text  = "Phân vân";
+                text  = getContext().getString(com.example.emotioncommerce.R.string.emotion_hesitant);
                 color = Color.parseColor("#FF9800");
                 break;
             case INDIFFERENT:
-                text  = "Thờ ơ";
+                text  = getContext().getString(com.example.emotioncommerce.R.string.emotion_indifferent);
                 color = Color.parseColor("#9E9E9E");
                 break;
             default:
-                text  = "Đang phát hiện...";
+                text  = getContext().getString(com.example.emotioncommerce.R.string.detecting);
                 color = Color.parseColor("#607D8B");
                 break;
         }

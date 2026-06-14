@@ -21,7 +21,7 @@ public class GeometricFeatureExtractor {
 
         if (points == null || points.size() < 468) {
             Log.w(TAG, "Not enough landmarks: " + (points == null ? "null" : points.size()));
-            features.isValid = false;
+            features.setValid(false);
             return features;
         }
 
@@ -40,16 +40,16 @@ public class GeometricFeatureExtractor {
 
         if (iod < 1.0f) {
             Log.w(TAG, "IOD too small: " + iod);
-            features.isValid = false;
+            features.setValid(false);
             return features;
         }
 
-        features.browRaiseRatio    = computeBRR(iod);
-        features.eyeAspectRatio    = 0f; // not used in classification
-        features.mouthCurvature    = computeMC();
-        features.mouthAspectRatio  = computeMAR();
-        features.browFurrowDistance = computeBFD(iod);
-        features.isValid = true;
+        features.setBrowRaiseRatio(computeBRR(iod));
+        features.setEyeAspectRatio(0f); // not used in classification
+        features.setMouthCurvature(computeMC());
+        features.setMouthAspectRatio(computeMAR());
+        features.setBrowFurrowDistance(computeBFD(iod));
+        features.setValid(true);
         return features;
     }
 

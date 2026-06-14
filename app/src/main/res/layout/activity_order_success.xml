@@ -12,7 +12,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ÉLAN"
+        android:text="@string/app_name"
         android:textSize="18sp"
         android:textStyle="bold"
         android:letterSpacing="0.15"
@@ -43,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:text="Đặt hàng thành công!"
+        android:text="@string/order_success_title"
         android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="@color/lume_text_primary" />
@@ -76,7 +76,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Cảm ơn bạn đã tin tưởng ÉLAN.\nChúng tôi sẽ liên hệ xác nhận đơn hàng trong vòng 30 phút."
+        android:text="@string/order_success_msg"
         android:textSize="14sp"
         android:textColor="@color/lume_text_secondary"
         android:gravity="center"
@@ -87,7 +87,7 @@
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:layout_marginTop="36dp"
-        android:text="Tiếp tục mua sắm"
+        android:text="@string/continue_shopping"
         android:textSize="15sp"
         android:textStyle="bold"
         android:textColor="@android:color/white"

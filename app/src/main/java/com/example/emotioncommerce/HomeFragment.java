@@ -26,9 +26,8 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
 
-    private static final String[] CATEGORIES = {
-        "Tất cả", "Thời trang", "Phụ kiện", "Đồng hồ"
-    };
+    // Internal category keys ("" = all). Matched against product.getCategory().
+    private static final String[] CAT_KEYS = {"", "Thời trang", "Phụ kiện", "Đồng hồ"};
 
     private List<Product> allProducts;
     private View rootView;
@@ -96,10 +95,12 @@ public class HomeFragment extends Fragment {
     private void setupCategoryChips(View view) {
         LinearLayout container = view.findViewById(R.id.category_chips);
         float dp = requireContext().getResources().getDisplayMetrics().density;
+        int[] catLabelRes = {R.string.cat_all, R.string.cat_fashion, R.string.cat_accessories, R.string.cat_watches};
 
-        for (String category : CATEGORIES) {
+        for (int i = 0; i < CAT_KEYS.length; i++) {
+            String catKey = CAT_KEYS[i];
             TextView chip = new TextView(requireContext());
-            chip.setText(category);
+            chip.setText(getString(catLabelRes[i]));
             chip.setTextSize(13f);
             chip.setTextColor(Color.parseColor("#8B6840"));
 
@@ -121,10 +122,10 @@ public class HomeFragment extends Fragment {
 
             chip.setOnClickListener(v -> {
                 MainActivity main = (MainActivity) requireActivity();
-                if (category.equals("Tất cả")) {
+                if (catKey.isEmpty()) {
                     main.switchToProductsTab();
                 } else {
-                    main.switchToProductsTab(category);
+                    main.switchToProductsTab(catKey);
                 }
             });
 

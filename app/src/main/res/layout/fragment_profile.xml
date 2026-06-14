@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Tài khoản"
+            android:text="@string/profile_title"
             android:textSize="18sp"
             android:textStyle="bold"
             android:letterSpacing="0.02"
@@ -79,7 +79,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
-                    android:text="Khách hàng"
+                    android:text="@string/guest"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="#FFFFFF" />
@@ -89,7 +89,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Đăng nhập để trải nghiệm đầy đủ"
+                    android:text="@string/login_for_full"
                     android:textSize="13sp"
                     android:textColor="#CCFFFFFF" />
 
@@ -98,7 +98,7 @@
                     android:layout_width="160dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="16dp"
-                    android:text="Đăng nhập"
+                    android:text="@string/login_title"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     android:backgroundTint="#FFFFFF"
@@ -132,7 +132,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Giỏ hàng"
+                        android:text="@string/stat_cart"
                         android:textSize="11sp"
                         android:textColor="@color/lume_text_secondary" />
                 </LinearLayout>
@@ -159,7 +159,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Yêu thích"
+                        android:text="@string/stat_wishlist"
                         android:textSize="11sp"
                         android:textColor="@color/lume_text_secondary" />
                 </LinearLayout>
@@ -186,7 +186,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Đã xem"
+                        android:text="@string/stat_viewed"
                         android:textSize="11sp"
                         android:textColor="@color/lume_text_secondary" />
                 </LinearLayout>
@@ -227,7 +227,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginStart="14dp"
-                            android:text="Analytics Dashboard"
+                            android:text="@string/analytics_dashboard"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:textColor="@color/lume_text_primary" />
@@ -235,7 +235,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="ADMIN"
+                            android:text="@string/badge_admin"
                             android:textSize="9sp"
                             android:textStyle="bold"
                             android:textColor="@color/lume_primary_dark"
@@ -271,7 +271,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginStart="14dp"
-                            android:text="Mode Nghiên Cứu"
+                            android:text="@string/research_mode"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:textColor="@color/lume_text_primary" />
@@ -279,7 +279,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="RESEARCH"
+                            android:text="@string/badge_research"
                             android:textSize="9sp"
                             android:textStyle="bold"
                             android:textColor="#2E7D32"
@@ -294,7 +294,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="MUA SẮM"
+                android:text="@string/section_shopping"
                 android:textSize="11sp"
                 android:letterSpacing="0.1"
                 android:textStyle="bold"
@@ -330,7 +330,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TÀI KHOẢN"
+                android:text="@string/section_account"
                 android:textSize="11sp"
                 android:letterSpacing="0.1"
                 android:textStyle="bold"
@@ -367,7 +367,7 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="16dp"
-                android:text="Đăng xuất"
+                android:text="@string/logout"
                 android:textColor="#C62828"
                 android:backgroundTint="#FFF0F0"
                 android:textSize="14sp"

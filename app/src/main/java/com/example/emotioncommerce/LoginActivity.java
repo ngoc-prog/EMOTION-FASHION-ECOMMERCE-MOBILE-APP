@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if (fromCheckout) {
             ((TextView) findViewById(R.id.tv_login_subtitle))
-                    .setText("Đăng nhập để hoàn tất đặt hàng");
+                    .setText(getString(R.string.login_to_checkout));
             findViewById(R.id.btn_login_skip).setVisibility(View.GONE);
         }
 
@@ -81,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
         tvError.setVisibility(View.GONE);
 
         if (email.isEmpty() || password.isEmpty()) {
-            showError("Vui lòng nhập đầy đủ email và mật khẩu");
+            showError(getString(R.string.err_login_empty));
             return;
         }
 
@@ -99,12 +99,12 @@ public class LoginActivity extends AppCompatActivity {
                 break;
 
             case WRONG_PASSWORD:
-                showError("Mật khẩu không đúng");
+                showError(getString(R.string.err_wrong_password));
                 etPassword.setText("");
                 break;
 
             case NOT_FOUND:
-                showError("Email chưa được đăng ký");
+                showError(getString(R.string.err_email_not_registered));
                 break;
         }
     }

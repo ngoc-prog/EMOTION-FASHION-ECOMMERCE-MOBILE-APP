@@ -148,7 +148,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         // Name, price, description
         ((TextView) findViewById(R.id.tv_detail_name)).setText(currentProduct.getName());
-        String priceText = String.format("%,dđ", currentProduct.getPrice());
+        String priceText = getString(R.string.price_currency, currentProduct.getPrice());
         tvDetailPrice = findViewById(R.id.tv_detail_price);
         tvDetailPrice.setText(priceText);
         ((TextView) findViewById(R.id.tv_detail_description)).setText(
@@ -164,7 +164,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             TextView tvRating = findViewById(R.id.tv_detail_rating);
             String ratingText = String.format("%.1f", currentProduct.getRating());
             if (currentProduct.getReviewCount() > 0) {
-                ratingText += " (" + currentProduct.getReviewCount() + " đánh giá)";
+                ratingText += getString(R.string.reviews_suffix, currentProduct.getReviewCount());
             }
             tvRating.setText(ratingText);
             ratingRow.setVisibility(View.VISIBLE);
@@ -204,7 +204,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             SessionAnalyticsRepository.getInstance().recordAction(
                     currentProduct.getId(), currentProduct.getName(),
                     lastTrackedEmotion, SessionAnalyticsRepository.ActionRecord.ActionType.ADD_CART);
-            Toast.makeText(this, currentProduct.getName() + " đã thêm vào giỏ hàng",
+            Toast.makeText(this, getString(R.string.added_to_cart_toast, currentProduct.getName()),
                     Toast.LENGTH_SHORT).show();
         });
 
@@ -399,8 +399,8 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         if (BuildConfig.DEBUG) {
             Log.d(TAG, String.format("BRR=%.3f MC=%.3f MAR=%.3f BFD=%.3f | %s -> %s",
-                    features.browRaiseRatio, features.mouthCurvature,
-                    features.mouthAspectRatio, features.browFurrowDistance,
+                    features.getBrowRaiseRatio(), features.getMouthCurvature(),
+                    features.getMouthAspectRatio(), features.getBrowFurrowDistance(),
                     rawLabel, smoothed));
         }
 
@@ -412,8 +412,8 @@ public class ProductDetailActivity extends AppCompatActivity {
             String debug = String.format(
                 "BRR: %.3f  MC:  %.3f\nMAR: %.3f  BFD: %.3f\n" +
                 "Raw: %s  Smoothed: %s\nGemini: %s\n%s",
-                features.browRaiseRatio, features.mouthCurvature,
-                features.mouthAspectRatio, features.browFurrowDistance,
+                features.getBrowRaiseRatio(), features.getMouthCurvature(),
+                features.getMouthAspectRatio(), features.getBrowFurrowDistance(),
                 rawLabel, smoothed,
                 cooldownSec > 0 ? "cooldown " + cooldownSec + "s" : "ready",
                 emotionClassifier.getBaselineDebugString());
@@ -441,12 +441,12 @@ public class ProductDetailActivity extends AppCompatActivity {
         long originalPrice = currentProduct.getPrice();
         long discountedPrice = (long) (originalPrice * 0.9);
 
-        tvPromoOriginalPrice.setText(String.format("%,dđ", originalPrice));
+        tvPromoOriginalPrice.setText(getString(R.string.price_currency, originalPrice));
         tvPromoOriginalPrice.setPaintFlags(
                 tvPromoOriginalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        tvPromoDiscountedPrice.setText(String.format("%,dđ", discountedPrice));
+        tvPromoDiscountedPrice.setText(getString(R.string.price_currency, discountedPrice));
 
-        String discountedPriceText = String.format("%,dđ", discountedPrice);
+        String discountedPriceText = getString(R.string.price_currency, discountedPrice);
         tvDetailPrice.setText(discountedPriceText);
         tvStickyPrice.setText(discountedPriceText);
 

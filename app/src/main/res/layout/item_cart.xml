@@ -82,7 +82,7 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:tint="@color/lume_primary_dark"
                     android:padding="7dp"
-                    android:contentDescription="Giảm" />
+                    android:contentDescription="@string/qty_decrease" />
 
                 <TextView
                     android:id="@+id/tv_quantity"
@@ -101,7 +101,7 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:tint="@color/lume_primary_dark"
                     android:padding="7dp"
-                    android:contentDescription="Tăng" />
+                    android:contentDescription="@string/qty_increase" />
             </LinearLayout>
         </LinearLayout>
 
@@ -115,7 +115,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:tint="@color/lume_text_secondary"
             android:padding="6dp"
-            android:contentDescription="Xóa" />
+            android:contentDescription="@string/remove" />
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

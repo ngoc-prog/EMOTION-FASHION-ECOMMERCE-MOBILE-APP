@@ -21,7 +21,7 @@ public class OrderSuccessActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.tv_order_number))
                 .setText(orderNum != null ? orderNum : "");
         ((TextView) findViewById(R.id.tv_order_total_success))
-                .setText(String.format("Tổng thanh toán: %,dđ", total));
+                .setText(getString(R.string.total_payment_fmt, total));
 
         // Back to shopping — clear back stack to MainActivity
         findViewById(R.id.btn_continue_shopping).setOnClickListener(v -> {

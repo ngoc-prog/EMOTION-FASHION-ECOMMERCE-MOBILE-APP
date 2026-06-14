@@ -16,11 +16,11 @@ public class SessionAnalyticsRepository {
     // ── Data models ──────────────────────────────────────────────────────────
 
     public static class EmotionRecord {
-        public final int productId;
-        public final String productName;
-        public final EmotionLabel emotion;
-        public final long durationMs;
-        public final long timestampMs;
+        private final int productId;
+        private final String productName;
+        private final EmotionLabel emotion;
+        private final long durationMs;
+        private final long timestampMs;
 
         EmotionRecord(int productId, String productName, EmotionLabel emotion,
                       long durationMs, long timestampMs) {
@@ -30,15 +30,21 @@ public class SessionAnalyticsRepository {
             this.durationMs  = durationMs;
             this.timestampMs = timestampMs;
         }
+
+        public int        getProductId()   { return productId; }
+        public String     getProductName() { return productName; }
+        public EmotionLabel getEmotion()   { return emotion; }
+        public long       getDurationMs()  { return durationMs; }
+        public long       getTimestampMs() { return timestampMs; }
     }
 
     public static class ActionRecord {
         public enum ActionType { ADD_CART, WISHLIST }
-        public final int productId;
-        public final String productName;
-        public final EmotionLabel emotionAtTime;
-        public final ActionType type;
-        public final long timestampMs;
+        private final int productId;
+        private final String productName;
+        private final EmotionLabel emotionAtTime;
+        private final ActionType type;
+        private final long timestampMs;
 
         ActionRecord(int productId, String productName,
                      EmotionLabel emotionAtTime, ActionType type, long timestampMs) {
@@ -48,17 +54,23 @@ public class SessionAnalyticsRepository {
             this.type          = type;
             this.timestampMs   = timestampMs;
         }
+
+        public int          getProductId()     { return productId; }
+        public String       getProductName()   { return productName; }
+        public EmotionLabel getEmotionAtTime() { return emotionAtTime; }
+        public ActionType   getType()          { return type; }
+        public long         getTimestampMs()   { return timestampMs; }
     }
 
     public static class TimelineEvent {
         public enum Kind { EMOTION, ACTION }
-        public final Kind kind;
-        public final int productId;
-        public final String productName;
-        public final long timestampMs;
-        public final EmotionLabel emotion;
-        public final long durationMs;
-        public final ActionRecord.ActionType actionType;
+        private final Kind kind;
+        private final int productId;
+        private final String productName;
+        private final long timestampMs;
+        private final EmotionLabel emotion;
+        private final long durationMs;
+        private final ActionRecord.ActionType actionType;
 
         TimelineEvent(EmotionRecord r) {
             kind        = Kind.EMOTION;
@@ -79,15 +91,23 @@ public class SessionAnalyticsRepository {
             durationMs  = 0;
             actionType  = a.type;
         }
+
+        public Kind                    getKind()        { return kind; }
+        public int                     getProductId()   { return productId; }
+        public String                  getProductName() { return productName; }
+        public long                    getTimestampMs() { return timestampMs; }
+        public EmotionLabel            getEmotion()     { return emotion; }
+        public long                    getDurationMs()  { return durationMs; }
+        public ActionRecord.ActionType getActionType()  { return actionType; }
     }
 
     public static class ProductStats {
-        public final int productId;
-        public final String productName;
-        public final Map<EmotionLabel, Long> emotionTimeMs;
-        public final long totalViewTimeMs;
-        public int cartCount;
-        public int wishlistCount;
+        private final int productId;
+        private final String productName;
+        private final Map<EmotionLabel, Long> emotionTimeMs;
+        private final long totalViewTimeMs;
+        private int cartCount;
+        private int wishlistCount;
 
         ProductStats(int productId, String productName, Map<EmotionLabel, Long> emotionTimeMs) {
             this.productId    = productId;
@@ -97,6 +117,15 @@ public class SessionAnalyticsRepository {
             for (long ms : emotionTimeMs.values()) total += ms;
             this.totalViewTimeMs = total;
         }
+
+        public int                       getProductId()     { return productId; }
+        public String                    getProductName()   { return productName; }
+        public Map<EmotionLabel, Long>   getEmotionTimeMs() { return emotionTimeMs; }
+        public long                      getTotalViewTimeMs() { return totalViewTimeMs; }
+        public int                       getCartCount()     { return cartCount; }
+        public int                       getWishlistCount() { return wishlistCount; }
+        void incrementCartCount()     { cartCount++; }
+        void incrementWishlistCount() { wishlistCount++; }
 
         public float getInterestRate() {
             if (totalViewTimeMs == 0) return 0f;
@@ -223,8 +252,8 @@ public class SessionAnalyticsRepository {
             ProductStats ps = new ProductStats(e.getKey(), nameById.get(e.getKey()), e.getValue());
             for (ActionRecord a : actionRecords) {
                 if (a.productId == e.getKey()) {
-                    if (a.type == ActionRecord.ActionType.ADD_CART) ps.cartCount++;
-                    else ps.wishlistCount++;
+                    if (a.type == ActionRecord.ActionType.ADD_CART) ps.incrementCartCount();
+                    else ps.incrementWishlistCount();
                 }
             }
             stats.add(ps);
@@ -272,10 +301,10 @@ public class SessionAnalyticsRepository {
             for (int i = 0; i < Math.min(5, ranking.size()); i++) {
                 ProductStats ps = ranking.get(i);
                 sb.append(String.format("- \"%s\": %.0f%% hứng thú, %ds xem, %d thêm giỏ\n",
-                        ps.productName,
+                        ps.getProductName(),
                         ps.getInterestRate() * 100,
-                        ps.totalViewTimeMs / 1000,
-                        ps.cartCount));
+                        ps.getTotalViewTimeMs() / 1000,
+                        ps.getCartCount()));
             }
         }
 

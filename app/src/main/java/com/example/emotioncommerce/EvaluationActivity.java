@@ -160,9 +160,8 @@ public class EvaluationActivity extends AppCompatActivity {
         EmotionLabel predicted = latestPredicted;
         long latency          = latestLatencyMs;
 
-        if (f == null || !f.isValid) {
-            Toast.makeText(this, "Không có dữ liệu khuôn mặt — hướng mặt vào camera",
-                    Toast.LENGTH_SHORT).show();
+        if (f == null || !f.isValid()) {
+            Toast.makeText(this, getString(R.string.no_face_data), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -177,11 +176,12 @@ public class EvaluationActivity extends AppCompatActivity {
 
         boolean correct = predicted == groundTruth;
         String resultStr = correct
-                ? "✓ Đúng"
-                : "✗ Sai (dự đoán: " + toVietnamese(predicted) + ")";
+                ? getString(R.string.sample_correct)
+                : getString(R.string.sample_wrong, emotionLabel(predicted));
 
-        tvLastRecord.setText("Mẫu #" + logger.getTotalRecords()
-                + "  GT=" + toVietnamese(groundTruth) + "  " + resultStr);
+        tvLastRecord.setText(getString(R.string.sample_recorded,
+                logger.getTotalRecords(),
+                "GT=" + emotionLabel(groundTruth) + "  " + resultStr));
 
         refreshEvalUI();
     }
@@ -198,7 +198,7 @@ public class EvaluationActivity extends AppCompatActivity {
                 cmCells[i][j].setText(String.valueOf(cm[i][j]));
 
         float acc = logger.computeAccuracy();
-        tvAccuracy.setText(String.format("Accuracy: %.1f%%  |  N = %d mẫu", acc * 100, n));
+        tvAccuracy.setText(getString(R.string.accuracy_fmt, acc * 100, n));
 
         float[][] metrics = logger.computeMetrics();
         for (int i = 0; i < 3; i++) {
@@ -213,29 +213,28 @@ public class EvaluationActivity extends AppCompatActivity {
     private void setupActionButtons() {
         findViewById(R.id.btn_export_csv).setOnClickListener(v -> {
             if (logger.getTotalRecords() == 0) {
-                Toast.makeText(this, "Chưa có mẫu nào để xuất", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.no_samples_export), Toast.LENGTH_SHORT).show();
                 return;
             }
             try {
                 startActivity(logger.buildShareIntent(this));
             } catch (IOException e) {
-                Toast.makeText(this, "Lỗi xuất file: " + e.getMessage(),
+                Toast.makeText(this, getString(R.string.export_error, e.getMessage()),
                         Toast.LENGTH_LONG).show();
             }
         });
 
         findViewById(R.id.btn_clear_data).setOnClickListener(v ->
             new AlertDialog.Builder(this)
-                .setTitle("Xóa dữ liệu")
-                .setMessage("Xóa tất cả " + logger.getTotalRecords() + " mẫu đã ghi?")
-                .setPositiveButton("Xóa", (d, w) -> {
+                .setTitle(getString(R.string.clear_data))
+                .setMessage(getString(R.string.clear_confirm_msg, logger.getTotalRecords()))
+                .setPositiveButton(getString(R.string.delete), (d, w) -> {
                     logger.clear();
-                    tvLastRecord.setText("Đã xóa. Chưa có mẫu nào.");
-                    // Reset confusion matrix display
+                    tvLastRecord.setText(getString(R.string.cleared_msg));
                     for (int i = 0; i < 3; i++)
                         for (int j = 0; j < 3; j++)
                             cmCells[i][j].setText("0");
-                    tvAccuracy.setText("Accuracy: —  |  N = 0 mẫu");
+                    tvAccuracy.setText(getString(R.string.accuracy_empty));
                     String dash = "—";
                     for (int i = 0; i < 3; i++) {
                         precViews[i].setText(dash);
@@ -243,14 +242,14 @@ public class EvaluationActivity extends AppCompatActivity {
                         f1Views[i].setText(dash);
                     }
                 })
-                .setNegativeButton("Hủy", null)
+                .setNegativeButton(getString(R.string.cancel), null)
                 .show());
 
         Button btnToggle = findViewById(R.id.btn_toggle_camera);
         btnToggle.setOnClickListener(v -> {
             boolean nowVisible = cameraPreview.getVisibility() == View.VISIBLE;
             cameraPreview.setVisibility(nowVisible ? View.INVISIBLE : View.VISIBLE);
-            btnToggle.setText(nowVisible ? "Hiện camera" : "Ẩn camera");
+            btnToggle.setText(nowVisible ? getString(R.string.show_camera) : getString(R.string.hide_camera));
         });
 
         findViewById(R.id.btn_skip_calibration).setOnClickListener(v -> skipCalibration());
@@ -370,22 +369,22 @@ public class EvaluationActivity extends AppCompatActivity {
         int color;
         switch (predicted) {
             case INTERESTED:
-                label = "Hứng thú  (INTERESTED)";  color = 0xFF388E3C; break;
+                label = getString(R.string.emotion_interested_code);  color = 0xFF388E3C; break;
             case HESITANT:
-                label = "Phân vân  (HESITANT)";     color = 0xFFE65100; break;
+                label = getString(R.string.emotion_hesitant_code);    color = 0xFFE65100; break;
             case INDIFFERENT:
-                label = "Thờ ơ  (INDIFFERENT)";    color = 0xFF6D4C41; break;
+                label = getString(R.string.emotion_indifferent_code); color = 0xFF6D4C41; break;
             default:
-                label = "Không phát hiện khuôn mặt"; color = 0xFF9A8870; break;
+                label = getString(R.string.no_face_detected);         color = 0xFF9A8870; break;
         }
         tvPredicted.setText(label);
         tvPredicted.setTextColor(color);
 
-        if (f != null && f.isValid) {
+        if (f != null && f.isValid()) {
             tvFeatures.setText(String.format(
                 "BRR: %.3f  |  MC: %.3f  |  MAR: %.3f  |  BFD: %.3f",
-                f.browRaiseRatio, f.mouthCurvature,
-                f.mouthAspectRatio, f.browFurrowDistance));
+                f.getBrowRaiseRatio(), f.getMouthCurvature(),
+                f.getMouthAspectRatio(), f.getBrowFurrowDistance()));
         } else {
             tvFeatures.setText("BRR: —  |  MC: —  |  MAR: —  |  BFD: —");
         }
@@ -394,7 +393,7 @@ public class EvaluationActivity extends AppCompatActivity {
         tvLatency.setText(String.format("Frame: %dms  |  Avg: %dms  |  ~%.0ffps",
                 latency, avgLatency, avgLatency > 0 ? 1000.0 / avgLatency : 0));
 
-        boolean canLabel = !isCalibrating && f != null && f.isValid;
+        boolean canLabel = !isCalibrating && f != null && f.isValid();
         setGroundTruthEnabled(canLabel);
     }
 
@@ -410,17 +409,17 @@ public class EvaluationActivity extends AppCompatActivity {
         calibrationOverlay.setVisibility(View.GONE);
         // Hide camera after calibration skip (user can re-enable with toggle button)
         cameraPreview.setVisibility(View.INVISIBLE);
-        tvPredicted.setText("Hiệu chỉnh đã bỏ qua — độ chính xác có thể thấp hơn");
+        tvPredicted.setText(getString(R.string.calib_skipped));
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
 
-    private String toVietnamese(EmotionLabel label) {
+    private String emotionLabel(EmotionLabel label) {
         switch (label) {
-            case INTERESTED:  return "Hứng thú";
-            case HESITANT:    return "Phân vân";
-            case INDIFFERENT: return "Thờ ơ";
-            default:          return "Không rõ";
+            case INTERESTED:  return getString(R.string.emotion_interested);
+            case HESITANT:    return getString(R.string.emotion_hesitant);
+            case INDIFFERENT: return getString(R.string.emotion_indifferent);
+            default:          return getString(R.string.unknown);
         }
     }
 

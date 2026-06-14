@@ -30,10 +30,10 @@ public class EvaluationLogger {
                           EmotionLabel predicted, EmotionLabel groundTruth,
                           long latencyMs) {
             this.timestampMs  = timestampMs;
-            this.brr          = f.browRaiseRatio;
-            this.mc           = f.mouthCurvature;
-            this.mar          = f.mouthAspectRatio;
-            this.bfd          = f.browFurrowDistance;
+            this.brr          = f.getBrowRaiseRatio();
+            this.mc           = f.getMouthCurvature();
+            this.mar          = f.getMouthAspectRatio();
+            this.bfd          = f.getBrowFurrowDistance();
             this.baselineBrr  = bBrr;
             this.baselineMc   = bMc;
             this.baselineBfd  = bBfd;

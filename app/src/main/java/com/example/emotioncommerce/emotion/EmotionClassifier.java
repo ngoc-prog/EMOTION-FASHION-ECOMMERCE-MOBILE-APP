@@ -54,7 +54,7 @@ public class EmotionClassifier {
     }
 
     public boolean feedCalibration(EmotionFeatures f) {
-        if (!f.isValid) return false;
+        if (!f.isValid()) return false;
         long now = System.currentTimeMillis();
         if (calibrationStartMs < 0) calibrationStartMs = now;
         calibrationSamples.add(f);
@@ -78,9 +78,9 @@ public class EmotionClassifier {
         List<Float> brrs = new ArrayList<>(), mcs = new ArrayList<>(),
                     bfds = new ArrayList<>();
         for (EmotionFeatures f : calibrationSamples) {
-            brrs.add(f.browRaiseRatio);
-            mcs.add(f.mouthCurvature);
-            bfds.add(f.browFurrowDistance);
+            brrs.add(f.getBrowRaiseRatio());
+            mcs.add(f.getMouthCurvature());
+            bfds.add(f.getBrowFurrowDistance());
         }
         baseline = new NeutralBaseline();
         baseline.brr = median(brrs);
@@ -110,13 +110,13 @@ public class EmotionClassifier {
      * forehead/brow muscles → BRR drops; mouth-only expressions (mím môi) do not.
      */
     public EmotionLabel classify(EmotionFeatures f) {
-        if (!f.isValid || baseline == null) return EmotionLabel.UNKNOWN;
+        if (!f.isValid() || baseline == null) return EmotionLabel.UNKNOWN;
 
         // INTERESTED: genuine smile (MC well above baseline + mouth opens)
         // MAR > 0.05 blocks lip-purse/scrunch where mouth stays closed
-        if (f.mouthCurvature > baseline.mc + 0.08f
-                && f.mouthCurvature > 0.04f
-                && f.mouthAspectRatio > 0.05f) {
+        if (f.getMouthCurvature() > baseline.mc + 0.08f
+                && f.getMouthCurvature() > 0.04f
+                && f.getMouthAspectRatio() > 0.05f) {
             return EmotionLabel.INTERESTED;
         }
 
@@ -124,10 +124,10 @@ public class EmotionClassifier {
         // BRR drops ≥0.5%: loosened from 1% — ML Kit smooths landmarks heavily
         // BFD drops ≥1.5%: loosened from 3% for same reason
         // MC < baseline - 0.05 AND absolute MC < -0.02: mouth corners pulled down (frown)
-        boolean browDrop   = f.browRaiseRatio     < baseline.brr * 0.995f;
-        boolean furrowDrop = f.browFurrowDistance < baseline.bfd * 0.985f;
-        boolean frown      = f.mouthCurvature     < baseline.mc  - 0.05f
-                          && f.mouthCurvature     < -0.02f;
+        boolean browDrop   = f.getBrowRaiseRatio()     < baseline.brr * 0.995f;
+        boolean furrowDrop = f.getBrowFurrowDistance() < baseline.bfd * 0.985f;
+        boolean frown      = f.getMouthCurvature()     < baseline.mc  - 0.05f
+                          && f.getMouthCurvature()     < -0.02f;
         if (browDrop || furrowDrop || frown) {
             return EmotionLabel.INDIFFERENT;
         }

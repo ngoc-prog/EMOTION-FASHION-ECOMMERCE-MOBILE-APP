@@ -12,6 +12,12 @@
     <string name="products_count">%1$d products</string>
     <string name="price_currency">%1$,dđ</string>
 
+    <!-- Categories (internal keys match API/product data) -->
+    <string name="cat_all">All</string>
+    <string name="cat_fashion">Fashion</string>
+    <string name="cat_accessories">Accessories</string>
+    <string name="cat_watches">Watches</string>
+
     <!-- Home -->
     <string name="home_badge_ai">✦  EMOTION AI</string>
     <string name="home_headline">Style that matches\nyour mood</string>
