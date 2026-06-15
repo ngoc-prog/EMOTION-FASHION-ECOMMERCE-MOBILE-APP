@@ -2,6 +2,11 @@
 <resources>
     <string name="app_name">ÉLAN</string>
     <string name="brand_tagline">Fashion · Style · Élégance</string>
+    <string name="wishlist_empty">Your wishlist is empty</string>
+    <string name="customer_reviews">CUSTOMER REVIEWS</string>
+    <string name="verified_purchase">✓ Verified</string>
+    <string name="reviews_count">%1$d reviews</string>
+    <string name="avg_rating_fmt">%.1f out of 5</string>
 
     <!-- Common -->
     <string name="see_all">See all ›</string>
@@ -64,6 +69,13 @@
     <string name="promo_title">An offer just for you</string>
     <string name="promo_subtitle">10% off · Valid when you buy today</string>
     <string name="select_size">SELECT SIZE</string>
+    <string name="select_size_watch">SELECT WATCH FACE SIZE</string>
+    <string name="select_size_shoes">SELECT SHOE SIZE</string>
+    <string name="select_size_bag">SELECT BAG SIZE</string>
+    <string name="select_size_glasses">SELECT GLASSES SIZE</string>
+    <string name="size_mini">Mini</string>
+    <string name="size_medium">Medium</string>
+    <string name="size_large">Large</string>
     <string name="product_description">DESCRIPTION</string>
     <string name="price_label">Price  </string>
     <string name="add_to_cart">Add to cart</string>
@@ -96,6 +108,9 @@
     <string name="label_address_required">Address *</string>
     <string name="label_city_required">City / Province *</string>
     <string name="choose_city">Select city / province</string>
+    <string name="hint_name">Nguyen Van A</string>
+    <string name="hint_email">email@example.com</string>
+    <string name="hint_phone">0901234567</string>
     <string name="hint_address">House no., street, ward, district</string>
     <string name="payment_method">Payment method</string>
     <string name="pay_cod">Cash on delivery (COD)</string>
@@ -130,6 +145,7 @@
     <string name="research_mode">Research Mode</string>
     <string name="section_shopping">SHOPPING</string>
     <string name="section_account">ACCOUNT</string>
+    <string name="section_other">OTHER</string>
     <string name="logout">Log out</string>
     <string name="logout_confirm">Are you sure you want to log out?</string>
     <string name="logged_out">Logged out</string>
@@ -211,6 +227,8 @@
     <string name="no_face_detected">No face detected</string>
     <string name="calib_skipped">Calibration skipped — accuracy may be lower</string>
     <string name="unknown">Unknown</string>
+
+    <string name="close">Close</string>
 
     <!-- Recommendation / emotion indicator -->
     <string name="picked_for_you">PICKED FOR YOU</string>

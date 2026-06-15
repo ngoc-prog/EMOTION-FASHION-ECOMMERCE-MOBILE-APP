@@ -9,6 +9,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.emotioncommerce.data.AuthRepository;
 
@@ -24,6 +26,14 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etEmail, etPassword;
     private CheckBox cbRemember;
     private TextView tvError;
+
+    private final ActivityResultLauncher<Intent> registerLauncher =
+        registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == RESULT_OK) {
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
         findViewById(R.id.tv_go_register).setOnClickListener(v -> {
             Intent intent = new Intent(this, RegisterActivity.class);
             intent.putExtra(EXTRA_FROM_CHECKOUT, fromCheckout);
-            startActivityForResult(intent, 1);
+            registerLauncher.launch(intent);
         });
 
         findViewById(R.id.btn_login_skip).setOnClickListener(v -> finish());
@@ -119,15 +129,6 @@ public class LoginActivity extends AppCompatActivity {
             editor.remove(KEY_EMAIL).remove(KEY_PASS).putBoolean(KEY_REMEMBER, false);
         }
         editor.apply();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            setResult(RESULT_OK);
-            finish();
-        }
     }
 
     private void showError(String msg) {

@@ -29,16 +29,35 @@
                 android:letterSpacing="0.12"
                 android:textColor="@color/lume_primary_dark" />
 
-            <ImageButton
-                android:id="@+id/btn_cart"
+            <FrameLayout
                 android:layout_width="44dp"
                 android:layout_height="44dp"
                 android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
-                android:src="@drawable/ic_cart"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:tint="@color/lume_primary_dark"
-                android:padding="10dp" />
+                android:layout_alignParentEnd="true">
+
+                <ImageButton
+                    android:id="@+id/btn_cart"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:src="@drawable/ic_cart"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:tint="@color/lume_primary_dark"
+                    android:padding="10dp" />
+
+                <TextView
+                    android:id="@+id/tv_cart_badge"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="top|end"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="@drawable/bg_badge_red"
+                    android:textColor="#FFFFFF"
+                    android:textSize="9sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:visibility="gone" />
+            </FrameLayout>
         </RelativeLayout>
 
         <!-- Search bar -->
@@ -71,13 +90,43 @@
                 android:id="@+id/btn_clear_search"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:layout_marginStart="6dp"
+                android:layout_marginStart="4dp"
                 android:src="@drawable/ic_close"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:tint="@color/lume_text_secondary"
                 android:padding="8dp"
                 android:visibility="gone"
                 android:contentDescription="@string/clear_search" />
+
+            <!-- Filter button with active badge -->
+            <FrameLayout
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_marginStart="4dp">
+
+                <ImageButton
+                    android:id="@+id/btn_filter"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:src="@drawable/ic_filter"
+                    android:background="@drawable/bg_filter_btn"
+                    android:tint="@color/lume_primary_dark"
+                    android:padding="10dp" />
+
+                <TextView
+                    android:id="@+id/tv_filter_badge"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="top|end"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="2dp"
+                    android:background="@drawable/bg_badge_red"
+                    android:textColor="#FFFFFF"
+                    android:textSize="9sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:visibility="gone" />
+            </FrameLayout>
         </LinearLayout>
 
         <!-- Category filter chips -->

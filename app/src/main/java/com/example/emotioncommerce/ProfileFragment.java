@@ -17,13 +17,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.example.emotioncommerce.data.AuthRepository;
 import com.example.emotioncommerce.data.CartRepository;
+import com.example.emotioncommerce.data.SessionAnalyticsRepository;
 import com.example.emotioncommerce.data.WishlistRepository;
 
 public class ProfileFragment extends Fragment
         implements CartRepository.CartListener, WishlistRepository.WishlistListener {
 
     private TextView tvAvatarLetter, tvProfileName, tvProfileSubtitle;
-    private TextView tvStatCart, tvStatWishlist;
+    private TextView tvStatCart, tvStatWishlist, tvStatViewed;
     private View btnAdminAnalytics, btnResearchMode, btnProfileLogin, btnLogout;
 
     private final ActivityResultLauncher<Intent> loginLauncher =
@@ -50,6 +51,7 @@ public class ProfileFragment extends Fragment
         tvProfileSubtitle = view.findViewById(R.id.tv_profile_subtitle);
         tvStatCart       = view.findViewById(R.id.tv_stat_cart);
         tvStatWishlist   = view.findViewById(R.id.tv_stat_wishlist);
+        tvStatViewed     = view.findViewById(R.id.tv_stat_viewed);
         btnAdminAnalytics = view.findViewById(R.id.btn_admin_analytics);
         btnResearchMode  = view.findViewById(R.id.btn_research_mode);
         btnProfileLogin  = view.findViewById(R.id.btn_profile_login);
@@ -77,11 +79,10 @@ public class ProfileFragment extends Fragment
                 .show()
         );
 
-        setupRow(view, R.id.row_orders,        R.drawable.ic_cart,     getString(R.string.row_orders));
-        setupRow(view, R.id.row_wishlist,      R.drawable.ic_heart,    getString(R.string.row_wishlist));
-        setupRow(view, R.id.row_address,       R.drawable.ic_location, getString(R.string.row_address));
-        setupRow(view, R.id.row_notifications, R.drawable.ic_bell,     getString(R.string.row_notifications));
-        setupRow(view, R.id.row_about,         R.drawable.ic_info,     getString(R.string.row_about));
+        setupRow(view, R.id.row_orders,   R.drawable.ic_cart,     getString(R.string.row_orders));
+        setupRow(view, R.id.row_wishlist, R.drawable.ic_heart,    getString(R.string.row_wishlist));
+        setupRow(view, R.id.row_address,  R.drawable.ic_location, getString(R.string.row_address));
+        setupRow(view, R.id.row_about,    R.drawable.ic_info,     getString(R.string.row_about));
 
         refreshProfileUI();
     }
@@ -153,18 +154,51 @@ public class ProfileFragment extends Fragment
         if (tvStatWishlist != null) {
             tvStatWishlist.setText(String.valueOf(WishlistRepository.getInstance().getCount()));
         }
+        if (tvStatViewed != null) {
+            tvStatViewed.setText(String.valueOf(SessionAnalyticsRepository.getInstance().getTotalProductsViewed()));
+        }
     }
 
     private void setupRow(View parent, int rowId, int iconRes, String title) {
         View row = parent.findViewById(rowId);
         ((ImageView) row.findViewById(R.id.row_icon)).setImageResource(iconRes);
         ((TextView) row.findViewById(R.id.row_title)).setText(title);
-        row.setOnClickListener(v -> {
-            if (!AuthRepository.getInstance().isLoggedIn() && rowId == R.id.row_orders) {
+        row.setOnClickListener(v -> onRowClick(rowId, title));
+    }
+
+    private void onRowClick(int rowId, String title) {
+        if (rowId == R.id.row_orders) {
+            if (!AuthRepository.getInstance().isLoggedIn()) {
                 loginLauncher.launch(new Intent(requireContext(), LoginActivity.class));
             } else {
-                Toast.makeText(requireContext(), title, Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(requireContext(), OrdersActivity.class));
             }
-        });
+        } else if (rowId == R.id.row_wishlist) {
+            startActivity(new Intent(requireContext(), WishlistActivity.class));
+        } else if (rowId == R.id.row_address) {
+            startActivity(new Intent(requireContext(), AddressActivity.class));
+        } else if (rowId == R.id.row_about) {
+            showAboutDialog();
+        }
+    }
+
+    private void showAboutDialog() {
+        android.app.Dialog dialog = new android.app.Dialog(requireContext());
+        dialog.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
+        android.view.View dv = android.view.LayoutInflater.from(requireContext())
+                .inflate(R.layout.dialog_about, null);
+        dialog.setContentView(dv);
+
+        android.view.Window win = dialog.getWindow();
+        if (win != null) {
+            win.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(
+                    android.graphics.Color.TRANSPARENT));
+            win.setLayout(
+                    (int)(getResources().getDisplayMetrics().widthPixels * 0.88f),
+                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
+
+        dv.findViewById(R.id.btn_about_close).setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
     }
 }

@@ -19,22 +19,36 @@ public class WishlistRepository {
         return instance;
     }
 
-    private final Set<Integer> wishlisted = new HashSet<>();
+    private final Set<Integer>        wishlisted = new HashSet<>();
+    private final List<Product>       products   = new ArrayList<>();
     private final List<WishlistListener> listeners = new ArrayList<>();
 
-    private WishlistRepository() {}
+    private WishlistRepository() {
+        // Restore persisted wishlist
+        for (Product p : AppPrefs.loadWishlist()) {
+            wishlisted.add(p.getId());
+            products.add(p);
+        }
+    }
 
     public void toggle(Product product) {
         if (wishlisted.contains(product.getId())) {
             wishlisted.remove(product.getId());
+            products.removeIf(p -> p.getId() == product.getId());
         } else {
             wishlisted.add(product.getId());
+            products.add(product);
         }
+        AppPrefs.saveWishlist(new ArrayList<>(products));
         notifyListeners();
     }
 
     public boolean isWishlisted(int productId) {
         return wishlisted.contains(productId);
+    }
+
+    public List<Product> getProducts() {
+        return new ArrayList<>(products);
     }
 
     public int getCount() {

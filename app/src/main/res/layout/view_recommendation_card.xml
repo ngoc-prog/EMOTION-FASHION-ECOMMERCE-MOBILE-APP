@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="GỢI Ý DÀNH CHO BẠN"
+        android:text="@string/picked_for_you"
         android:textSize="10sp"
         android:textColor="@color/lume_primary_dark"
         android:textStyle="bold"

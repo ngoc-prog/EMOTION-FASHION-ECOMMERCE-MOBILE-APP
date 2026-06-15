@@ -202,9 +202,9 @@ public class EvaluationActivity extends AppCompatActivity {
 
         float[][] metrics = logger.computeMetrics();
         for (int i = 0; i < 3; i++) {
-            precViews[i].setText(String.format("%.0f%%", metrics[i][0] * 100));
-            recViews[i].setText(String.format("%.0f%%", metrics[i][1] * 100));
-            f1Views[i].setText(String.format("%.0f%%", metrics[i][2] * 100));
+            precViews[i].setText(String.format(java.util.Locale.getDefault(), "%.0f%%", metrics[i][0] * 100));
+            recViews[i].setText(String.format(java.util.Locale.getDefault(), "%.0f%%", metrics[i][1] * 100));
+            f1Views[i].setText(String.format(java.util.Locale.getDefault(), "%.0f%%", metrics[i][2] * 100));
         }
     }
 
@@ -381,7 +381,7 @@ public class EvaluationActivity extends AppCompatActivity {
         tvPredicted.setTextColor(color);
 
         if (f != null && f.isValid()) {
-            tvFeatures.setText(String.format(
+            tvFeatures.setText(String.format(java.util.Locale.getDefault(),
                 "BRR: %.3f  |  MC: %.3f  |  MAR: %.3f  |  BFD: %.3f",
                 f.getBrowRaiseRatio(), f.getMouthCurvature(),
                 f.getMouthAspectRatio(), f.getBrowFurrowDistance()));
@@ -390,7 +390,8 @@ public class EvaluationActivity extends AppCompatActivity {
         }
 
         long avgLatency = totalLatencyFrames > 0 ? totalLatencyMs / totalLatencyFrames : 0;
-        tvLatency.setText(String.format("Frame: %dms  |  Avg: %dms  |  ~%.0ffps",
+        tvLatency.setText(String.format(java.util.Locale.getDefault(),
+                "Frame: %dms  |  Avg: %dms  |  ~%.0ffps",
                 latency, avgLatency, avgLatency > 0 ? 1000.0 / avgLatency : 0));
 
         boolean canLabel = !isCalibrating && f != null && f.isValid();

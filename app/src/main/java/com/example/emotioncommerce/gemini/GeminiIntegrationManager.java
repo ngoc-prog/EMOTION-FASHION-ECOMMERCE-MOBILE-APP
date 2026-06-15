@@ -222,11 +222,11 @@ public class GeminiIntegrationManager {
     private String getFallback(EmotionLabel emotion) {
         switch (emotion) {
             case INTERESTED:
-                return "Sản phẩm này đang rất được ưa chuộng! Hãy sở hữu ngay để hoàn thiện phong cách của bạn.";
+                return "This piece is trending right now — add it to your collection before it's gone.";
             case HESITANT:
-                return "Bạn có thể yên tâm — sản phẩm chính hãng 100% với chính sách đổi trả trong 30 ngày.";
+                return "Shop with confidence — 100% authentic with a 30-day hassle-free return policy.";
             default:
-                return "Khám phá thêm bộ sưu tập ÉLAN để tìm phụ kiện hoàn hảo cho phong cách của bạn.";
+                return "Explore the ÉLAN collection to find the perfect accessory for your style.";
         }
     }
 
@@ -235,33 +235,36 @@ public class GeminiIntegrationManager {
     private String buildPrompt(EmotionLabel emotion, Product product) {
         String name     = product.getName();
         String category = product.getCategory();
-        String price    = String.format("%,d", product.getPrice());
+        String price    = String.format(java.util.Locale.getDefault(), "%,d", product.getPrice());
         String desc     = product.getDescription();
         if (desc.length() > DESC_MAX_CHARS) desc = desc.substring(0, DESC_MAX_CHARS) + "...";
 
         switch (emotion) {
             case INTERESTED:
                 return String.format(
-                    "Người dùng đang xem sản phẩm thời trang \"%s\" (danh mục: %s, giá: %sđ). " +
-                    "Mô tả: %s. Người dùng có biểu hiện hứng thú rõ rệt. " +
-                    "Viết 1-2 câu ngắn bằng tiếng Việt để khuyến khích mua ngay, " +
-                    "nhấn mạnh phong cách hoặc sự độc đáo của sản phẩm. " +
-                    "Giọng thân thiện, thời trang. Không dùng emoji.",
+                    "A user is browsing a fashion product \"%s\" (category: %s, price: %s). " +
+                    "Description: %s. The user shows clear signs of interest. " +
+                    "Write 1-2 short sentences to encourage an immediate purchase, " +
+                    "highlighting the style or uniqueness of the product. " +
+                    "Respond in the same language as the product name and description. " +
+                    "Friendly, fashion-forward tone. No emoji.",
                     name, category, price, desc);
             case HESITANT:
                 return String.format(
-                    "Người dùng đang xem sản phẩm thời trang \"%s\" (danh mục: %s, giá: %sđ). " +
-                    "Mô tả: %s. Người dùng đang phân vân chưa quyết định. " +
-                    "Viết 1-2 câu ngắn bằng tiếng Việt để tăng sự tự tin khi mua, " +
-                    "nhấn mạnh chất lượng, độ bền hoặc chính sách đổi trả. " +
-                    "Giọng nhẹ nhàng, thuyết phục. Không dùng emoji.",
+                    "A user is browsing a fashion product \"%s\" (category: %s, price: %s). " +
+                    "Description: %s. The user seems hesitant and undecided. " +
+                    "Write 1-2 short sentences to build purchase confidence, " +
+                    "emphasising quality, durability, or return policy. " +
+                    "Respond in the same language as the product name and description. " +
+                    "Gentle, reassuring tone. No emoji.",
                     name, category, price, desc);
             default:
                 return String.format(
-                    "Người dùng đang xem sản phẩm thời trang \"%s\" (danh mục: %s, giá: %sđ). " +
-                    "Mô tả: %s. Người dùng chưa có phản ứng rõ ràng. " +
-                    "Viết 1-2 câu ngắn bằng tiếng Việt để gợi mở sự tò mò và phong cách. " +
-                    "Giọng tươi, sáng tạo. Không dùng emoji.",
+                    "A user is browsing a fashion product \"%s\" (category: %s, price: %s). " +
+                    "Description: %s. The user has no strong reaction yet. " +
+                    "Write 1-2 short sentences to spark curiosity about the product's style. " +
+                    "Respond in the same language as the product name and description. " +
+                    "Fresh, creative tone. No emoji.",
                     name, category, price, desc);
         }
     }

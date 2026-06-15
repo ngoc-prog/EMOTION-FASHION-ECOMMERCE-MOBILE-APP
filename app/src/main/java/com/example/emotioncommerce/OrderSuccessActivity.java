@@ -3,6 +3,7 @@ package com.example.emotioncommerce;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class OrderSuccessActivity extends AppCompatActivity {
@@ -24,17 +25,16 @@ public class OrderSuccessActivity extends AppCompatActivity {
                 .setText(getString(R.string.total_payment_fmt, total));
 
         // Back to shopping — clear back stack to MainActivity
-        findViewById(R.id.btn_continue_shopping).setOnClickListener(v -> {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(intent);
-            finish();
+        findViewById(R.id.btn_continue_shopping).setOnClickListener(v -> goHome());
+
+        // Prevent back to checkout on hardware back press
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() { goHome(); }
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        // Prevent back to checkout
+    private void goHome() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);

@@ -33,9 +33,9 @@
     <path android:fillColor="#C4A055"
           android:pathData="M62,132 L148,132 L148,148 L62,148 Z"/>
 
-    <!-- Acute accent ´ above É -->
+    <!-- Acute accent ´ above É — slants right like / -->
     <path android:fillColor="#C4A055"
-          android:pathData="M100,30 L115,50 L108,50 L100,40 L92,50 L85,50 Z"/>
+          android:pathData="M93,48 L100,48 L113,26 L106,26 Z"/>
 
     <!-- Thin decorative line below letter -->
     <path android:fillColor="#C4A055"

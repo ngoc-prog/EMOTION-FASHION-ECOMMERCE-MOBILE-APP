@@ -10,15 +10,25 @@ public class CartRepository {
 
     public static class CartItem {
         private final Product product;
+        private final long effectivePrice;
         private int quantity;
 
-        CartItem(Product product) {
-            this.product = product;
-            this.quantity = 1;
+        CartItem(Product product, long effectivePrice) {
+            this.product       = product;
+            this.effectivePrice = effectivePrice;
+            this.quantity      = 1;
         }
 
-        public Product getProduct()  { return product; }
-        public int     getQuantity() { return quantity; }
+        // Used only by AppPrefs when restoring persisted data
+        public static CartItem fromPrefs(Product product, long effectivePrice, int quantity) {
+            CartItem item = new CartItem(product, effectivePrice);
+            item.quantity = quantity;
+            return item;
+        }
+
+        public Product getProduct()        { return product; }
+        public int     getQuantity()       { return quantity; }
+        public long    getEffectivePrice() { return effectivePrice; }
     }
 
     public interface CartListener {
@@ -35,20 +45,31 @@ public class CartRepository {
     private final Map<Integer, CartItem> items = new LinkedHashMap<>();
     private final List<CartListener> listeners = new ArrayList<>();
 
-    private CartRepository() {}
+    private CartRepository() {
+        // Restore persisted cart
+        for (CartItem item : AppPrefs.loadCart()) {
+            items.put(item.getProduct().getId(), item);
+        }
+    }
 
     public void addProduct(Product product) {
+        addProduct(product, product.getPrice());
+    }
+
+    public void addProduct(Product product, long effectivePrice) {
         CartItem existing = items.get(product.getId());
         if (existing != null) {
             existing.quantity++;
         } else {
-            items.put(product.getId(), new CartItem(product));
+            items.put(product.getId(), new CartItem(product, effectivePrice));
         }
+        persist();
         notifyListeners();
     }
 
     public void removeProduct(int productId) {
         items.remove(productId);
+        persist();
         notifyListeners();
     }
 
@@ -56,6 +77,7 @@ public class CartRepository {
         CartItem item = items.get(productId);
         if (item != null) {
             item.quantity++;
+            persist();
             notifyListeners();
         }
     }
@@ -68,6 +90,7 @@ public class CartRepository {
         } else {
             item.quantity--;
         }
+        persist();
         notifyListeners();
     }
 
@@ -83,7 +106,7 @@ public class CartRepository {
 
     public long getTotalPrice() {
         long total = 0;
-        for (CartItem i : items.values()) total += i.product.getPrice() * i.quantity;
+        for (CartItem i : items.values()) total += i.effectivePrice * i.quantity;
         return total;
     }
 
@@ -93,6 +116,7 @@ public class CartRepository {
 
     public void clear() {
         items.clear();
+        AppPrefs.clearCart();
         notifyListeners();
     }
 
@@ -102,6 +126,10 @@ public class CartRepository {
 
     public void removeListener(CartListener l) {
         listeners.remove(l);
+    }
+
+    private void persist() {
+        AppPrefs.saveCart(new ArrayList<>(items.values()));
     }
 
     private void notifyListeners() {

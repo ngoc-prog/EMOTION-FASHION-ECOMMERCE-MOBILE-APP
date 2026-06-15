@@ -326,11 +326,11 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Section: Tài khoản -->
+            <!-- Section: Khác -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/section_account"
+                android:text="@string/section_other"
                 android:textSize="11sp"
                 android:letterSpacing="0.1"
                 android:textStyle="bold"
@@ -352,9 +352,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <include layout="@layout/item_profile_row" android:id="@+id/row_notifications" />
-                    <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="@color/lume_divider" android:layout_marginStart="56dp" />
                     <include layout="@layout/item_profile_row" android:id="@+id/row_about" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

@@ -256,7 +256,7 @@ public class AdminAnalyticsActivity extends AppCompatActivity {
             TimelineEvent event = items.get(position);
 
             long relSec = Math.max(0, (event.getTimestampMs() - sessionStartMs) / 1000);
-            h.tvTime.setText(String.format("%d:%02d", relSec / 60, relSec % 60));
+            h.tvTime.setText(String.format(java.util.Locale.getDefault(), "%d:%02d", relSec / 60, relSec % 60));
             h.tvProduct.setText(event.getProductName());
 
             int dotColor;

@@ -126,6 +126,43 @@
             android:layout_height="1dp"
             android:background="@color/lume_divider" />
 
+        <!-- Select all row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="20dp">
+
+            <CheckBox
+                android:id="@+id/cb_select_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/checkbox_tint"
+                android:background="@drawable/ripple_brand" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="Chọn tất cả"
+                android:textSize="13sp"
+                android:textColor="@color/lume_text_primary" />
+
+            <TextView
+                android:id="@+id/tv_selected_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/lume_text_secondary" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lume_divider" />
+
         <!-- Price breakdown -->
         <LinearLayout
             android:layout_width="match_parent"

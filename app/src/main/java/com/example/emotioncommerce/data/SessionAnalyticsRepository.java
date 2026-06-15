@@ -74,22 +74,22 @@ public class SessionAnalyticsRepository {
 
         TimelineEvent(EmotionRecord r) {
             kind        = Kind.EMOTION;
-            productId   = r.productId;
-            productName = r.productName;
-            timestampMs = r.timestampMs;
-            emotion     = r.emotion;
-            durationMs  = r.durationMs;
+            productId   = r.getProductId();
+            productName = r.getProductName();
+            timestampMs = r.getTimestampMs();
+            emotion     = r.getEmotion();
+            durationMs  = r.getDurationMs();
             actionType  = null;
         }
 
         TimelineEvent(ActionRecord a) {
             kind        = Kind.ACTION;
-            productId   = a.productId;
-            productName = a.productName;
-            timestampMs = a.timestampMs;
+            productId   = a.getProductId();
+            productName = a.getProductName();
+            timestampMs = a.getTimestampMs();
             emotion     = null;
             durationMs  = 0;
-            actionType  = a.type;
+            actionType  = a.getType();
         }
 
         public Kind                    getKind()        { return kind; }

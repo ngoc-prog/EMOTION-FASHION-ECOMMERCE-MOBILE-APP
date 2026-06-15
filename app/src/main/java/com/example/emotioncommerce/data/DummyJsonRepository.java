@@ -97,7 +97,7 @@ public class DummyJsonRepository {
 
                         combined.add(new Product(id, p.getString("title"),
                             p.getString("description"), price, 0,
-                            mapCategory(category), thumb,
+                            mapCategory(category), category, thumb,
                             p.optString("brand", "ÉLAN"), imgs,
                             rating, rev != null ? rev.length() : 0));
                     }

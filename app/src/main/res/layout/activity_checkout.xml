@@ -154,6 +154,111 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- ── Address picker (Shopee-style) ────────────────── -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_address_picker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="12dp"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Header row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="12dp">
+
+                        <View
+                            android:layout_width="3dp"
+                            android:layout_height="16dp"
+                            android:background="@color/lume_primary"
+                            android:layout_marginEnd="8dp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Địa chỉ giao hàng"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/lume_text_primary" />
+
+                        <TextView
+                            android:id="@+id/btn_change_address"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Thay đổi ›"
+                            android:textSize="13sp"
+                            android:textColor="@color/lume_primary_dark"
+                            android:textStyle="bold"
+                            android:padding="4dp"
+                            android:background="?attr/selectableItemBackgroundBorderless" />
+                    </LinearLayout>
+
+                    <!-- Address display (when an address is picked) -->
+                    <LinearLayout
+                        android:id="@+id/layout_picked_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="top"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginEnd="10dp"
+                            android:src="@drawable/ic_location"
+                            android:tint="@color/lume_primary_dark" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_picked_name_phone"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/lume_text_primary" />
+
+                            <TextView
+                                android:id="@+id/tv_picked_address"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="3dp"
+                                android:textSize="13sp"
+                                android:textColor="@color/lume_text_secondary" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Prompt when no address saved -->
+                    <TextView
+                        android:id="@+id/tv_no_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Chưa có địa chỉ đã lưu. Nhấn Thay đổi để thêm."
+                        android:textSize="13sp"
+                        android:textColor="@color/lume_text_secondary"
+                        android:visibility="visible" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
             <!-- ── Shipping info ──────────────────────────────────── -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
@@ -214,7 +319,7 @@
                         android:textSize="14sp"
                         android:textColor="@color/lume_text_primary"
                         android:textColorHint="@color/lume_text_secondary"
-                        android:hint="Nguyễn Văn A"
+                        android:hint="@string/hint_name"
                         android:imeOptions="actionNext"
                         android:singleLine="true" />
 
@@ -240,7 +345,7 @@
                         android:textSize="14sp"
                         android:textColor="@color/lume_text_primary"
                         android:textColorHint="@color/lume_text_secondary"
-                        android:hint="0901234567"
+                        android:hint="@string/hint_phone"
                         android:imeOptions="actionNext"
                         android:singleLine="true" />
 
@@ -268,7 +373,7 @@
                         android:textSize="14sp"
                         android:textColor="@color/lume_text_primary"
                         android:textColorHint="@color/lume_text_secondary"
-                        android:hint="Số nhà, đường, phường, quận"
+                        android:hint="@string/hint_address"
                         android:imeOptions="actionNext"
                         android:minLines="2"
                         android:gravity="top|start" />

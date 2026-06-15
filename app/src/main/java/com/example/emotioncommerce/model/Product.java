@@ -11,15 +11,16 @@ public class Product implements Serializable {
     private final long price;
     private final int imageResId;
     private final String category;
+    private final String rawCategory;
     private final String imageUrl;
     private final String brand;
     private final ArrayList<String> images;
     private final float rating;
     private final int reviewCount;
 
-    // Full constructor
+    // Full constructor (with rawCategory)
     public Product(int id, String name, String description, long price,
-                   int imageResId, String category, String imageUrl, String brand,
+                   int imageResId, String category, String rawCategory, String imageUrl, String brand,
                    ArrayList<String> images, float rating, int reviewCount) {
         this.id          = id;
         this.name        = name;
@@ -27,11 +28,19 @@ public class Product implements Serializable {
         this.price       = price;
         this.imageResId  = imageResId;
         this.category    = category;
+        this.rawCategory = rawCategory != null ? rawCategory : "";
         this.imageUrl    = imageUrl != null ? imageUrl : "";
         this.brand       = brand != null ? brand : "ÉLAN";
         this.images      = images != null ? images : new ArrayList<>();
         this.rating      = rating;
         this.reviewCount = reviewCount;
+    }
+
+    // Legacy constructor (no rawCategory — rawCategory defaults to category)
+    public Product(int id, String name, String description, long price,
+                   int imageResId, String category, String imageUrl, String brand,
+                   ArrayList<String> images, float rating, int reviewCount) {
+        this(id, name, description, price, imageResId, category, "", imageUrl, brand, images, rating, reviewCount);
     }
 
     public Product(int id, String name, String description, long price,
@@ -55,7 +64,8 @@ public class Product implements Serializable {
     public String getDescription(){ return description; }
     public long getPrice()        { return price; }
     public int getImageResId()    { return imageResId; }
-    public String getCategory()   { return category; }
+    public String getCategory()    { return category; }
+    public String getRawCategory() { return rawCategory; }
     public String getImageUrl()   { return imageUrl; }
     public String getBrand()      { return brand; }
     public List<String> getImages(){ return images; }

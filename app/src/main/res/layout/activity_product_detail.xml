@@ -28,16 +28,6 @@
                     android:layout_height="match_parent"
                     android:background="@color/lume_divider" />
 
-                <!-- Dot indicators -->
-                <LinearLayout
-                    android:id="@+id/ll_dots"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:layout_marginBottom="12dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical" />
-
                 <!-- Back button (top-left) -->
                 <ImageButton
                     android:id="@+id/btn_back"
@@ -65,12 +55,22 @@
                     android:contentDescription="@string/wishlist" />
             </FrameLayout>
 
+            <!-- Dot indicators — on white background, always clearly visible -->
+            <LinearLayout
+                android:id="@+id/ll_dots"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@color/white" />
+
             <!-- Content card -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="20dp"
+                android:paddingTop="4dp"
                 android:background="@color/white">
 
                 <!-- Brand -->
@@ -102,7 +102,10 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="10dp"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="5dp"
+                    android:background="@drawable/bg_rating_pill"
                     android:visibility="gone">
 
                     <ImageView
@@ -111,7 +114,16 @@
                         android:src="@drawable/ic_star" />
 
                     <TextView
-                        android:id="@+id/tv_detail_rating"
+                        android:id="@+id/tv_detail_rating_score"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lume_primary_dark"
+                        android:layout_marginStart="5dp" />
+
+                    <TextView
+                        android:id="@+id/tv_detail_rating_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="13sp"
@@ -190,6 +202,7 @@
 
                 <!-- Size selector -->
                 <TextView
+                    android:id="@+id/tv_size_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/select_size"
@@ -241,13 +254,86 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp" />
 
+                <!-- Reviews section -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/lume_divider"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="4dp" />
+
+                <!-- Reviews header: label + avg score -->
+                <LinearLayout
+                    android:id="@+id/layout_reviews_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="4dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/customer_reviews"
+                            android:textSize="11sp"
+                            android:letterSpacing="0.1"
+                            android:textStyle="bold"
+                            android:textColor="@color/lume_text_secondary" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginTop="4dp">
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:src="@drawable/ic_star" />
+
+                            <TextView
+                                android:id="@+id/tv_reviews_avg"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                android:textColor="#1C1C2E"
+                                android:layout_marginStart="6dp" />
+
+                            <TextView
+                                android:id="@+id/tv_reviews_count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="13sp"
+                                android:textColor="@color/lume_text_secondary"
+                                android:layout_marginStart="8dp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Reviews list (non-scrollable, inside NestedScrollView) -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_reviews"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:layout_marginTop="4dp" />
+
                 <!-- Debug toggle (admin only — hidden by default, shown in Java for admin) -->
                 <Button
                     android:id="@+id/btn_debug_toggle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Debug"
+                    android:text="@string/debug"
                     android:textSize="11sp"
                     android:visibility="gone"
                     style="?attr/materialButtonOutlinedStyle" />
@@ -301,21 +387,31 @@
             android:gravity="center_vertical"
             android:layout_marginBottom="10dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/price_label"
-                android:textSize="12sp"
-                android:textColor="@color/lume_text_secondary" />
-
-            <TextView
-                android:id="@+id/tv_sticky_price"
+            <!-- Label + price stacked vertically -->
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/lume_primary_dark" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/price_label"
+                    android:textSize="10sp"
+                    android:letterSpacing="0.08"
+                    android:textAllCaps="true"
+                    android:textColor="@color/lume_text_secondary" />
+
+                <TextView
+                    android:id="@+id/tv_sticky_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:lineSpacingMultiplier="1.0"
+                    android:textColor="@color/lume_primary_dark" />
+            </LinearLayout>
 
             <!-- Emotion indicator lives here in the bar -->
             <com.example.emotioncommerce.ui.EmotionIndicatorView
