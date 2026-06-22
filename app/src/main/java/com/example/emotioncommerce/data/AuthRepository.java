@@ -80,6 +80,9 @@ public class AuthRepository {
                 if (u.checkPassword(password)) {
                     currentUser = u;
                     AppPrefs.saveLoginSession(u.email);
+                    CartRepository.getInstance().reload(u.email);
+                    WishlistRepository.getInstance().reload(u.email);
+                    OrderRepository.getInstance().reload(u.email);
                     return u.role == Role.ADMIN ? LoginResult.SUCCESS_ADMIN
                                                 : LoginResult.SUCCESS_CUSTOMER;
                 } else {
@@ -101,12 +104,18 @@ public class AuthRepository {
         currentUser = newUser;
         persistNonDefaultUsers();
         AppPrefs.saveLoginSession(newUser.email);
+        CartRepository.getInstance().reload(newUser.email);
+        WishlistRepository.getInstance().reload(newUser.email);
+        OrderRepository.getInstance().reload(newUser.email);
         return RegisterResult.SUCCESS;
     }
 
     public void logout() {
         currentUser = null;
         AppPrefs.clearLoginSession();
+        CartRepository.getInstance().reload("");
+        WishlistRepository.getInstance().reload("");
+        OrderRepository.getInstance().reload("");
     }
 
     // ── State queries ─────────────────────────────────────────────────────────
@@ -122,6 +131,10 @@ public class AuthRepository {
     public String getAvatarLetter() {
         if (currentUser == null || currentUser.name.isEmpty()) return "K";
         return String.valueOf(currentUser.name.charAt(0)).toUpperCase();
+    }
+
+    public List<UserRecord> getUsers() {
+        return new ArrayList<>(users);
     }
 
     // Save only non-hardcoded users (index 2+)

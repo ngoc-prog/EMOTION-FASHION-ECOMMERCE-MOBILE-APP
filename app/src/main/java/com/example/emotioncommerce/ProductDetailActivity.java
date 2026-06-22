@@ -82,7 +82,6 @@ public class ProductDetailActivity extends AppCompatActivity {
     private View layoutHesitantPromo;
     private TextView tvPromoOriginalPrice;
     private TextView tvPromoDiscountedPrice;
-    private TextView tvDetailPrice;
     private TextView tvStickyPrice;
     private NestedScrollView scrollView;
     private long activePromoPrice = -1;
@@ -155,12 +154,9 @@ public class ProductDetailActivity extends AppCompatActivity {
         // Name, price, description
         ((TextView) findViewById(R.id.tv_detail_name)).setText(currentProduct.getName());
         String priceText = getString(R.string.price_currency, currentProduct.getPrice());
-        tvDetailPrice = findViewById(R.id.tv_detail_price);
-        tvDetailPrice.setText(priceText);
         ((TextView) findViewById(R.id.tv_detail_description)).setText(
                 currentProduct.getDescription());
 
-        // Sticky bar price mirror
         tvStickyPrice = findViewById(R.id.tv_sticky_price);
         tvStickyPrice.setText(priceText);
 
@@ -200,7 +196,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         calibrationOverlay     = findViewById(R.id.calibration_overlay);
         tvCalibrationCountdown = findViewById(R.id.tv_calibration_countdown);
         scrollView             = findViewById(R.id.scroll_view);
-        ScrollTopHelper.attach(this, scrollView, 88);
+        ScrollTopHelper.attach(this, scrollView, 150);
         layoutHesitantPromo    = findViewById(R.id.layout_hesitant_promo);
         tvPromoOriginalPrice   = findViewById(R.id.tv_promo_original_price);
         tvPromoDiscountedPrice = findViewById(R.id.tv_promo_discounted_price);
@@ -217,7 +213,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         // Add to cart
         findViewById(R.id.btn_add_to_cart).setOnClickListener(v -> {
             long price = activePromoPrice > 0 ? activePromoPrice : currentProduct.getPrice();
-            CartRepository.getInstance().addProduct(currentProduct, price);
+            CartRepository.getInstance().addProduct(currentProduct, price, getSelectedSizeLabel());
             SessionAnalyticsRepository.getInstance().recordAction(
                     currentProduct.getId(), currentProduct.getName(),
                     lastTrackedEmotion, SessionAnalyticsRepository.ActionRecord.ActionType.ADD_CART);
@@ -228,7 +224,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         // Buy now → add to cart then go to cart
         findViewById(R.id.btn_buy_now).setOnClickListener(v -> {
             long price = activePromoPrice > 0 ? activePromoPrice : currentProduct.getPrice();
-            CartRepository.getInstance().addProduct(currentProduct, price);
+            CartRepository.getInstance().addProduct(currentProduct, price, getSelectedSizeLabel());
             SessionAnalyticsRepository.getInstance().recordAction(
                     currentProduct.getId(), currentProduct.getName(),
                     lastTrackedEmotion, SessionAnalyticsRepository.ActionRecord.ActionType.ADD_CART);
@@ -302,6 +298,13 @@ public class ProductDetailActivity extends AppCompatActivity {
             default:               resId = R.string.select_size;
         }
         ((android.widget.TextView) findViewById(R.id.tv_size_label)).setText(resId);
+    }
+
+    private String getSelectedSizeLabel() {
+        String[] sizes = sizesForProduct();
+        if (sizes == null || sizes.length == 0) return "";
+        int idx = Math.min(selectedSizeIndex, sizes.length - 1);
+        return sizes[idx];
     }
 
     private String[] sizesForProduct() {
@@ -483,8 +486,10 @@ public class ProductDetailActivity extends AppCompatActivity {
         InputImage inputImage = InputImage.fromMediaImage(
                 imageProxy.getImage(), imageProxy.getImageInfo().getRotationDegrees());
 
+        long tMlKit = System.currentTimeMillis();
         faceMeshDetector.process(inputImage)
                 .addOnSuccessListener(meshes -> {
+                    Log.d("ELAN_PERF", "MLKit:" + (System.currentTimeMillis() - tMlKit) + "ms faces=" + meshes.size());
                     if (!meshes.isEmpty()) {
                         processFirstFace(meshes.get(0));
                     } else {
@@ -528,7 +533,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         tryTriggerGemini(smoothed);
 
         if (debugVisible) {
-            long cooldownSec = geminiManager.getCooldownRemainingMs(smoothed) / 1000;
+            long cooldownSec = geminiManager.getCooldownRemainingMs(currentProduct.getId(), smoothed) / 1000;
             String debug = String.format(java.util.Locale.US,
                 "BRR: %.3f  MC:  %.3f\nMAR: %.3f  BFD: %.3f\n" +
                 "Raw: %s  Smoothed: %s\nGemini: %s\n%s",
@@ -568,7 +573,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         tvPromoDiscountedPrice.setText(getString(R.string.price_currency, discountedPrice));
 
         String discountedPriceText = getString(R.string.price_currency, discountedPrice);
-        tvDetailPrice.setText(discountedPriceText);
         tvStickyPrice.setText(discountedPriceText);
 
         layoutHesitantPromo.setVisibility(View.VISIBLE);

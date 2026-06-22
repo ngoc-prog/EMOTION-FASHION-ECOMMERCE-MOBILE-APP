@@ -17,6 +17,7 @@ public class GeometricFeatureExtractor {
     }
 
     public EmotionFeatures extract(List<FaceMeshPoint> points) {
+        long t0 = System.currentTimeMillis();
         EmotionFeatures features = new EmotionFeatures();
 
         if (points == null || points.size() < 468) {
@@ -50,6 +51,7 @@ public class GeometricFeatureExtractor {
         features.setMouthAspectRatio(computeMAR());
         features.setBrowFurrowDistance(computeBFD(iod));
         features.setValid(true);
+        Log.d("ELAN_PERF", "FeatureExtract:" + (System.currentTimeMillis() - t0) + "ms");
         return features;
     }
 

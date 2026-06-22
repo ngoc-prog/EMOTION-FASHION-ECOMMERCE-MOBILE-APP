@@ -3,6 +3,9 @@ package com.example.emotioncommerce;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +17,13 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.example.emotioncommerce.data.AppPrefs;
 import com.example.emotioncommerce.data.AuthRepository;
 import com.example.emotioncommerce.data.CartRepository;
 import java.util.ArrayList;
@@ -41,6 +47,7 @@ public class CartFragment extends Fragment implements CartRepository.CartListene
 
     // Tracks which product IDs are checked
     private final Set<Integer> selectedIds = new HashSet<>();
+    private boolean mScrollRestored = false;
 
     private final ActivityResultLauncher<Intent> loginLauncher =
         registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -73,6 +80,31 @@ public class CartFragment extends Fragment implements CartRepository.CartListene
         recyclerCart.setLayoutManager(new LinearLayoutManager(requireContext()));
         adapter = new CartAdapter();
         recyclerCart.setAdapter(adapter);
+        mScrollRestored = false;
+        setupSwipeToDelete();
+
+        android.widget.ImageButton btnScrollTop = view.findViewById(R.id.btn_scroll_top);
+        btnScrollTop.setOnClickListener(v -> recyclerCart.smoothScrollToPosition(0));
+        recyclerCart.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            int total = 0;
+            @Override
+            public void onScrolled(@androidx.annotation.NonNull RecyclerView rv, int dx, int dy) {
+                total += dy;
+                if (total < 0) total = 0;
+                if (total > 300) {
+                    if (btnScrollTop.getVisibility() != View.VISIBLE) {
+                        btnScrollTop.setVisibility(View.VISIBLE);
+                        btnScrollTop.setAlpha(0f);
+                        btnScrollTop.animate().alpha(1f).setDuration(200).start();
+                    }
+                } else {
+                    if (btnScrollTop.getVisibility() == View.VISIBLE) {
+                        btnScrollTop.animate().alpha(0f).setDuration(200)
+                            .withEndAction(() -> btnScrollTop.setVisibility(View.GONE)).start();
+                    }
+                }
+            }
+        });
 
         view.findViewById(R.id.btn_continue_shopping).setOnClickListener(v ->
                 ((MainActivity) requireActivity()).switchToProductsTab());
@@ -102,6 +134,17 @@ public class CartFragment extends Fragment implements CartRepository.CartListene
     }
 
     @Override
+    public void onDestroyView() {
+        if (recyclerCart != null) {
+            LinearLayoutManager lm = (LinearLayoutManager) recyclerCart.getLayoutManager();
+            if (lm != null) {
+                AppPrefs.saveScrollState("cart", Math.max(0, lm.findFirstVisibleItemPosition()), 0);
+            }
+        }
+        super.onDestroyView();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         CartRepository.getInstance().addListener(this);
@@ -126,6 +169,57 @@ public class CartFragment extends Fragment implements CartRepository.CartListene
         startActivity(intent);
     }
 
+    private void setupSwipeToDelete() {
+        Paint swipePaint = new Paint();
+        swipePaint.setColor(0xFFE53935);
+
+        Drawable icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_close);
+        if (icon != null) icon.setTint(0xFFFFFFFF);
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView rv,
+                                  @NonNull RecyclerView.ViewHolder vh,
+                                  @NonNull RecyclerView.ViewHolder target) { return false; }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder vh, int direction) {
+                int pos = vh.getBindingAdapterPosition();
+                if (pos == RecyclerView.NO_POSITION) return;
+                CartRepository.CartItem item = adapter.getItem(pos);
+                if (item == null) return;
+                selectedIds.remove(item.getProduct().getId());
+                CartRepository.getInstance().removeProduct(item.getProduct().getId());
+            }
+
+            @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView rv,
+                                    @NonNull RecyclerView.ViewHolder vh,
+                                    float dX, float dY, int actionState, boolean isActive) {
+                View itemView = vh.itemView;
+                int iconSize = (int)(24 * getResources().getDisplayMetrics().density);
+                int iconMargin = (int)(20 * getResources().getDisplayMetrics().density);
+                int iconTop  = itemView.getTop() + (itemView.getHeight() - iconSize) / 2;
+
+                // Red background
+                c.drawRect(itemView.getRight() + dX, itemView.getTop(),
+                           itemView.getRight(), itemView.getBottom(), swipePaint);
+
+                // Trash icon
+                if (icon != null) {
+                    int iconLeft  = itemView.getRight() - iconMargin - iconSize;
+                    icon.setBounds(iconLeft, iconTop, iconLeft + iconSize, iconTop + iconSize);
+                    icon.draw(c);
+                }
+
+                super.onChildDraw(c, rv, vh, dX, dY, actionState, isActive);
+            }
+
+            @Override
+            public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder vh) { return 0.4f; }
+        }).attachToRecyclerView(recyclerCart);
+    }
+
     private void refreshCart() {
         CartRepository cart = CartRepository.getInstance();
         boolean empty = cart.isEmpty();
@@ -145,6 +239,16 @@ public class CartFragment extends Fragment implements CartRepository.CartListene
             selectedIds.retainAll(cartIds);
 
             adapter.setItems(cart.getItems());
+            if (!mScrollRestored) {
+                mScrollRestored = true;
+                int savedPos = AppPrefs.getSavedScrollPos("cart");
+                if (savedPos > 0 && savedPos < adapter.getItemCount()) {
+                    recyclerCart.post(() -> {
+                        LinearLayoutManager lm = (LinearLayoutManager) recyclerCart.getLayoutManager();
+                        if (lm != null) lm.scrollToPositionWithOffset(savedPos, 0);
+                    });
+                }
+            }
             updateBottomBar();
 
             int count = cart.getTotalCount();
@@ -171,7 +275,7 @@ public class CartFragment extends Fragment implements CartRepository.CartListene
 
         tvTotalPrice.setText(getString(R.string.price_currency, selectedTotal));
         tvCartItemCount.setText(getString(R.string.products_count, selectedCount));
-        tvSelectedCount.setText("Đã chọn " + selectedIds.size() + "/" + items.size());
+        tvSelectedCount.setText(getString(R.string.cart_selected_count, selectedIds.size(), items.size()));
 
         // Sync select-all checkbox state
         cbSelectAll.setOnCheckedChangeListener(null);
@@ -200,6 +304,10 @@ public class CartFragment extends Fragment implements CartRepository.CartListene
             notifyDataSetChanged();
         }
 
+        CartRepository.CartItem getItem(int position) {
+            return (position >= 0 && position < items.size()) ? items.get(position) : null;
+        }
+
         @NonNull
         @Override
         public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -218,6 +326,15 @@ public class CartFragment extends Fragment implements CartRepository.CartListene
             holder.tvPrice.setText(holder.itemView.getContext().getString(
                     R.string.price_currency, item.getEffectivePrice() * item.getQuantity()));
             holder.tvQuantity.setText(String.valueOf(item.getQuantity()));
+
+            String size = item.getSelectedSize();
+            if (size != null && !size.isEmpty()) {
+                holder.tvSize.setText(holder.itemView.getContext()
+                        .getString(R.string.cart_item_size, size));
+                holder.tvSize.setVisibility(android.view.View.VISIBLE);
+            } else {
+                holder.tvSize.setVisibility(android.view.View.GONE);
+            }
 
             Glide.with(holder.itemView.getContext())
                     .load(item.getProduct().getImageUrl().isEmpty() ? null : item.getProduct().getImageUrl())
@@ -254,7 +371,7 @@ public class CartFragment extends Fragment implements CartRepository.CartListene
         class VH extends RecyclerView.ViewHolder {
             final CheckBox cbSelect;
             final ImageView ivImage;
-            final TextView tvName, tvBrand, tvPrice, tvQuantity;
+            final TextView tvName, tvBrand, tvPrice, tvQuantity, tvSize;
             final View btnDecrement, btnIncrement, btnRemove;
 
             VH(View v) {
@@ -265,6 +382,7 @@ public class CartFragment extends Fragment implements CartRepository.CartListene
                 tvBrand      = v.findViewById(R.id.tv_cart_brand);
                 tvPrice      = v.findViewById(R.id.tv_cart_price);
                 tvQuantity   = v.findViewById(R.id.tv_quantity);
+                tvSize       = v.findViewById(R.id.tv_cart_size);
                 btnDecrement = v.findViewById(R.id.btn_decrement);
                 btnIncrement = v.findViewById(R.id.btn_increment);
                 btnRemove    = v.findViewById(R.id.btn_remove);

@@ -1,5 +1,6 @@
 package com.example.emotioncommerce.emotion;
 
+import android.util.Log;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -110,6 +111,7 @@ public class EmotionClassifier {
      * forehead/brow muscles → BRR drops; mouth-only expressions (mím môi) do not.
      */
     public EmotionLabel classify(EmotionFeatures f) {
+        long t0 = System.currentTimeMillis();
         if (!f.isValid() || baseline == null) return EmotionLabel.UNKNOWN;
 
         // INTERESTED: genuine smile (MC well above baseline + mouth opens)
@@ -117,6 +119,7 @@ public class EmotionClassifier {
         if (f.getMouthCurvature() > baseline.mc + 0.08f
                 && f.getMouthCurvature() > 0.04f
                 && f.getMouthAspectRatio() > 0.05f) {
+            Log.d("ELAN_PERF", "Classify:" + (System.currentTimeMillis() - t0) + "ms label=INTERESTED");
             return EmotionLabel.INTERESTED;
         }
 
@@ -129,12 +132,16 @@ public class EmotionClassifier {
         boolean frown      = f.getMouthCurvature()     < baseline.mc  - 0.05f
                           && f.getMouthCurvature()     < -0.02f;
         if (browDrop || furrowDrop || frown) {
-            return EmotionLabel.INDIFFERENT;
+            EmotionLabel result = EmotionLabel.INDIFFERENT;
+            Log.d("ELAN_PERF", "Classify:" + (System.currentTimeMillis() - t0) + "ms label=" + result);
+            return result;
         }
 
         // HESITANT: default — neutral or ambiguous face = đang cân nhắc (phân vân)
         // Semantically correct: anyone viewing a product without clear +/- signal is considering
-        return EmotionLabel.HESITANT;
+        EmotionLabel result = EmotionLabel.HESITANT;
+        Log.d("ELAN_PERF", "Classify:" + (System.currentTimeMillis() - t0) + "ms label=" + result);
+        return result;
     }
 
     public EmotionLabel getSmoothedLabel(EmotionLabel rawLabel) {

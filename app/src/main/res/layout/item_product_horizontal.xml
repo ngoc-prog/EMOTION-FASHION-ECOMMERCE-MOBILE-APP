@@ -27,6 +27,22 @@
                 android:scaleType="centerCrop"
                 android:background="@color/lume_divider" />
 
+            <!-- Discount badge -->
+            <TextView
+                android:id="@+id/tv_discount_badge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|start"
+                android:layout_margin="7dp"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="3dp"
+                android:background="#E53935"
+                android:visibility="gone"
+                android:elevation="2dp" />
+
             <!-- Wishlist button -->
             <ImageButton
                 android:id="@+id/btn_wishlist"
@@ -94,14 +110,30 @@
                     android:layout_marginStart="3dp" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_product_price"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="13sp"
-                android:textColor="@color/lume_primary_dark"
-                android:textStyle="bold"
-                android:layout_marginTop="5dp" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:id="@+id/tv_product_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:textColor="@color/lume_primary_dark"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_original_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:textSize="10sp"
+                    android:textColor="@color/lume_text_secondary"
+                    android:visibility="gone" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

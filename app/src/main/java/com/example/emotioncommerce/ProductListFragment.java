@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.example.emotioncommerce.data.AppPrefs;
 import com.example.emotioncommerce.data.CartRepository;
 import com.example.emotioncommerce.data.DummyJsonRepository;
 import com.example.emotioncommerce.data.MockProductData;
@@ -92,6 +93,7 @@ public class ProductListFragment extends Fragment implements CartRepository.Cart
     private int    ratingIdx      = 0;   // index into RATING_MINS
     private final List<TextView> chipViews = new ArrayList<>();
     private float dp;
+    private boolean mScrollRestored = false;
 
     @Nullable
     @Override
@@ -120,9 +122,32 @@ public class ProductListFragment extends Fragment implements CartRepository.Cart
 
         recyclerProducts = view.findViewById(R.id.recycler_products);
         recyclerProducts.setLayoutManager(new GridLayoutManager(requireContext(), 2));
-        ScrollTopHelper.attach(requireActivity(), recyclerProducts, 72);
         adapter = new ProductAdapter(new ArrayList<>());
         recyclerProducts.setAdapter(adapter);
+        mScrollRestored = false;
+
+        android.widget.ImageButton btnScrollTop = view.findViewById(R.id.btn_scroll_top);
+        btnScrollTop.setOnClickListener(v -> recyclerProducts.smoothScrollToPosition(0));
+        recyclerProducts.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            int total = 0;
+            @Override
+            public void onScrolled(@androidx.annotation.NonNull RecyclerView rv, int dx, int dy) {
+                total += dy;
+                if (total < 0) total = 0;
+                if (total > 300) {
+                    if (btnScrollTop.getVisibility() != android.view.View.VISIBLE) {
+                        btnScrollTop.setVisibility(android.view.View.VISIBLE);
+                        btnScrollTop.setAlpha(0f);
+                        btnScrollTop.animate().alpha(1f).setDuration(200).start();
+                    }
+                } else {
+                    if (btnScrollTop.getVisibility() == android.view.View.VISIBLE) {
+                        btnScrollTop.animate().alpha(0f).setDuration(200)
+                            .withEndAction(() -> btnScrollTop.setVisibility(android.view.View.GONE)).start();
+                    }
+                }
+            }
+        });
 
         view.findViewById(R.id.btn_cart).setOnClickListener(v ->
             ((MainActivity) requireActivity()).switchToCartTab());
@@ -138,8 +163,14 @@ public class ProductListFragment extends Fragment implements CartRepository.Cart
 
     @Override
     public void onDestroyView() {
+        if (recyclerProducts != null) {
+            GridLayoutManager lm = (GridLayoutManager) recyclerProducts.getLayoutManager();
+            if (lm != null) {
+                int pos = lm.findFirstVisibleItemPosition();
+                AppPrefs.saveScrollState("products", Math.max(0, pos), 0);
+            }
+        }
         super.onDestroyView();
-        ScrollTopHelper.detach(requireActivity());
     }
 
     @Override
@@ -432,6 +463,17 @@ public class ProductListFragment extends Fragment implements CartRepository.Cart
 
         adapter.setProducts(filtered);
         tvProductCount.setText(getString(R.string.products_count, filtered.size()));
+
+        if (!mScrollRestored) {
+            mScrollRestored = true;
+            int savedPos = AppPrefs.getSavedScrollPos("products");
+            if (savedPos > 0 && savedPos < filtered.size()) {
+                recyclerProducts.post(() -> {
+                    GridLayoutManager lm = (GridLayoutManager) recyclerProducts.getLayoutManager();
+                    if (lm != null) lm.scrollToPositionWithOffset(savedPos, 0);
+                });
+            }
+        }
     }
 
     private void updateBoostHint(boolean active, java.util.Set<String> boosted) {
@@ -486,8 +528,21 @@ public class ProductListFragment extends Fragment implements CartRepository.Cart
         public void onBindViewHolder(@NonNull VH holder, int position) {
             Product p = products.get(position);
             holder.tvName.setText(p.getName());
-            holder.tvPrice.setText(getString(R.string.price_currency, p.getPrice()));
             holder.tvCategory.setText(p.getBrand());
+
+            if (p.getDiscount() > 0) {
+                holder.tvPrice.setText(getString(R.string.price_currency, p.getEffectivePrice()));
+                holder.tvOriginalPrice.setText(getString(R.string.price_currency, p.getPrice()));
+                holder.tvOriginalPrice.setPaintFlags(
+                        holder.tvOriginalPrice.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
+                holder.tvOriginalPrice.setVisibility(View.VISIBLE);
+                holder.tvDiscountBadge.setText("-" + p.getDiscount() + "%");
+                holder.tvDiscountBadge.setVisibility(View.VISIBLE);
+            } else {
+                holder.tvPrice.setText(getString(R.string.price_currency, p.getPrice()));
+                holder.tvOriginalPrice.setVisibility(View.GONE);
+                holder.tvDiscountBadge.setVisibility(View.GONE);
+            }
 
             // Rating row
             if (p.getRating() > 0f && holder.layoutRating != null) {
@@ -536,18 +591,20 @@ public class ProductListFragment extends Fragment implements CartRepository.Cart
 
         class VH extends RecyclerView.ViewHolder {
             final ImageView ivImage;
-            final TextView tvName, tvPrice, tvCategory, tvRating;
+            final TextView tvName, tvPrice, tvCategory, tvRating, tvDiscountBadge, tvOriginalPrice;
             final ImageButton btnWishlist;
             final View layoutRating;
             VH(View v) {
                 super(v);
-                ivImage      = v.findViewById(R.id.iv_product_image);
-                tvName       = v.findViewById(R.id.tv_product_name);
-                tvPrice      = v.findViewById(R.id.tv_product_price);
-                tvCategory   = v.findViewById(R.id.tv_product_category);
-                tvRating     = v.findViewById(R.id.tv_rating);
-                btnWishlist  = v.findViewById(R.id.btn_wishlist);
-                layoutRating = v.findViewById(R.id.layout_rating);
+                ivImage         = v.findViewById(R.id.iv_product_image);
+                tvName          = v.findViewById(R.id.tv_product_name);
+                tvPrice         = v.findViewById(R.id.tv_product_price);
+                tvCategory      = v.findViewById(R.id.tv_product_category);
+                tvRating        = v.findViewById(R.id.tv_rating);
+                tvDiscountBadge = v.findViewById(R.id.tv_discount_badge);
+                tvOriginalPrice = v.findViewById(R.id.tv_original_price);
+                btnWishlist     = v.findViewById(R.id.btn_wishlist);
+                layoutRating    = v.findViewById(R.id.layout_rating);
             }
         }
     }

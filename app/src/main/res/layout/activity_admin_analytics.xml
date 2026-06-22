@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:text="@string/analytics_title"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:textStyle="bold"
                 android:letterSpacing="0.02"
                 android:textColor="@android:color/white" />
@@ -73,6 +73,44 @@
                 android:text="@string/analytics_subtitle"
                 android:textSize="12sp"
                 android:textColor="#BBFFFFFF" />
+
+            <!-- Quick stat pills -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="12dp">
+
+                <TextView
+                    android:id="@+id/tv_pill_products"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 sản phẩm"
+                    android:textSize="11sp"
+                    android:textColor="@android:color/white"
+                    android:background="#33FFFFFF"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:layout_marginEnd="8dp" />
+
+                <TextView
+                    android:id="@+id/tv_pill_emotion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="—"
+                    android:textSize="11sp"
+                    android:textColor="@android:color/white"
+                    android:background="#33FFFFFF"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp" />
+            </LinearLayout>
+
         </LinearLayout>
     </FrameLayout>
 
@@ -180,189 +218,205 @@
                         android:textColor="@color/lume_text_primary" />
                 </LinearLayout>
 
-                <!-- Row 1: SP xem + Thời gian -->
+                <!-- 2×2 stat cards -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
+                    <!-- Card: Products viewed -->
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginEnd="5dp"
-                        app:cardCornerRadius="14dp"
-                        app:cardElevation="2dp"
+                        android:layout_marginEnd="6dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="0dp"
                         app:strokeWidth="0dp"
-                        app:cardBackgroundColor="@color/white">
+                        app:cardBackgroundColor="#FFF5E6">
+
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:orientation="vertical"
                             android:padding="16dp">
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical">
-                                <View
-                                    android:layout_width="8dp"
-                                    android:layout_height="8dp"
-                                    android:background="@drawable/bg_dot_gold" />
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="6dp"
-                                    android:text="@string/stat_products_viewed"
-                                    android:textSize="11sp"
-                                    android:textColor="@color/lume_text_secondary" />
-                            </LinearLayout>
+
+                            <TextView
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:gravity="center"
+                                android:text="👁"
+                                android:textSize="18sp"
+                                android:background="@drawable/bg_stat_icon_gold"
+                                android:padding="4dp" />
+
                             <TextView
                                 android:id="@+id/tv_stat_products"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="6dp"
+                                android:layout_marginTop="10dp"
                                 android:text="0"
-                                android:textSize="30sp"
+                                android:textSize="34sp"
                                 android:textStyle="bold"
-                                android:textColor="@color/lume_text_primary" />
+                                android:textColor="#8B6840"
+                                android:includeFontPadding="false" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="@string/stat_products_viewed"
+                                android:textSize="11sp"
+                                android:textColor="#C09A6A" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
+                    <!-- Card: View time -->
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginStart="5dp"
-                        app:cardCornerRadius="14dp"
-                        app:cardElevation="2dp"
+                        android:layout_marginStart="6dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="0dp"
                         app:strokeWidth="0dp"
-                        app:cardBackgroundColor="@color/white">
+                        app:cardBackgroundColor="#E8F4FD">
+
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:orientation="vertical"
                             android:padding="16dp">
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical">
-                                <View
-                                    android:layout_width="8dp"
-                                    android:layout_height="8dp"
-                                    android:background="@drawable/bg_dot_blue" />
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="6dp"
-                                    android:text="@string/stat_view_time"
-                                    android:textSize="11sp"
-                                    android:textColor="@color/lume_text_secondary" />
-                            </LinearLayout>
+
+                            <TextView
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:gravity="center"
+                                android:text="⏱"
+                                android:textSize="18sp"
+                                android:background="@drawable/bg_stat_icon_blue"
+                                android:padding="4dp" />
+
                             <TextView
                                 android:id="@+id/tv_stat_time"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="6dp"
+                                android:layout_marginTop="10dp"
                                 android:text="0s"
-                                android:textSize="30sp"
+                                android:textSize="34sp"
                                 android:textStyle="bold"
-                                android:textColor="@color/lume_text_primary" />
+                                android:textColor="#2E7BAE"
+                                android:includeFontPadding="false" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="@string/stat_view_time"
+                                android:textSize="11sp"
+                                android:textColor="#5B9DC9" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
 
-                <!-- Row 2: Giỏ hàng + Yêu thích -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginTop="10dp">
 
+                    <!-- Card: Add to cart -->
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginEnd="5dp"
-                        app:cardCornerRadius="14dp"
-                        app:cardElevation="2dp"
+                        android:layout_marginEnd="6dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="0dp"
                         app:strokeWidth="0dp"
-                        app:cardBackgroundColor="@color/white">
+                        app:cardBackgroundColor="#EDFBF0">
+
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:orientation="vertical"
                             android:padding="16dp">
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical">
-                                <View
-                                    android:layout_width="8dp"
-                                    android:layout_height="8dp"
-                                    android:background="@drawable/bg_dot_green" />
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="6dp"
-                                    android:text="@string/stat_add_cart"
-                                    android:textSize="11sp"
-                                    android:textColor="@color/lume_text_secondary" />
-                            </LinearLayout>
+
+                            <TextView
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:gravity="center"
+                                android:text="🛒"
+                                android:textSize="18sp"
+                                android:background="@drawable/bg_stat_icon_green"
+                                android:padding="4dp" />
+
                             <TextView
                                 android:id="@+id/tv_stat_carts"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="6dp"
+                                android:layout_marginTop="10dp"
                                 android:text="0"
-                                android:textSize="30sp"
+                                android:textSize="34sp"
                                 android:textStyle="bold"
-                                android:textColor="@color/lume_text_primary" />
+                                android:textColor="#2E7D50"
+                                android:includeFontPadding="false" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="@string/stat_add_cart"
+                                android:textSize="11sp"
+                                android:textColor="#5BAD80" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
+                    <!-- Card: Wishlist -->
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginStart="5dp"
-                        app:cardCornerRadius="14dp"
-                        app:cardElevation="2dp"
+                        android:layout_marginStart="6dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="0dp"
                         app:strokeWidth="0dp"
-                        app:cardBackgroundColor="@color/white">
+                        app:cardBackgroundColor="#FEF0F0">
+
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:orientation="vertical"
                             android:padding="16dp">
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical">
-                                <View
-                                    android:layout_width="8dp"
-                                    android:layout_height="8dp"
-                                    android:background="@drawable/bg_dot_red" />
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="6dp"
-                                    android:text="@string/wishlist"
-                                    android:textSize="11sp"
-                                    android:textColor="@color/lume_text_secondary" />
-                            </LinearLayout>
+
+                            <TextView
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:gravity="center"
+                                android:text="♥"
+                                android:textSize="18sp"
+                                android:textColor="#E53935"
+                                android:background="@drawable/bg_stat_icon_red"
+                                android:padding="4dp" />
+
                             <TextView
                                 android:id="@+id/tv_stat_wishlists"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="6dp"
+                                android:layout_marginTop="10dp"
                                 android:text="0"
-                                android:textSize="30sp"
+                                android:textSize="34sp"
                                 android:textStyle="bold"
-                                android:textColor="@color/lume_text_primary" />
+                                android:textColor="#C0392B"
+                                android:includeFontPadding="false" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="@string/wishlist"
+                                android:textSize="11sp"
+                                android:textColor="#E08080" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
@@ -698,6 +752,54 @@
                             android:textColor="@color/lume_text_primary"
                             android:lineSpacingMultiplier="1.7"
                             android:visibility="gone" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Reset analytics card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="2dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#FFE0D0"
+                    app:cardBackgroundColor="#FFF8F5">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="18dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/analytics_reset_title"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:textColor="#C0392B" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="@string/analytics_reset_desc"
+                            android:textSize="12sp"
+                            android:textColor="@color/lume_text_secondary"
+                            android:lineSpacingMultiplier="1.4" />
+
+                        <Button
+                            android:id="@+id/btn_reset_analytics"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="12dp"
+                            android:text="@string/analytics_reset_btn"
+                            android:backgroundTint="#C0392B"
+                            android:textColor="@android:color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="20dp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 

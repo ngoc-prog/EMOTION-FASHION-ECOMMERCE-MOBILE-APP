@@ -78,7 +78,7 @@
                     android:id="@+id/tv_detail_brand"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ÉLAN"
+                    android:text="@string/app_name"
                     android:textSize="11sp"
                     android:letterSpacing="0.1"
                     android:textColor="@color/lume_primary"
@@ -130,16 +130,6 @@
                         android:textColor="@color/lume_text_secondary"
                         android:layout_marginStart="4dp" />
                 </LinearLayout>
-
-                <!-- Price -->
-                <TextView
-                    android:id="@+id/tv_detail_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="22sp"
-                    android:textColor="@color/lume_primary"
-                    android:textStyle="bold"
-                    android:layout_marginTop="10dp" />
 
                 <!-- Hesitant promotion banner (animated in when HESITANT detected) -->
                 <LinearLayout

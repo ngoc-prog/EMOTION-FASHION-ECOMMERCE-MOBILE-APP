@@ -85,8 +85,10 @@ public class DummyJsonRepository {
                         if (seenIds.contains(id)) continue;
                         seenIds.add(id);
 
-                        long price   = Math.round(p.getDouble("price") * 25000 / 1000.0) * 1000;
-                        String thumb = p.optString("thumbnail", "");
+                        long price    = Math.round(p.getDouble("price") * 25000 / 1000.0) * 1000;
+                        double rawDisc = p.optDouble("discountPercentage", 0.0);
+                        int discount  = rawDisc >= 15.0 ? (int) Math.round(rawDisc) : 0;
+                        String thumb  = p.optString("thumbnail", "");
                         ArrayList<String> imgs = new ArrayList<>();
                         JSONArray raw = p.optJSONArray("images");
                         if (raw != null) for (int j = 0; j < raw.length(); j++) imgs.add(raw.getString(j));
@@ -96,9 +98,9 @@ public class DummyJsonRepository {
                         JSONArray rev = p.optJSONArray("reviews");
 
                         combined.add(new Product(id, p.getString("title"),
-                            p.getString("description"), price, 0,
-                            mapCategory(category), category, thumb,
-                            p.optString("brand", "ÉLAN"), imgs,
+                            p.getString("description"), price, discount,
+                            0, mapCategory(category), category, thumb,
+                            p.optString("brand", "ELAN"), imgs,
                             rating, rev != null ? rev.length() : 0));
                     }
                 } catch (JSONException ignored) {}

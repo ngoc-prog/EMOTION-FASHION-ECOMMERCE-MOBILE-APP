@@ -28,17 +28,19 @@ import java.util.Map;
 public class GeminiIntegrationManager {
 
     private static final String TAG = "GeminiManager";
-    private static final String MODEL = "gemini-2.0-flash";
-    // v1beta accepts both legacy AIza keys and new AQ. format keys.
-    // Key is passed via x-goog-api-key header (required for AQ. format).
-    private static final String BASE_URL =
+    // flash-lite: higher free-tier RPM, sufficient for short recommendation prompts
+    private static final String MODEL_LITE    = "gemini-2.0-flash-lite";
+    // flash: better reasoning for admin analytics insights
+    private static final String MODEL_FULL    = "gemini-2.0-flash";
+    private static final String BASE_URL_LITE =
             "https://generativelanguage.googleapis.com/v1beta/models/"
-            + MODEL + ":generateContent";
+            + MODEL_LITE + ":generateContent";
+    private static final String BASE_URL_FULL =
+            "https://generativelanguage.googleapis.com/v1beta/models/"
+            + MODEL_FULL + ":generateContent";
 
-    // Per-emotion cooldown (ms) — reduced from 30s to 2 min to avoid burn
-    private static final long EMOTION_COOLDOWN_MS  = 120_000;
-    // Minimum gap between any two API calls regardless of emotion
-    private static final long GLOBAL_COOLDOWN_MS   = 90_000;
+    private static final long EMOTION_COOLDOWN_MS  = 120_000; // 2 min per product+emotion
+    private static final long GLOBAL_COOLDOWN_MS   = 60_000;  // 1 min between any calls
     private static final int  DESC_MAX_CHARS        = 180;
 
     // ── Singleton ─────────────────────────────────────────────────────────────
@@ -69,34 +71,50 @@ public class GeminiIntegrationManager {
 
     // ── State ─────────────────────────────────────────────────────────────────
 
-    private final Map<EmotionLabel, Long>   lastCallTimePerEmotion = new EnumMap<>(EmotionLabel.class);
-    // Cache one successful response per emotion for the entire session
-    private final Map<EmotionLabel, String> responseCache          = new EnumMap<>(EmotionLabel.class);
+    // Cache keyed by "productId:emotion" — avoids re-calling for same product
+    private final java.util.concurrent.ConcurrentHashMap<String, String> responseCache
+            = new java.util.concurrent.ConcurrentHashMap<>();
+    private final java.util.concurrent.ConcurrentHashMap<String, Long> lastCallTime
+            = new java.util.concurrent.ConcurrentHashMap<>();
     private volatile long    lastGlobalCallTime = 0;
-    // After a 429, block calls for 5 minutes then retry automatically
-    private static final long QUOTA_BACKOFF_MS  = 5 * 60_000L;
+    // After a 429, block for 15 minutes (free tier resets hourly)
+    private static final long QUOTA_BACKOFF_MS  = 15 * 60_000L;
     private volatile long    quotaBlockedUntil  = 0;
 
     // ── Cooldown helpers ──────────────────────────────────────────────────────
 
-    public boolean canCallGemini(EmotionLabel label) {
+    private String cacheKey(int productId, EmotionLabel label) {
+        return productId + ":" + label.name();
+    }
+
+    public boolean canCallGemini(int productId, EmotionLabel label) {
         long now = System.currentTimeMillis();
         if (now < quotaBlockedUntil) return false;
         if (now - lastGlobalCallTime < GLOBAL_COOLDOWN_MS) return false;
-        Long last = lastCallTimePerEmotion.get(label);
+        Long last = lastCallTime.get(cacheKey(productId, label));
         return last == null || now - last > EMOTION_COOLDOWN_MS;
     }
 
-    public boolean shouldTrigger(EmotionLabel label) {
-        return label != EmotionLabel.UNKNOWN && canCallGemini(label);
+    public boolean shouldTrigger(int productId, EmotionLabel label) {
+        if (label == EmotionLabel.UNKNOWN) return false;
+        if (responseCache.containsKey(cacheKey(productId, label))) return false;
+        return canCallGemini(productId, label);
     }
 
-    public long getCooldownRemainingMs(EmotionLabel label) {
+    public long getCooldownRemainingMs(int productId, EmotionLabel label) {
         long now = System.currentTimeMillis();
         long globalWait  = Math.max(0, GLOBAL_COOLDOWN_MS - (now - lastGlobalCallTime));
-        Long last = lastCallTimePerEmotion.get(label);
+        Long last = lastCallTime.get(cacheKey(productId, label));
         long emotionWait = last == null ? 0 : Math.max(0, EMOTION_COOLDOWN_MS - (now - last));
         return Math.max(globalWait, emotionWait);
+    }
+
+    public boolean isQuotaBlocked() {
+        return System.currentTimeMillis() < quotaBlockedUntil;
+    }
+
+    public long getQuotaBlockedRemainingMs() {
+        return Math.max(0, quotaBlockedUntil - System.currentTimeMillis());
     }
 
     // ── Customer recommendation ───────────────────────────────────────────────
@@ -105,27 +123,29 @@ public class GeminiIntegrationManager {
                                        RecommendationCallback callback) {
         if (BuildConfig.GEMINI_API_KEY == null || BuildConfig.GEMINI_API_KEY.isEmpty()) return;
 
-        // Return cached response immediately — no API call needed
-        if (responseCache.containsKey(emotion)) {
-            callback.onSuccess(responseCache.get(emotion));
+        String key = cacheKey(product.getId(), emotion);
+
+        // Cached → return immediately without any network call
+        String cached = responseCache.get(key);
+        if (cached != null) {
+            callback.onSuccess(cached);
             return;
         }
 
-        if (!shouldTrigger(emotion)) {
+        if (!shouldTrigger(product.getId(), emotion)) {
             return;
         }
 
         long now = System.currentTimeMillis();
-        lastCallTimePerEmotion.put(emotion, now);
+        lastCallTime.put(key, now);
         lastGlobalCallTime = now;
 
-        callGemini(buildPrompt(emotion, product), new InsightsCallback() {
+        callGemini(BASE_URL_LITE, buildPrompt(emotion, product), new InsightsCallback() {
             @Override public void onSuccess(String t) {
-                responseCache.put(emotion, t);
+                responseCache.put(key, t);
                 callback.onSuccess(t);
             }
             @Override public void onError(Exception e) {
-                // On any API error, return fallback so the UI never breaks
                 callback.onSuccess(getFallback(emotion));
             }
         });
@@ -152,12 +172,12 @@ public class GeminiIntegrationManager {
             "tỷ lệ chuyển đổi và trải nghiệm mua sắm thời trang. " +
             "Mỗi đề xuất viết trên 1 dòng, bắt đầu bằng số thứ tự (1. 2. 3. 4.). " +
             "Ngắn gọn, rõ ràng, không dùng emoji.";
-        callGemini(prompt, callback);
+        callGemini(BASE_URL_FULL, prompt, callback);
     }
 
     // ── Direct REST call ──────────────────────────────────────────────────────
 
-    private void callGemini(String prompt, InsightsCallback callback) {
+    private void callGemini(String url, String prompt, InsightsCallback callback) {
         new Thread(() -> {
             HttpURLConnection conn = null;
             try {
@@ -168,7 +188,7 @@ public class GeminiIntegrationManager {
                         .put("contents", new JSONArray().put(content))
                         .toString();
 
-                conn = (HttpURLConnection) new URL(BASE_URL).openConnection();
+                conn = (HttpURLConnection) new URL(url).openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
                 conn.setRequestProperty("x-goog-api-key", BuildConfig.GEMINI_API_KEY);
@@ -180,7 +200,9 @@ public class GeminiIntegrationManager {
                     os.write(body.getBytes("UTF-8"));
                 }
 
+                long tGemini = System.currentTimeMillis();
                 int code = conn.getResponseCode();
+                Log.d("ELAN_PERF", "GeminiRTT:" + (System.currentTimeMillis() - tGemini) + "ms code=" + code);
                 BufferedReader br = new BufferedReader(new InputStreamReader(
                         code == 200 ? conn.getInputStream() : conn.getErrorStream(), "UTF-8"));
                 StringBuilder sb = new StringBuilder();
@@ -191,8 +213,8 @@ public class GeminiIntegrationManager {
                 if (code == 429) {
                     // Back off 5 minutes then allow retries automatically
                     quotaBlockedUntil = System.currentTimeMillis() + QUOTA_BACKOFF_MS;
-                    Log.w(TAG, "Gemini 429 — backing off for 5 minutes");
-                    callback.onError(new Exception("HTTP 429: rate limit — thử lại sau 5 phút"));
+                    Log.w(TAG, "Gemini 429 — backing off for 15 minutes");
+                    callback.onError(new Exception("HTTP 429: rate limit — thử lại sau 15 phút"));
                     return;
                 }
                 if (code != 200) {
@@ -222,11 +244,11 @@ public class GeminiIntegrationManager {
     private String getFallback(EmotionLabel emotion) {
         switch (emotion) {
             case INTERESTED:
-                return "This piece is trending right now — add it to your collection before it's gone.";
+                return "Sản phẩm này đang được yêu thích — thêm vào giỏ hàng trước khi hết.";
             case HESITANT:
-                return "Shop with confidence — 100% authentic with a 30-day hassle-free return policy.";
+                return "Mua sắm tự tin với chính sách đổi trả 30 ngày và hàng chính hãng 100%.";
             default:
-                return "Explore the ÉLAN collection to find the perfect accessory for your style.";
+                return "Khám phá bộ sưu tập ÉLAN để tìm phụ kiện hoàn hảo cho phong cách của bạn.";
         }
     }
 

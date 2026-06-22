@@ -24,7 +24,8 @@
         </activity>
 
         <activity android:name=".ProductDetailActivity" android:exported="false" />
-        <activity android:name=".AdminAnalyticsActivity" android:exported="false" />
+        <activity android:name=".AdminAnalyticsActivity"  android:exported="false" />
+        <activity android:name=".AdminManagementActivity" android:exported="false" />
         <activity android:name=".LoginActivity"          android:exported="false" />
         <activity android:name=".RegisterActivity"       android:exported="false" />
         <activity android:name=".CheckoutActivity"       android:exported="false" />

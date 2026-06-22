@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import com.example.emotioncommerce.data.AppPrefs;
 import com.example.emotioncommerce.data.AuthRepository;
 import com.example.emotioncommerce.data.CartRepository;
 import com.example.emotioncommerce.data.SessionAnalyticsRepository;
@@ -25,7 +26,7 @@ public class ProfileFragment extends Fragment
 
     private TextView tvAvatarLetter, tvProfileName, tvProfileSubtitle;
     private TextView tvStatCart, tvStatWishlist, tvStatViewed;
-    private View btnAdminAnalytics, btnResearchMode, btnProfileLogin, btnLogout;
+    private View btnAdminAnalytics, btnAdminManagement, btnResearchMode, btnProfileLogin, btnLogout;
 
     private final ActivityResultLauncher<Intent> loginLauncher =
         registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -52,8 +53,9 @@ public class ProfileFragment extends Fragment
         tvStatCart       = view.findViewById(R.id.tv_stat_cart);
         tvStatWishlist   = view.findViewById(R.id.tv_stat_wishlist);
         tvStatViewed     = view.findViewById(R.id.tv_stat_viewed);
-        btnAdminAnalytics = view.findViewById(R.id.btn_admin_analytics);
-        btnResearchMode  = view.findViewById(R.id.btn_research_mode);
+        btnAdminAnalytics  = view.findViewById(R.id.btn_admin_analytics);
+        btnAdminManagement = view.findViewById(R.id.btn_admin_management);
+        btnResearchMode    = view.findViewById(R.id.btn_research_mode);
         btnProfileLogin  = view.findViewById(R.id.btn_profile_login);
         btnLogout        = view.findViewById(R.id.btn_logout);
 
@@ -62,6 +64,9 @@ public class ProfileFragment extends Fragment
 
         btnAdminAnalytics.setOnClickListener(v ->
             startActivity(new Intent(requireContext(), AdminAnalyticsActivity.class)));
+
+        btnAdminManagement.setOnClickListener(v ->
+            startActivity(new Intent(requireContext(), AdminManagementActivity.class)));
 
         btnResearchMode.setOnClickListener(v ->
             startActivity(new Intent(requireContext(), EvaluationActivity.class)));
@@ -84,7 +89,39 @@ public class ProfileFragment extends Fragment
         setupRow(view, R.id.row_address,  R.drawable.ic_location, getString(R.string.row_address));
         setupRow(view, R.id.row_about,    R.drawable.ic_info,     getString(R.string.row_about));
 
+        androidx.core.widget.NestedScrollView profileScroll = view.findViewById(R.id.profile_scroll);
+        android.widget.ImageButton btnScrollTop = view.findViewById(R.id.btn_scroll_top);
+        btnScrollTop.setOnClickListener(v -> profileScroll.smoothScrollTo(0, 0));
+        profileScroll.setOnScrollChangeListener((androidx.core.widget.NestedScrollView.OnScrollChangeListener)
+            (v, scrollX, scrollY, oldX, oldY) -> {
+                if (scrollY > 300) {
+                    if (btnScrollTop.getVisibility() != android.view.View.VISIBLE) {
+                        btnScrollTop.setVisibility(android.view.View.VISIBLE);
+                        btnScrollTop.setAlpha(0f);
+                        btnScrollTop.animate().alpha(1f).setDuration(200).start();
+                    }
+                } else {
+                    if (btnScrollTop.getVisibility() == android.view.View.VISIBLE) {
+                        btnScrollTop.animate().alpha(0f).setDuration(200)
+                            .withEndAction(() -> btnScrollTop.setVisibility(android.view.View.GONE)).start();
+                    }
+                }
+            });
+
+        int savedY = AppPrefs.getSavedScrollPos("profile");
+        if (savedY > 0) profileScroll.post(() -> profileScroll.scrollTo(0, savedY));
+
         refreshProfileUI();
+    }
+
+    @Override
+    public void onDestroyView() {
+        View v = getView();
+        if (v != null) {
+            androidx.core.widget.NestedScrollView sv = v.findViewById(R.id.profile_scroll);
+            AppPrefs.saveScrollState("profile", sv.getScrollY(), 0);
+        }
+        super.onDestroyView();
     }
 
     @Override
@@ -117,20 +154,22 @@ public class ProfileFragment extends Fragment
 
         if (!auth.isLoggedIn()) {
             // Guest state
-            tvAvatarLetter.setText("K");
+            tvAvatarLetter.setText(getString(R.string.avatar_guest));
             tvProfileName.setText(getString(R.string.guest));
             tvProfileSubtitle.setText(getString(R.string.login_for_full));
             btnProfileLogin.setVisibility(View.VISIBLE);
             btnAdminAnalytics.setVisibility(View.GONE);
+            btnAdminManagement.setVisibility(View.GONE);
             btnResearchMode.setVisibility(View.GONE);
             btnLogout.setVisibility(View.GONE);
         } else if (auth.isAdmin()) {
             // Admin state
-            tvAvatarLetter.setText("A");
+            tvAvatarLetter.setText(getString(R.string.avatar_admin));
             tvProfileName.setText(auth.getDisplayName());
             tvProfileSubtitle.setText(getString(R.string.admin_subtitle));
             btnProfileLogin.setVisibility(View.GONE);
             btnAdminAnalytics.setVisibility(View.VISIBLE);
+            btnAdminManagement.setVisibility(View.VISIBLE);
             btnResearchMode.setVisibility(View.VISIBLE);
             btnLogout.setVisibility(View.VISIBLE);
         } else {
@@ -140,6 +179,7 @@ public class ProfileFragment extends Fragment
             tvProfileSubtitle.setText(getString(R.string.member_subtitle));
             btnProfileLogin.setVisibility(View.GONE);
             btnAdminAnalytics.setVisibility(View.GONE);
+            btnAdminManagement.setVisibility(View.GONE);
             btnResearchMode.setVisibility(View.GONE);
             btnLogout.setVisibility(View.VISIBLE);
         }

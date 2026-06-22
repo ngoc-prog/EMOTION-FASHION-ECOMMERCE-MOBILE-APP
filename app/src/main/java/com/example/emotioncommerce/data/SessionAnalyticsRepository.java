@@ -22,7 +22,7 @@ public class SessionAnalyticsRepository {
         private final long durationMs;
         private final long timestampMs;
 
-        EmotionRecord(int productId, String productName, EmotionLabel emotion,
+        public EmotionRecord(int productId, String productName, EmotionLabel emotion,
                       long durationMs, long timestampMs) {
             this.productId   = productId;
             this.productName = productName;
@@ -46,7 +46,7 @@ public class SessionAnalyticsRepository {
         private final ActionType type;
         private final long timestampMs;
 
-        ActionRecord(int productId, String productName,
+        public ActionRecord(int productId, String productName,
                      EmotionLabel emotionAtTime, ActionType type, long timestampMs) {
             this.productId     = productId;
             this.productName   = productName;
@@ -160,7 +160,23 @@ public class SessionAnalyticsRepository {
     private final Set<String>          boostedCategories  = new LinkedHashSet<>();
     private long sessionStartMs = 0;
 
-    private SessionAnalyticsRepository() {}
+    private SessionAnalyticsRepository() {
+        // Load persisted history so analytics accumulate across app sessions
+        emotionRecords.addAll(AppPrefs.loadAnalyticsEmotions());
+        actionRecords.addAll(AppPrefs.loadAnalyticsActions());
+        if (!emotionRecords.isEmpty()) {
+            sessionStartMs = emotionRecords.get(0).getTimestampMs();
+        }
+    }
+
+    /** Wipe all accumulated analytics data (admin action). */
+    public void clearAll() {
+        emotionRecords.clear();
+        actionRecords.clear();
+        boostedCategories.clear();
+        sessionStartMs = 0;
+        AppPrefs.clearAnalytics();
+    }
 
     public long getSessionStartMs() { return sessionStartMs; }
 
@@ -180,6 +196,7 @@ public class SessionAnalyticsRepository {
         long ts = System.currentTimeMillis() - durationMs;
         if (sessionStartMs == 0) sessionStartMs = ts;
         emotionRecords.add(new EmotionRecord(productId, productName, emotion, durationMs, ts));
+        AppPrefs.saveAnalyticsEmotions(emotionRecords);
     }
 
     public void recordAction(int productId, String productName,
@@ -187,6 +204,7 @@ public class SessionAnalyticsRepository {
         long ts = System.currentTimeMillis();
         if (sessionStartMs == 0) sessionStartMs = ts;
         actionRecords.add(new ActionRecord(productId, productName, currentEmotion, type, ts));
+        AppPrefs.saveAnalyticsActions(actionRecords);
     }
 
     // ── Aggregates ────────────────────────────────────────────────────────────

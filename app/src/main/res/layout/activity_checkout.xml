@@ -34,6 +34,112 @@
             android:textColor="@color/lume_text_primary" />
     </RelativeLayout>
 
+    <!-- Step indicator -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        android:paddingHorizontal="24dp"
+        android:paddingBottom="12dp"
+        android:paddingTop="2dp">
+
+        <!-- Step 1: Cart (completed) -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:gravity="center"
+                android:text="✓"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/bg_success_circle" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/step_cart"
+                android:textSize="10sp"
+                android:textColor="@color/lume_primary" />
+        </LinearLayout>
+
+        <!-- Connector line -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="6dp"
+            android:background="@color/lume_primary" />
+
+        <!-- Step 2: Payment (active) -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:gravity="center"
+                android:text="2"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/bg_step_active" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/step_payment"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:textColor="@color/lume_primary_dark" />
+        </LinearLayout>
+
+        <!-- Connector line (inactive) -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="6dp"
+            android:background="@color/lume_divider" />
+
+        <!-- Step 3: Done (inactive) -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:gravity="center"
+                android:text="3"
+                android:textSize="13sp"
+                android:textColor="@color/lume_text_secondary"
+                android:background="@drawable/bg_step_inactive" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/step_done"
+                android:textSize="10sp"
+                android:textColor="@color/lume_text_secondary" />
+        </LinearLayout>
+    </LinearLayout>
+
     <!-- Scrollable content -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -189,7 +295,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Địa chỉ giao hàng"
+                            android:text="@string/shipping_address"
                             android:textSize="15sp"
                             android:textStyle="bold"
                             android:textColor="@color/lume_text_primary" />
@@ -198,7 +304,7 @@
                             android:id="@+id/btn_change_address"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Thay đổi ›"
+                            android:text="@string/change_address"
                             android:textSize="13sp"
                             android:textColor="@color/lume_primary_dark"
                             android:textStyle="bold"
@@ -252,7 +358,7 @@
                         android:id="@+id/tv_no_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Chưa có địa chỉ đã lưu. Nhấn Thay đổi để thêm."
+                        android:text="@string/no_saved_address"
                         android:textSize="13sp"
                         android:textColor="@color/lume_text_secondary"
                         android:visibility="visible" />

@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -255,7 +258,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
         new AlertDialog.Builder(this)
                 .setView(dialogView)
-                .setPositiveButton("Lưu", (d, w) -> {
+                .setPositiveButton(getString(R.string.save), (d, w) -> {
                     String name   = etAddrName.getText().toString().trim();
                     String phone  = etAddrPhone.getText().toString().trim();
                     String street = etAddrStreet.getText().toString().trim();
@@ -328,10 +331,19 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void placeOrder(long total) {
-        // Snapshot only the selected items
-        List<CartRepository.CartItem> cartItems = checkoutItems;
+        int payId = rgPayment.getCheckedRadioButtonId();
+        if (payId == R.id.rb_bank) {
+            showQRPaymentDialog(total);
+        } else if (payId == R.id.rb_card) {
+            showCardPaymentDialog(total);
+        } else {
+            doPlaceOrder(total);
+        }
+    }
+
+    private void doPlaceOrder(long total) {
         List<com.example.emotioncommerce.model.Order.OrderItem> orderItems = new ArrayList<>();
-        for (CartRepository.CartItem ci : cartItems) {
+        for (CartRepository.CartItem ci : checkoutItems) {
             orderItems.add(new com.example.emotioncommerce.model.Order.OrderItem(
                     ci.getProduct().getName(),
                     ci.getProduct().getImageUrl(),
@@ -339,7 +351,6 @@ public class CheckoutActivity extends AppCompatActivity {
                     ci.getQuantity()));
         }
 
-        // Build address string from current state
         String addrStr = "";
         Address picked = com.example.emotioncommerce.data.AddressRepository.getInstance().getDefault();
         if (picked != null) {
@@ -353,7 +364,6 @@ public class CheckoutActivity extends AppCompatActivity {
                 orderNum, total, System.currentTimeMillis(), addrStr, orderItems);
         com.example.emotioncommerce.data.OrderRepository.getInstance().addOrder(order);
 
-        // Only remove the items that were checked out
         for (CartRepository.CartItem ci : checkoutItems) {
             CartRepository.getInstance().removeProduct(ci.getProduct().getId());
         }
@@ -364,11 +374,105 @@ public class CheckoutActivity extends AppCompatActivity {
         finish();
     }
 
+    private void showQRPaymentDialog(long total) {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        View dv = LayoutInflater.from(this).inflate(R.layout.dialog_qr_payment, null);
+        dialog.setContentView(dv);
+
+        Window win = dialog.getWindow();
+        if (win != null) {
+            win.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(
+                    android.graphics.Color.TRANSPARENT));
+            win.setLayout((int)(getResources().getDisplayMetrics().widthPixels * 0.9f),
+                          ViewGroup.LayoutParams.WRAP_CONTENT);
+            win.setGravity(Gravity.CENTER);
+        }
+
+        ((TextView) dv.findViewById(R.id.tv_qr_amount))
+                .setText(getString(R.string.price_currency, total));
+
+        TextView tvCountdown = dv.findViewById(R.id.tv_qr_countdown);
+        View btnConfirm = dv.findViewById(R.id.btn_qr_confirm);
+        View btnCancel  = dv.findViewById(R.id.btn_qr_cancel);
+
+        final CountDownTimer[] timerRef = new CountDownTimer[1];
+
+        btnConfirm.setOnClickListener(v -> {
+            timerRef[0].cancel();
+            dialog.dismiss();
+            doPlaceOrder(total);
+        });
+        btnCancel.setOnClickListener(v -> {
+            timerRef[0].cancel();
+            dialog.dismiss();
+        });
+
+        dialog.show();
+
+        timerRef[0] = new CountDownTimer(15_000, 1_000) {
+            @Override public void onTick(long ms) {
+                tvCountdown.setText(getString(R.string.qr_countdown, (ms / 1000) + 1));
+            }
+            @Override public void onFinish() {
+                if (dialog.isShowing()) { dialog.dismiss(); doPlaceOrder(total); }
+            }
+        }.start();
+    }
+
+    private void showCardPaymentDialog(long total) {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        View dv = LayoutInflater.from(this).inflate(R.layout.dialog_card_payment, null);
+        dialog.setContentView(dv);
+
+        Window win = dialog.getWindow();
+        if (win != null) {
+            win.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(
+                    android.graphics.Color.TRANSPARENT));
+            win.setLayout((int)(getResources().getDisplayMetrics().widthPixels * 0.9f),
+                          ViewGroup.LayoutParams.WRAP_CONTENT);
+            win.setGravity(Gravity.CENTER);
+        }
+
+        TextView tvCountdown = dv.findViewById(R.id.tv_card_countdown);
+        ProgressBar progress  = dv.findViewById(R.id.progress_card);
+        View btnConfirm = dv.findViewById(R.id.btn_card_confirm);
+        View btnCancel  = dv.findViewById(R.id.btn_card_cancel);
+
+        final CountDownTimer[] timerRef = new CountDownTimer[1];
+
+        btnConfirm.setOnClickListener(v -> {
+            timerRef[0].cancel();
+            dialog.dismiss();
+            doPlaceOrder(total);
+        });
+        btnCancel.setOnClickListener(v -> {
+            timerRef[0].cancel();
+            dialog.dismiss();
+        });
+
+        dialog.show();
+
+        timerRef[0] = new CountDownTimer(10_000, 100) {
+            @Override public void onTick(long ms) {
+                tvCountdown.setText(getString(R.string.card_countdown, (int)((ms / 1000) + 1)));
+                progress.setProgress((int)(ms * 100 / 10_000));
+            }
+            @Override public void onFinish() {
+                progress.setProgress(0);
+                if (dialog.isShowing()) { dialog.dismiss(); doPlaceOrder(total); }
+            }
+        }.start();
+    }
+
     private String generateOrderNumber() {
         String date = new java.text.SimpleDateFormat("yyyyMMdd", java.util.Locale.getDefault())
                 .format(new java.util.Date());
         int seq = (int)(System.currentTimeMillis() % 9000) + 1000;
-        return "#ÉLAN" + date + "-" + seq;
+        return getString(R.string.order_number_prefix) + date + "-" + seq;
     }
 
     private static String getText(EditText field) {

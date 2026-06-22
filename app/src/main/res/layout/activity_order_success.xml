@@ -1,97 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
     android:background="@color/lume_background"
-    android:padding="32dp">
+    android:fillViewport="true">
 
-    <!-- Brand -->
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:letterSpacing="0.15"
-        android:textColor="@color/lume_primary"
-        android:layout_marginBottom="32dp" />
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="28dp"
+        android:paddingTop="48dp">
 
-    <!-- Success icon -->
-    <FrameLayout
-        android:layout_width="100dp"
-        android:layout_height="100dp">
-
-        <View
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@drawable/bg_success_circle" />
-
+        <!-- Brand name -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="✓"
-            android:textSize="46sp"
+            android:text="@string/app_name"
+            android:textSize="13sp"
             android:textStyle="bold"
-            android:textColor="@android:color/white" />
-    </FrameLayout>
+            android:letterSpacing="0.2"
+            android:textAllCaps="true"
+            android:textColor="@color/lume_primary"
+            android:layout_marginBottom="32dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="@string/order_success_title"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:textColor="@color/lume_text_primary" />
+        <!-- Success icon circle -->
+        <FrameLayout
+            android:layout_width="108dp"
+            android:layout_height="108dp"
+            android:layout_marginBottom="24dp">
 
-    <TextView
-        android:id="@+id/tv_order_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textSize="16sp"
-        android:textColor="@color/lume_primary_dark"
-        android:textStyle="bold" />
+            <View
+                android:layout_width="108dp"
+                android:layout_height="108dp"
+                android:background="@drawable/bg_success_circle" />
 
-    <TextView
-        android:id="@+id/tv_order_total_success"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:textSize="15sp"
-        android:textColor="@color/lume_text_primary" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="✓"
+                android:textSize="52sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white" />
+        </FrameLayout>
 
-    <!-- Divider line -->
-    <View
-        android:layout_width="48dp"
-        android:layout_height="2dp"
-        android:background="@color/lume_primary"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="16dp" />
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/order_success_title"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/lume_text_primary"
+            android:gravity="center" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/order_success_msg"
-        android:textSize="14sp"
-        android:textColor="@color/lume_text_secondary"
-        android:gravity="center"
-        android:lineSpacingMultiplier="1.6" />
+        <!-- Subtitle -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/order_success_subtitle"
+            android:textSize="14sp"
+            android:textColor="@color/lume_text_secondary"
+            android:gravity="center" />
 
-    <Button
-        android:id="@+id/btn_continue_shopping"
-        android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:layout_marginTop="36dp"
-        android:text="@string/continue_shopping"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/white"
-        android:backgroundTint="@color/lume_primary_dark"
-        app:cornerRadius="26dp" />
+        <!-- Order details card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/lume_divider"
+            app:cardBackgroundColor="@color/white">
 
-</LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Order number row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/order_label"
+                        android:textSize="13sp"
+                        android:textColor="@color/lume_text_secondary" />
+
+                    <TextView
+                        android:id="@+id/tv_order_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lume_primary_dark" />
+                </LinearLayout>
+
+                <!-- Divider -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/lume_divider"
+                    android:layout_marginVertical="14dp" />
+
+                <!-- Total row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/order_total_label"
+                        android:textSize="13sp"
+                        android:textColor="@color/lume_text_secondary" />
+
+                    <TextView
+                        android:id="@+id/tv_order_total_success"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lume_primary_dark" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Message -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/order_success_msg"
+            android:textSize="13sp"
+            android:textColor="@color/lume_text_secondary"
+            android:gravity="center"
+            android:lineSpacingMultiplier="1.6" />
+
+        <!-- View orders button -->
+        <Button
+            android:id="@+id/btn_view_orders"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="32dp"
+            android:text="@string/view_my_orders"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@color/lume_primary_dark"
+            app:cornerRadius="26dp" />
+
+        <!-- Continue shopping (ghost) -->
+        <Button
+            android:id="@+id/btn_continue_shopping"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/continue_shopping"
+            android:textSize="15sp"
+            android:textColor="@color/lume_primary_dark"
+            app:strokeColor="@color/lume_primary_dark"
+            app:cornerRadius="26dp" />
+
+    </LinearLayout>
+</ScrollView>

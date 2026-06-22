@@ -23,10 +23,15 @@
             android:textColor="@color/lume_text_primary" />
     </RelativeLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/profile_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -251,6 +256,49 @@
                         android:layout_marginStart="52dp" />
 
                     <LinearLayout
+                        android:id="@+id/btn_admin_management"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp"
+                        android:background="?attr/selectableItemBackground">
+
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:src="@drawable/ic_person"
+                            android:tint="@color/lume_primary_dark" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="14dp"
+                            android:text="@string/admin_management"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/lume_text_primary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/badge_admin"
+                            android:textSize="9sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/lume_primary_dark"
+                            android:background="@drawable/bg_tag_gold"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="3dp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/lume_divider"
+                        android:layout_marginStart="52dp" />
+
+                    <LinearLayout
                         android:id="@+id/btn_research_mode"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
@@ -374,4 +422,19 @@
             <View android:layout_width="match_parent" android:layout_height="16dp" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+        <ImageButton
+            android:id="@+id/btn_scroll_top"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_arrow_up"
+            android:background="@drawable/bg_scroll_top"
+            android:scaleType="centerInside"
+            android:padding="10dp"
+            android:elevation="6dp"
+            android:visibility="gone"
+            android:contentDescription="@string/scroll_to_top" />
+    </FrameLayout>
 </LinearLayout>

@@ -33,21 +33,25 @@ public class AdminAnalyticsActivity extends AppCompatActivity {
 
         findViewById(R.id.btn_back).setOnClickListener(v -> finish());
 
-        SessionAnalyticsRepository repo = SessionAnalyticsRepository.getInstance();
-
-        if (!repo.hasData()) {
-            findViewById(R.id.layout_no_data).setVisibility(View.VISIBLE);
-            return;
-        }
-
         findViewById(R.id.tab_layout).setVisibility(View.VISIBLE);
         findViewById(R.id.tab_content).setVisibility(View.VISIBLE);
 
-        populateOverview(repo);
-        populateEmotionDistribution(repo);
-        populateProductRanking(repo);
-        populateTimeline(repo);
+        SessionAnalyticsRepository repo = SessionAnalyticsRepository.getInstance();
+        if (repo.hasData()) {
+            populateOverview(repo);
+            populateEmotionDistribution(repo);
+            populateProductRanking(repo);
+            populateTimeline(repo);
+            fillHeaderPills(repo);
+        } else {
+            ((TextView) findViewById(R.id.tv_session_label))
+                    .setText(getString(R.string.admin_analytics_empty));
+            findViewById(R.id.tv_pill_products).setVisibility(View.GONE);
+            findViewById(R.id.tv_pill_emotion).setVisibility(View.GONE);
+        }
         setupGeminiInsights(repo);
+        setupResetButton();
+
         setupTabs();
     }
 
@@ -79,9 +83,41 @@ public class AdminAnalyticsActivity extends AppCompatActivity {
         });
     }
 
+    // ── Header pills ─────────────────────────────────────────────────────────
+
+    private void fillHeaderPills(SessionAnalyticsRepository repo) {
+        TextView tvProducts = findViewById(R.id.tv_pill_products);
+        TextView tvEmotion  = findViewById(R.id.tv_pill_emotion);
+
+        tvProducts.setText(repo.getTotalProductsViewed() + " " + getString(R.string.stat_products_viewed));
+
+        Map<EmotionLabel, Long> dist = repo.getOverallEmotionDistribution();
+        EmotionLabel dominant = EmotionLabel.HESITANT;
+        long maxVal = 0;
+        for (Map.Entry<EmotionLabel, Long> e : dist.entrySet()) {
+            if (e.getValue() > maxVal) { maxVal = e.getValue(); dominant = e.getKey(); }
+        }
+        String domLabel;
+        switch (dominant) {
+            case INTERESTED:  domLabel = "😊 " + getString(R.string.emotion_interested); break;
+            case INDIFFERENT: domLabel = "😐 " + getString(R.string.emotion_indifferent); break;
+            default:          domLabel = "🤔 " + getString(R.string.emotion_hesitant);
+        }
+        tvEmotion.setText(domLabel);
+    }
+
     // ── Overview cards ────────────────────────────────────────────────────────
 
     private void populateOverview(SessionAnalyticsRepository repo) {
+        // Update subtitle with data date range
+        java.text.SimpleDateFormat dateFmt =
+                new java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault());
+        long earliest = repo.getSessionStartMs();
+        long latest   = System.currentTimeMillis();
+        String rangeLabel = dateFmt.format(new java.util.Date(earliest))
+                + " – " + dateFmt.format(new java.util.Date(latest));
+        ((TextView) findViewById(R.id.tv_session_label)).setText(rangeLabel);
+
         ((TextView) findViewById(R.id.tv_stat_products))
                 .setText(String.valueOf(repo.getTotalProductsViewed()));
 
@@ -172,9 +208,26 @@ public class AdminAnalyticsActivity extends AppCompatActivity {
         });
     }
 
+    // ── Reset analytics ───────────────────────────────────────────────────────
+
+    private void setupResetButton() {
+        findViewById(R.id.btn_reset_analytics).setOnClickListener(v ->
+            new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setMessage(getString(R.string.analytics_reset_confirm))
+                .setPositiveButton(getString(R.string.analytics_reset_btn), (d, w) -> {
+                    SessionAnalyticsRepository.getInstance().clearAll();
+                    android.widget.Toast.makeText(this,
+                            getString(R.string.analytics_reset_done),
+                            android.widget.Toast.LENGTH_SHORT).show();
+                    recreate();
+                })
+                .setNegativeButton(getString(R.string.cancel), null)
+                .show());
+    }
+
     // ── Emotion timeline ──────────────────────────────────────────────────────
 
-    private static final int TIMELINE_MAX = 20;
+    private static final int TIMELINE_MAX = 50;
 
     private void populateTimeline(SessionAnalyticsRepository repo) {
         List<TimelineEvent> all = repo.getTimeline();
@@ -207,13 +260,11 @@ public class AdminAnalyticsActivity extends AppCompatActivity {
         private static final int TYPE_FOOTER = 1;
 
         private final List<TimelineEvent> items;
-        private final long sessionStartMs;
         private final int totalCount; // 0 = no truncation
 
-        TimelineAdapter(List<TimelineEvent> items, long sessionStartMs, int totalCount) {
-            this.items          = items;
-            this.sessionStartMs = sessionStartMs;
-            this.totalCount     = totalCount;
+        TimelineAdapter(List<TimelineEvent> items, long ignored, int totalCount) {
+            this.items      = items;
+            this.totalCount = totalCount;
         }
 
         @Override
@@ -255,8 +306,8 @@ public class AdminAnalyticsActivity extends AppCompatActivity {
             VH h = (VH) holder;
             TimelineEvent event = items.get(position);
 
-            long relSec = Math.max(0, (event.getTimestampMs() - sessionStartMs) / 1000);
-            h.tvTime.setText(String.format(java.util.Locale.getDefault(), "%d:%02d", relSec / 60, relSec % 60));
+            h.tvTime.setText(new java.text.SimpleDateFormat("dd/MM HH:mm",
+                    java.util.Locale.getDefault()).format(new java.util.Date(event.getTimestampMs())));
             h.tvProduct.setText(event.getProductName());
 
             int dotColor;

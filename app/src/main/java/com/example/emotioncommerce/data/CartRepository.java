@@ -11,17 +11,18 @@ public class CartRepository {
     public static class CartItem {
         private final Product product;
         private final long effectivePrice;
+        private final String selectedSize;
         private int quantity;
 
-        CartItem(Product product, long effectivePrice) {
+        CartItem(Product product, long effectivePrice, String selectedSize) {
             this.product       = product;
             this.effectivePrice = effectivePrice;
+            this.selectedSize  = selectedSize == null ? "" : selectedSize;
             this.quantity      = 1;
         }
 
-        // Used only by AppPrefs when restoring persisted data
-        public static CartItem fromPrefs(Product product, long effectivePrice, int quantity) {
-            CartItem item = new CartItem(product, effectivePrice);
+        public static CartItem fromPrefs(Product product, long effectivePrice, int quantity, String selectedSize) {
+            CartItem item = new CartItem(product, effectivePrice, selectedSize);
             item.quantity = quantity;
             return item;
         }
@@ -29,6 +30,7 @@ public class CartRepository {
         public Product getProduct()        { return product; }
         public int     getQuantity()       { return quantity; }
         public long    getEffectivePrice() { return effectivePrice; }
+        public String  getSelectedSize()   { return selectedSize; }
     }
 
     public interface CartListener {
@@ -44,24 +46,41 @@ public class CartRepository {
 
     private final Map<Integer, CartItem> items = new LinkedHashMap<>();
     private final List<CartListener> listeners = new ArrayList<>();
+    private String userKey = "guest";
 
     private CartRepository() {
-        // Restore persisted cart
-        for (CartItem item : AppPrefs.loadCart()) {
+        String email = AppPrefs.getLoggedInEmail();
+        userKey = email.isEmpty() ? "guest" : email;
+        for (CartItem item : AppPrefs.loadCart(userKey)) {
             items.put(item.getProduct().getId(), item);
         }
     }
 
+    /** Switch to another user's cart. Called by AuthRepository on login/logout. */
+    public synchronized void reload(String email) {
+        userKey = email.isEmpty() ? "guest" : email;
+        items.clear();
+        for (CartItem item : AppPrefs.loadCart(userKey)) {
+            items.put(item.getProduct().getId(), item);
+        }
+        notifyListeners();
+    }
+
     public void addProduct(Product product) {
-        addProduct(product, product.getPrice());
+        addProduct(product, product.getEffectivePrice(), "");
     }
 
     public void addProduct(Product product, long effectivePrice) {
+        addProduct(product, effectivePrice, "");
+    }
+
+    public void addProduct(Product product, long effectivePrice, String selectedSize) {
         CartItem existing = items.get(product.getId());
         if (existing != null) {
             existing.quantity++;
         } else {
-            items.put(product.getId(), new CartItem(product, effectivePrice));
+            items.put(product.getId(), new CartItem(product, effectivePrice,
+                    selectedSize == null ? "" : selectedSize));
         }
         persist();
         notifyListeners();
@@ -116,7 +135,7 @@ public class CartRepository {
 
     public void clear() {
         items.clear();
-        AppPrefs.clearCart();
+        AppPrefs.clearCart(userKey);
         notifyListeners();
     }
 
@@ -129,7 +148,7 @@ public class CartRepository {
     }
 
     private void persist() {
-        AppPrefs.saveCart(new ArrayList<>(items.values()));
+        AppPrefs.saveCart(userKey, new ArrayList<>(items.values()));
     }
 
     private void notifyListeners() {

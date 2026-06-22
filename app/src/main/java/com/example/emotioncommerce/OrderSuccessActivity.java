@@ -22,12 +22,15 @@ public class OrderSuccessActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.tv_order_number))
                 .setText(orderNum != null ? orderNum : "");
         ((TextView) findViewById(R.id.tv_order_total_success))
-                .setText(getString(R.string.total_payment_fmt, total));
+                .setText(getString(R.string.price_currency, total));
 
-        // Back to shopping — clear back stack to MainActivity
+        findViewById(R.id.btn_view_orders).setOnClickListener(v -> {
+            startActivity(new Intent(this, OrdersActivity.class));
+            finish();
+        });
+
         findViewById(R.id.btn_continue_shopping).setOnClickListener(v -> goHome());
 
-        // Prevent back to checkout on hardware back press
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() { goHome(); }

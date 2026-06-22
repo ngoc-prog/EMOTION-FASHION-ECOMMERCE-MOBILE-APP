@@ -81,7 +81,9 @@ public class ImagePagerAdapter extends RecyclerView.Adapter<ImagePagerAdapter.Vi
         vp.setLayoutParams(new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT));
-        vp.setAdapter(new FullPagerAdapter(ctx, urls, dialog));
+        FullPagerAdapter fullAdapter = new FullPagerAdapter(ctx, urls, dialog);
+        vp.setAdapter(fullAdapter);
+        fullAdapter.setViewPager(vp);
         vp.setCurrentItem(startIndex, false);
 
         // ── Close button — top right ──────────────────────────────────────────
@@ -139,7 +141,7 @@ public class ImagePagerAdapter extends RecyclerView.Adapter<ImagePagerAdapter.Vi
                 Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
         hintLp.bottomMargin = dpToPx(ctx, 54);
         tvHint.setLayoutParams(hintLp);
-        tvHint.setText("← Vuốt để xem thêm →");
+        tvHint.setText(ctx.getString(R.string.swipe_hint));
         tvHint.setTextColor(0xAA3D2B1F);
         tvHint.setTextSize(12f);
         tvHint.setVisibility(urls.size() > 1 ? View.VISIBLE : View.GONE);
@@ -199,6 +201,7 @@ public class ImagePagerAdapter extends RecyclerView.Adapter<ImagePagerAdapter.Vi
         private final Context ctx;
         private final List<String> urls;
         private final Dialog dialog;
+        private ViewPager2 viewPager;
 
         FullPagerAdapter(Context ctx, List<String> urls, Dialog dialog) {
             this.ctx    = ctx;
@@ -206,16 +209,18 @@ public class ImagePagerAdapter extends RecyclerView.Adapter<ImagePagerAdapter.Vi
             this.dialog = dialog;
         }
 
+        void setViewPager(ViewPager2 vp) { viewPager = vp; }
+
         @NonNull
         @Override
         public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            ImageView iv = new ImageView(ctx);
+            ZoomableImageView iv = new ZoomableImageView(ctx);
             iv.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
-            iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            // Tap image to dismiss — set here so swipe on ViewPager2 still works
-            iv.setOnClickListener(v -> dialog.dismiss());
+            iv.setZoomCallback(zoomed -> {
+                if (viewPager != null) viewPager.setUserInputEnabled(!zoomed);
+            });
             return new VH(iv);
         }
 
@@ -231,8 +236,8 @@ public class ImagePagerAdapter extends RecyclerView.Adapter<ImagePagerAdapter.Vi
         @Override public int getItemCount() { return urls.size(); }
 
         static class VH extends RecyclerView.ViewHolder {
-            final ImageView iv;
-            VH(ImageView iv) { super(iv); this.iv = iv; }
+            final ZoomableImageView iv;
+            VH(ZoomableImageView iv) { super(iv); this.iv = iv; }
         }
     }
 

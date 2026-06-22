@@ -19,16 +19,30 @@ public class WishlistRepository {
         return instance;
     }
 
-    private final Set<Integer>        wishlisted = new HashSet<>();
-    private final List<Product>       products   = new ArrayList<>();
-    private final List<WishlistListener> listeners = new ArrayList<>();
+    private final Set<Integer>           wishlisted = new HashSet<>();
+    private final List<Product>          products   = new ArrayList<>();
+    private final List<WishlistListener> listeners  = new ArrayList<>();
+    private String userKey = "guest";
 
     private WishlistRepository() {
-        // Restore persisted wishlist
-        for (Product p : AppPrefs.loadWishlist()) {
+        String email = AppPrefs.getLoggedInEmail();
+        userKey = email.isEmpty() ? "guest" : email;
+        for (Product p : AppPrefs.loadWishlist(userKey)) {
             wishlisted.add(p.getId());
             products.add(p);
         }
+    }
+
+    /** Switch to another user's wishlist. Called by AuthRepository on login/logout. */
+    public synchronized void reload(String email) {
+        userKey = email.isEmpty() ? "guest" : email;
+        wishlisted.clear();
+        products.clear();
+        for (Product p : AppPrefs.loadWishlist(userKey)) {
+            wishlisted.add(p.getId());
+            products.add(p);
+        }
+        notifyListeners();
     }
 
     public void toggle(Product product) {
@@ -39,7 +53,7 @@ public class WishlistRepository {
             wishlisted.add(product.getId());
             products.add(product);
         }
-        AppPrefs.saveWishlist(new ArrayList<>(products));
+        AppPrefs.saveWishlist(userKey, new ArrayList<>(products));
         notifyListeners();
     }
 

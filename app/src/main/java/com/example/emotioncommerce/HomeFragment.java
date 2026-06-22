@@ -55,7 +55,7 @@ public class HomeFragment extends Fragment implements CartRepository.CartListene
         setupCategoryChips(view);
 
         NestedScrollView sv = view.findViewById(R.id.home_scroll_content);
-        ScrollTopHelper.attach(requireActivity(), sv, 72);
+        ScrollTopHelper.attach(requireActivity(), sv, 90);
 
         DummyJsonRepository.fetchSkinCareProducts(requireContext(), new DummyJsonRepository.ProductsCallback() {
             @Override
@@ -67,6 +67,7 @@ public class HomeFragment extends Fragment implements CartRepository.CartListene
                     setupNewArrivalsSection(rootView);
                     rootView.findViewById(R.id.pb_home_loading).setVisibility(View.GONE);
                     rootView.findViewById(R.id.home_scroll_content).setVisibility(View.VISIBLE);
+                    restoreHomeScroll(sv);
                 });
             }
 
@@ -79,9 +80,15 @@ public class HomeFragment extends Fragment implements CartRepository.CartListene
                     setupNewArrivalsSection(rootView);
                     rootView.findViewById(R.id.pb_home_loading).setVisibility(View.GONE);
                     rootView.findViewById(R.id.home_scroll_content).setVisibility(View.VISIBLE);
+                    restoreHomeScroll(sv);
                 });
             }
         });
+    }
+
+    private void restoreHomeScroll(NestedScrollView sv) {
+        int savedY = com.example.emotioncommerce.data.AppPrefs.getSavedScrollPos("home");
+        if (savedY > 0) sv.post(() -> sv.scrollTo(0, savedY));
     }
 
     @Override
@@ -93,8 +100,12 @@ public class HomeFragment extends Fragment implements CartRepository.CartListene
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
+        if (rootView != null) {
+            NestedScrollView sv = rootView.findViewById(R.id.home_scroll_content);
+            com.example.emotioncommerce.data.AppPrefs.saveScrollState("home", sv.getScrollY(), 0);
+        }
         ScrollTopHelper.detach(requireActivity());
+        super.onDestroyView();
     }
 
     @Override
@@ -215,7 +226,20 @@ public class HomeFragment extends Fragment implements CartRepository.CartListene
             Product p = products.get(position);
             holder.tvName.setText(p.getName());
             holder.tvBrand.setText(p.getBrand());
-            holder.tvPrice.setText(getString(R.string.price_currency, p.getPrice()));
+
+            if (p.getDiscount() > 0) {
+                holder.tvPrice.setText(getString(R.string.price_currency, p.getEffectivePrice()));
+                holder.tvOriginalPrice.setText(getString(R.string.price_currency, p.getPrice()));
+                holder.tvOriginalPrice.setPaintFlags(
+                        holder.tvOriginalPrice.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
+                holder.tvOriginalPrice.setVisibility(View.VISIBLE);
+                holder.tvDiscountBadge.setText("-" + p.getDiscount() + "%");
+                holder.tvDiscountBadge.setVisibility(View.VISIBLE);
+            } else {
+                holder.tvPrice.setText(getString(R.string.price_currency, p.getPrice()));
+                holder.tvOriginalPrice.setVisibility(View.GONE);
+                holder.tvDiscountBadge.setVisibility(View.GONE);
+            }
 
             // Rating row
             if (p.getRating() > 0f && holder.layoutRating != null) {
@@ -264,18 +288,20 @@ public class HomeFragment extends Fragment implements CartRepository.CartListene
 
         class VH extends RecyclerView.ViewHolder {
             final ImageView ivImage;
-            final TextView tvName, tvBrand, tvPrice, tvRating;
+            final TextView tvName, tvBrand, tvPrice, tvRating, tvDiscountBadge, tvOriginalPrice;
             final ImageButton btnWishlist;
             final View layoutRating;
             VH(View v) {
                 super(v);
-                ivImage     = v.findViewById(R.id.iv_product_image);
-                tvName      = v.findViewById(R.id.tv_product_name);
-                tvBrand     = v.findViewById(R.id.tv_product_brand);
-                tvPrice     = v.findViewById(R.id.tv_product_price);
-                tvRating    = v.findViewById(R.id.tv_rating);
-                btnWishlist = v.findViewById(R.id.btn_wishlist);
-                layoutRating = v.findViewById(R.id.layout_rating);
+                ivImage         = v.findViewById(R.id.iv_product_image);
+                tvName          = v.findViewById(R.id.tv_product_name);
+                tvBrand         = v.findViewById(R.id.tv_product_brand);
+                tvPrice         = v.findViewById(R.id.tv_product_price);
+                tvRating        = v.findViewById(R.id.tv_rating);
+                tvDiscountBadge = v.findViewById(R.id.tv_discount_badge);
+                tvOriginalPrice = v.findViewById(R.id.tv_original_price);
+                btnWishlist     = v.findViewById(R.id.btn_wishlist);
+                layoutRating    = v.findViewById(R.id.layout_rating);
             }
         }
     }
