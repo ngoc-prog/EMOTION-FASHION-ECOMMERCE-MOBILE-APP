@@ -76,6 +76,8 @@ public class ProductDetailActivity extends AppCompatActivity {
     private View calibrationOverlay;
     private TextView tvCalibrationCountdown;
     private boolean isCalibrating = true;
+    private long lastFrameAnalyzedMs = 0;
+    private static final long FRAME_INTERVAL_MS = 300; // ~3fps analysis to avoid emulator overload
 
     // Hesitant promotion
     private static final long PROMO_DELAY_MS = 8000;
@@ -479,6 +481,12 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     @android.annotation.SuppressLint("UnsafeOptInUsageError")
     private void analyzeFrame(ImageProxy imageProxy) {
+        long now = System.currentTimeMillis();
+        if (now - lastFrameAnalyzedMs < FRAME_INTERVAL_MS) {
+            imageProxy.close();
+            return;
+        }
+        lastFrameAnalyzedMs = now;
         if (imageProxy.getImage() == null) {
             imageProxy.close();
             return;
